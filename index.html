@@ -1,0 +1,393 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Angus书签专用</title>
+	<!--[if lt IE 9]>
+    	<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js""></script>
+	<link href="forie/media-queries.css" rel="stylesheet" type="text/css">   
+    <![endif]-->
+  
+	<style>
+	@media screen and (min-width:1000px){
+		body {
+			font:10px/20px 微软雅黑;
+			text-align:center;
+		}
+		.nav {
+			width:100%;
+			padding-bottom:5em;
+		}
+		.nav ul li {
+			margin:0.5%;
+			width:24%;
+		}
+		.nav ul li a:hover,.nav ul li a.cur {	
+			border:0.1em dotted #000;
+			background:#66b4cc;
+			color:red;
+			height:1.8em;
+			width:99%;
+		}
+		.subcon div {
+			margin:1%;
+			width:31.3%;
+		}
+	}
+	
+	@media screen and (max-width:1000px){
+		body {
+			font:8px/16px 微软雅黑;
+			text-align:center;
+		}
+		.nav {
+			width:100%;
+			padding-bottom:5em;
+		}
+		.nav ul li {
+			margin:0.5%;
+			width:24%;
+		}
+		.nav ul li a:hover,.nav ul li a.cur {	
+			border:0.1em dotted #000;
+			background:#66b4cc;
+			color:red;
+			height:1.8em;
+			width:99%;
+		}
+		.subcon div {
+			margin:1%;
+			width:31.3%;
+		}
+	}
+	
+	@media screen and (max-width:800px){
+		.nav ul li a:hover,.nav ul li a.cur {
+			border:0;
+			height:2em;
+			width:100%;
+		}		
+		.subcon div {
+			margin:0.6% 2.5%;
+			width:45%;
+		}
+	}
+	@media screen and (max-width:500px){
+		body {
+			font:6px/10px 微软雅黑;
+		}
+		.subcon div {
+			width:95%;
+			margin:1px 2.5% 1px 2.5%;
+		}
+		.nav{
+			position:fixed;
+			padding:0;
+			bottom:0;
+			left:0;
+			right:0;
+			background:rgba(0,0,0,0.5);
+		}
+		.nav ul li {
+			margin:1.5%;
+			width:22%;
+		}
+		.padding{
+			height:5.1em;
+			width:100%;
+		}
+	}	
+	
+	
+	ul li {
+		display:block;
+		float:left;
+		list-style:none;
+	}
+	.wrapper {
+		height:100%;
+		margin:20px auto;
+		width:90%;
+	}
+	.nav ul{
+		margin:0 auto;
+		padding:0;
+	}
+	.nav ul li a {
+		background:#e2b83d;
+		color:#000;
+		display:block;
+		font-weight:bolder;
+		font-size:2em;
+		height:2em;
+		line-height:2em;
+		text-decoration:none;
+		width:100%;
+	}
+	.search{
+		width:90%;
+		margin:0 auto;
+		padding:0.5em;
+		text-align:center;
+		font-size:2em;
+		background:#90edff;
+	}
+	.search ul {
+		display:block;
+		width:60%;
+		margin:0 auto;
+		padding-left:0;
+	}
+	.search ul li {
+		width:12%;
+		margin:0.5% 2%;
+	}
+	.search input[type="text"]{
+		width:80%;
+		height:1.5em;
+	}
+	.search input[type="submit"]{
+		width:15%;
+		height:2em;
+	}
+	.search > div{
+		width:100%;
+		margin:0 auto;
+	}
+	.subcon {
+		display:none;
+		height:100%;
+		width:100%;
+	}
+
+	.subcon div {
+		float:left;
+	}
+
+	.subcon div a {
+		color:#333;
+		display:block;
+		font-weight:bolder;
+		font-size:1.6em;
+		line-height:2em;
+		text-decoration:none;
+		padding:2% 0;
+		width:100%;
+	}
+	.subcon:nth-child(1) div a{
+		background:#B6E09E;
+	}
+	.subcon:nth-child(2) div a{
+		background:#A0D89B;
+	}
+	.subcon:nth-child(3) div a{
+		background:#87CFA7;
+	}
+	.subcon:nth-child(4) div a{
+		background:#87B598;
+	}
+	.subcon div a:hover {
+		background:#e37171;
+	}
+	.cur-subcon {
+		display:block;
+	}
+	
+	</style>
+</head>
+
+<body>
+<div class="wrapper">
+	<div class="nav">
+		<ul>
+			<li><a href="javascript:void(0)" class="cur">WEB学习</a></li>
+			<li><a href="javascript:void(0)">工具导航</a></li>
+			<li><a href="javascript:void(0)">工作入口</a></li>
+			<li><a href="javascript:void(0)">日常阅读</a></li>
+		</ul>
+	</div>
+	
+	<div class="search">
+		<form onsubmit="return go(this)" name="search" target="_blank" method="get" action="http://www.baidu.com/baidu">
+			<ul>
+				<li><input id="a1" type="radio" value="0" name="select" checked="" onclick="javascript:this.form.type.value=0;"><label for="a1">网页</label></li>
+				<li><input id="a2" type="radio" value="0" name="select" onclick="javascript:this.form.type.value=3;"><label for="a2">图片</label></li>
+				<li><input id="a3" type="radio" value="0" name="select" onclick="javascript:this.form.type.value=4;"><label for="a3">新闻</label></li>
+				<li><input id="a4" type="radio" value="0" name="select" onclick="javascript:this.form.type.value=5;"><label for="a4">音乐</label></li>
+				<li><input id="a5" type="radio" value="0" name="select" onclick="javascript:this.form.type.value=1;"><label for="a5">账号</label></li>
+				<li><input id="a6" type="radio" value="0" name="select" onclick="javascript:this.form.type.value=2;"><label for="a6">文章</label></li>
+				<li><input type="hidden" value="utf-8" name="ie" /></li>
+				<li><input type="hidden" value="0" name="type" /></li>
+				<li><input type="hidden" name="word" /></li>
+				<li><input type="hidden" name="query" /></li>
+			</ul>
+			<div>
+				<input name="input" type="text" />
+				<input type="submit" value="百度" />	
+			</div>
+		</form>
+	</div>
+
+	<div class="container">
+		<div class="subcon cur-subcon" title="web">
+		  <div><a href="http://www.uisdc.com/">优设网</a></div>
+		  <div><a href="http://shijue.me/home/">视觉中国</a></div>
+		  <div><a href="http://www.woshipm.com/">人人产品经理</a></div>
+		  <div><a href="http://www.gbin1.com/">GBIN1</a></div>
+		  <div><a href="http://www.w3cschool.com//">W3CSchool</a></div>   
+		  <div><a href="http://www.w3cplus.com/sassguide/">W3C+</a></div>   
+		  <div><a href="http://www.ruanyifeng.com/blog/2012/06/sass.html">阮一峰</a></div>
+		  <div><a href="http://www.html-js.com">HTML-JS</a></div>
+		  <div><a href="http://numbbbbb.gitbooks.io/-the-swift-programming-language-/chapter1/02_a_swift_tour.html">SWIFT</a></div>
+		  <div><a href="http://sassmeister.com/">SASS在线</a></div>
+		  <div><a href="http://peiwen.lu/sass-chinese-reference//">SASS参考</a></div>
+		  <div><a href="http://isux.tencent.com/">ISUX</a></div>
+		  <div><a href="http://daxue.qq.com/wechat">腾讯大学</a></div>
+		  <div><a href="http://uedc.163.com/">163UEDC</a></div>
+		  <div><a href="http://udc.weibo.com/">微博UDC</a></div>
+		  <div><a href="http://ued.taobao.org/blog/">淘宝UED</a></div>
+		  <div><a href="http://www.aliued.cn/">阿里UED</a></div>
+		  <div><a href="http://ued.alimama.com/">阿里妈妈UED</a></div>
+		  <div><a href="http://ecd.tencent.com/">腾讯ECD</a></div>
+		  <div class="padding"></div>
+		</div><!--web ending-->
+		
+		<div class="subcon" title="tool">
+			<div><a href="data:text/html,%20%3Chtml%20contenteditable%3E">文本编辑</a></div>
+			<div><a href="https://www.projecth.us/sources">HOST</a></div>
+			<div><a href="https://code.google.com/">GoogleCode</a></div>
+			<div><a href="http://www.w3cschool.cc/coder-learn-path">W3C.CC</a></div>
+			<div><a href="http://www.shangxueba.com/jingyan/102623.html">Ajax</a></div>
+			<div><a href="http://www.w3cschool.cc/w3cnote/jquery-style-guide-html.html">JQuery规范</a></div>
+			<div><a href="http://www.jb51.net/article/32679.htm">关于浏览器高度</a></div>
+      
+      
+			<div><a href="http://hao.zlg.cc/">设计导航</a></div>
+			<div><a href="http://hao.uisdc.com/?md=wb">优设导航</a></div>
+			<div><a href="http://www.68ps.com/index.htm">68PS</a></div>
+			
+			<div><a href="https://kuler.adobe.com/explore/newest/">Kuler</a></div>
+			<div><a href="http://www.peise.net/">配色</a></div>
+
+			<div><a href="http://tool.chinaz.com/">站长工具</a></div>
+			<div><a href="http://tool.chinaz.com/Tools/CssFormat.aspx">CSS格式化</a></div>
+			<div><a href="http://tool.chinaz.com/Tools/JsFormat.aspx">HTML/JS格式化</a></div>		
+
+			<div><a href="http://open.bootcss.com/">CDN公共库</a></div>
+			<div><a href="http://www.jq22.com/">jQuery插件库</a></div>
+			<div><a href="http://www.open-lib.com/Type/190-1.jsp">highlight插件</a></div>
+			<div><a href="http://www.woiweb.net/50-amazing-jquery-plugins-2.html">插件</a></div>
+			
+			<div><a href="http://www.css88.com/">WEB前端</a></div>
+			<div><a href="http://www.css88.com/doc/zeptojs_api/">ZIPTO.JS</a></div>
+			<div><a href="http://v3.bootcss.com/getting-started/">BOOTSTRAP</a></div>
+ 
+			<div class="padding"></div>
+		</div><!--tool ending-->
+		
+		<div class="subcon" title="work">
+			<div><a href="http://c1.icms.ifeng.com">ICMS</a></div>
+			<div><a href="http://c1.icms.ifeng.com/?_c=file-uploader&_a=help">图片上传</a></div>
+			<div><a href="http://c1.icms.ifeng.com/?_c=page&_a=live-edit&pageId=144189">趣你的ICMS</a></div>
+			<div><a href="http://c1.icms.ifeng.com/?_c=page&_a=live-edit&pageId=143720">世界杯ICMS</a></div>
+			<div><a href="http://c1.icms.ifeng.com/?_c=page&_a=live-edit&pageId=128587">SUPER-ICMS</a></div>
+			<div><a href="http://admin.chat.v.ifeng.com/index.php/auth/login">边看边聊后台</a></div>
+			<div><a href="http://chat.v.ifeng.com/index.php/home/default/?cid=734&theme=gray&height=441">superMama时聊</a></div>
+			<div><a href="http://www.ifeng.com/">凤凰网</a></div>
+			<div><a href="http://v.ifeng.com/">凤凰视频</a></div>
+			<div><a href="http://v.ifeng.com/program/">原创视频</a></div>
+			<div><a href="http://v.ifeng.com/program/special/funworldcup">趣你的</a></div>
+			<div><a href="http://v.ifeng.com/program/special/douwei/">斗味首页</a></div>
+			<div><a href="http://v.ifeng.com/program/supermami/">SuperMami</a></div>
+
+			<div class="padding"></div>
+		</div><!--work ending-->
+		
+		<div class="subcon" title="reading">
+			<div><a href="http://www.ftchinese.com">FT中文网</a></div>
+			<div><a href="http://www.caixin.com">财新网</a></div>
+			<div><a href="http://cnpolitics.org/">政见</a></div>
+			<div><a href="http://www.21ccom.net/">共识网</a></div>
+			<div><a href="http://www.guancha.cn/">观察者网</a></div>
+			<div><a href="http://www.aisixiang.com/">爱思想</a></div>
+			<div><a href="http://heschina.org/">人文经济学会</a></div>
+			
+			<div class="padding"></div>
+		</div><!--reading ending-->
+	</div>
+</div>
+
+<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+var intervalID;
+var curLi;
+$(".nav li a").mouseover(function(){
+curLi=$(this);
+intervalID=setInterval(onMouseOver,100);//鼠标移入的时候有一定的延时才会切换到所在项，防止用户不经意的操作
+});
+function onMouseOver(){
+$(".cur-subcon").removeClass("cur-subcon");
+$(".subcon").eq($(".nav li a").index(curLi)).addClass("cur-subcon");
+$(".cur").removeClass("cur");
+curLi.addClass("cur");
+}
+$(".nav li a").mouseout(function(){
+clearInterval(intervalID);
+});
+
+$(".nav li a").click(function(){//鼠标点击也可以切换
+clearInterval(intervalID);
+$(".cur-subcon").removeClass("cur-subcon");
+$(".subcon").eq($(".nav li a").index(curLi)).addClass("cur-subcon");
+$(".cur").removeClass("cur");
+curLi.addClass("cur");
+});
+
+});
+</script>
+
+<script>
+$("a[href^='http']").attr('target','_blank');
+$(".cur-subcon div:last").attr('bottom','2.5em');
+</script>
+
+<script>
+function go(formname){
+	var url;
+	
+	if (formname.type.value == "0"){
+		url = "http://www.baidu.com/baidu";
+		formname.word.value = formname.input.value;
+		formname.query.value = '';
+	}
+	if (formname.type.value == "3"){
+		url = "http://image.baidu.com/i";
+		formname.word.value = formname.input.value;
+		formname.query.value = '';
+	}
+	if (formname.type.value == "4"){
+		url = "http://news.baidu.com/ns";
+		formname.word.value = formname.input.value;
+		formname.query.value = '';
+	}
+	if (formname.type.value == "5"){
+		url = "http://mp3.baidu.com/m";
+		formname.word.value = formname.input.value;
+		formname.query.value = '';
+	}
+	
+	if (formname.type.value == "1"||formname.type.value == "2"){
+		url = "http://weixin.sogou.com/weixin";
+		formname.query.value = formname.input.value;
+		formname.word.value = '';
+	}
+	
+	formname.action = url;
+	return true;
+}
+</script>
+
+</body>
+</html> 
