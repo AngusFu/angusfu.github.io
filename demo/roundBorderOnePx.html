@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<meta name="robots" content="noindex">
+<title>1px round border</title>
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    bottom: 0;
+}
+.wrap > div {
+    -webkit-box-sizing: border-box;
+    width: 100%;
+    height: 300px;
+    line-height: 300px;
+    background-color: #ccc;
+    padding: 25px;
+    border: 1px solid red;
+    border-radius: 20px;
+    font-size: 24px;
+    text-align: center;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+    <div id="click" class="go">点击后边框会变细哦</div>
+</div>
+<script src="js/onePxBorder.js"></script>
+<script> 
+var a = document.getElementById('click');
+
+a.addEventListener('click', function () {
+    roundSharpBorder('.go');
+    click.innerHTML = '边框变细啦';
+}, false);
+</script>
+</body>
+</html>
