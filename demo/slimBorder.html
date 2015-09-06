@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        
+        body {
+            margin: 0 50px;
+            padding: 10px;
+            color: black;
+            font-family: sans-serif;
+        }
+        body, button, input, select, textarea {
+            font-family: 'helvetica neue',tahoma,'hiragino sans gb',stheiti,'wenquanyi micro hei',\5FAE\8F6F\96C5\9ED1,\5B8B\4F53,sans-serif;
+            -ms-text-autospace: ideograph-alpha ideograph-numeric ideograph-parenthesis;
+            text-autospace: ideograph-alpha ideograph-numeric ideograph-parenthesis;
+        } 
+         
+        #demo div {
+            height:100px;
+            margin: 20px 0;
+            font-size: 20px;
+            font-family: sans-serif;
+            line-height: 100px;
+            text-align: center;
+            background-color: #eee;
+            color: red;
+        }
+        .bd {
+            border-width: 0;
+            border-style: solid;
+            border-color: red
+        }
+        .bd-l {border-left-width: 1px;}
+        .bd-r {border-right-width: 1px;}
+        .bd-t {border-top-width: 1px;}
+        .bd-b {border-bottom-width: 1px;}
+        .bd-t-b, .bd-b-t {border-width: 1px 0;}
+        .bd-l-r, .bd-r-l {border-width: 0 1px;}
+        .bd-all {border-width: 1px;}
+    </style>
+</head>
+
+<body>
+    <div id="demo">
+        <div class="bd bd-all"></div>
+        <div class="bd bd-l"></div>
+        <div class="bd bd-r"></div>
+        <div class="bd bd-t"></div>
+        <div class="bd bd-b"></div>
+        <div class="bd bd-l-r"></div>
+        <div class="bd bd-t-b"></div>
+    </div>
+
+    <script src="js/slimBorder.js"></script>
+    <script>
+        slimBorder('#demo div');
+    </script>
+</body>
+
+</html>

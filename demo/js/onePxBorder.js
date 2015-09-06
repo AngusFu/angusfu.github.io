@@ -52,7 +52,6 @@
                 + '}'
             + '}';
 
-
     var addCSSText = function (cssText) {
         var style = document.createElement('style');
 
@@ -119,8 +118,8 @@
 
         tempObj = {
             border   : bWidth + 'px ' + bStyle + ' ' + bColor,
-            radius   : radius + 'px',
-            radiusx2 : radius * 2 + 'px',
+            radius   : radius ? radius + 'px' : 0,
+            radiusx2 : radius ? radius * 2 + 'px' : 9,
             klass    : 'rsb_' + guid()
         };
 
@@ -149,9 +148,9 @@
             throw new Error('The selector must be a string!');
         }
         
-        elem = slice.call(document.querySelectorAll(selector));
+        elems = slice.call(document.querySelectorAll(selector));
 
-        elem.forEach(function(ele, idx){
+        elems.forEach(function(ele, idx){
             sharpBorder(ele);
         });
 
