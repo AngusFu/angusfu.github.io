@@ -42,6 +42,15 @@
         guid = function () {
             return ++_id;
         },
+        
+        toInt = function(expr) {
+            var num = parseInt(expr, 10);
+            return isNaN(num) ? 0 : num;
+        },
+
+        trim = function (str) {
+            return str.trim && str.trim() || str.replace(/^\s+|\s+$/g, '');
+        },
 
         getStyle = function(ele, prop) {
             return prop ? getComputedStyle(ele, '').getPropertyValue(prop) : getComputedStyle(ele, '');
@@ -50,7 +59,8 @@
     function slimBorder(ele){
         var style    = document.createElement('style'),
             curStyle = getStyle(ele),
-            color    = curStyle['borderColor'] || '#dcdcdc';
+            color    = curStyle['borderColor'] || '#dcdcdc',
+            klass    = trim(ele.className);
 
         ctx.fillStyle = color;
         ctx.clearRect(0, 0, 5, 5);

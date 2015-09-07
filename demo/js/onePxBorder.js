@@ -1,11 +1,8 @@
-
 /*
  * @desc    1px border with borderRadius
  * @author  fj10854
  * @email   angusfu1126@qq.com
  * @date    2015-09-02 17:17:43
- *
- * @demo    http://output.jsbin.com/vemocehihu
  */
 
 !(function (global, factory) {
@@ -101,7 +98,7 @@
             eleStyle = ele['style'],
             pos      = curStyle['position'],
             radius   = toInt(curStyle['borderRadius']) || 0,
-            bWidth   = toInt(curStyle['borderWidth']) || 1,
+            bWidth   = toInt(curStyle['borderWidth']) ? 1 : 0,
             bColor   = curStyle['borderColor'] || '#000',
             bStyle   = curStyle['borderStyle'],
             tempObj  = null,
@@ -119,7 +116,7 @@
         tempObj = {
             border   : bWidth + 'px ' + bStyle + ' ' + bColor,
             radius   : radius ? radius + 'px' : 0,
-            radiusx2 : radius ? radius * 2 + 'px' : 9,
+            radiusx2 : radius ? radius * 2 + 'px' : 0,
             klass    : 'rsb_' + guid()
         };
 
