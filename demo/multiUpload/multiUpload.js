@@ -27,21 +27,21 @@
      * 利用 $ 的 on和off
      * 完成订阅者模式
      */
-    function createEventEmiter(obj) {
-        var o = $({});
+    // function createEventEmiter(obj) {
+    //     var o = $({});
 
-        obj.on = function() {
-          o.on.apply(o, arguments);
-        };
+    //     obj.on = function() {
+    //       o.on.apply(o, arguments);
+    //     };
 
-        obj.off = function() {
-          o.off.apply(o, arguments);
-        };
+    //     obj.off = function() {
+    //       o.off.apply(o, arguments);
+    //     };
 
-        obj.trigger = function() {
-          o.trigger.apply(o, arguments);
-        };
-    }
+    //     obj.trigger = function() {
+    //       o.trigger.apply(o, arguments);
+    //     };
+    // }
 
     /**
      * 数组去重
@@ -118,8 +118,6 @@
         this.afterQueue = config.afterQueue;
 
         this.initialize();
-
-        createEventEmiter(this);
     }
 
     /**

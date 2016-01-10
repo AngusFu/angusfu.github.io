@@ -9,6 +9,7 @@
   "author": "angusfu1126@qq.com",
   "license": "MIT",
   "devDependencies": {
-    "formidable": "^1.0.17"
+    "formidable": "^1.0.17",
+    "shelljs": "^0.5.3"
   }
 }
