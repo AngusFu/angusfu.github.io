@@ -1,0 +1,219 @@
+
+.page-mask {
+    display: none;
+    top: 0px;
+    left: 0px;
+    position: fixed;
+    width: 1903px;
+    height: 965px;
+    opacity: 0.5;
+    z-index: 10;
+    background-color: rgb(51, 51, 51);
+}
+.my-calendar-wrap {
+    display: none;
+    background-color: #fff;
+    width: 400px;
+    font-size: 14px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -200px;
+    -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+    z-index: 99;
+    background: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 11px 0 #333;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+}
+.pop-head {
+    padding: 14px 20px 0;
+    font-size: 16px;
+    font-weight: bold;;
+}
+.my-calendar-con {
+    position: relative;
+    padding: 0 20px;
+}
+.my-calendar {
+    float: left;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 10px 30px;
+}
+.my-calendar-con:after,
+.my-calendar:after {
+    display: block;
+    content: '';
+    clear: both;
+    visibility: hidden;
+}
+.my-calendar p,
+.my-calendar b {
+    background-color: #fff;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+.my-calendar p:nth-child(7n + 1),
+.my-calendar b:nth-child(7n + 1) {
+    border-left: 1px solid #ccc;
+}
+.my-calendar p:nth-child(-n+14),
+.my-calendar b:nth-child(-n+14) {
+    border-top: 1px solid #ccc;
+}
+.my-calendar p,
+.my-calendar b {
+    position: relative;
+    box-sizing: border-box;
+    float: left;
+    width: 14.285714285714286%;
+    margin: 0;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+}
+.my-calendar b {
+    background: rgba(151, 241, 208, 0.38);
+    /*border-color: rgba(205, 205, 205, .5);*/
+    border-bottom: 2px solid #a0d468;
+}
+.my-calendar p {
+    color: #ddd;
+}
+.my-calendar .cvalid {
+    color: red;
+}
+.my-calendar p > i {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    font-style: normal;
+    left: 50%;
+    margin-left: -12px;
+    top: 3px;
+}
+.my-calendar .cvalid.over,
+.my-calendar .cvalid.at,
+.my-calendar .cvalid:hover {
+    color: #fff;
+    background-color: #3bb4f2;
+}
+.my-calendar p.over > i {
+    opacity: 0.6;
+}
+.my-calendar p.to > i,
+.my-calendar p.from > i {
+    color: #fff;
+    border-radius: 50%;
+    background-color: #F37B1D;
+}
+
+.my-calendar .cvalid{
+    cursor: pointer;
+}
+
+.my-calendar-con input {
+     background-color: #fff!important
+}
+
+.prev,
+.next {
+    position: absolute;
+    font-size: 12px;
+    float: left;
+}
+.prev {
+   left: 20px;
+}
+.next {
+    right: 20px;
+}
+.my-time-change {
+    position: relative;
+    margin-top: 5px;
+    font-size: 14px;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+}
+.my-time-change select {
+    font-size: 14px;
+    height: 26px;
+    line-height: 26px;
+    border: 0;
+}
+.my-time-change select:focus {
+    outline: 0;
+}
+
+.my-calendar-result {
+    float: left;
+    width: 100%;
+    top: 20px;
+    margin-top: 20px;
+}
+.my-dates-tags {
+    float: left;
+    overflow: hidden;
+}
+.my-dates-tags span {
+    position: relative;
+    display: inline-block;
+    color: #333;
+    font-weight: bold;
+    margin: 5px;
+    margin-top: 8px;
+    padding: 4px 5px;
+    padding-right: 15px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+.my-dates-tags span i {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    right: -7px;
+    top: -7px;
+    background-color: #fff;
+    border: 1px solid #333;
+    border-radius: 50%;
+
+    text-align: center;
+    font-size: 16px;
+    line-height: 8px;
+    font-style: normal;
+    cursor: pointer;
+}
+.my-dates-tags span.conflict-warn {
+    border-color: red;
+}
+.my-calendar .cinvalid.over > i,
+.my-calendar .cinvalid > i,
+.my-calendar .cinvalid {
+    color: #ccc;
+    cursor: not-allowed;
+    background: none;
+}
+
+.my-dates-tags span.date-invalid {
+    color: #ccc;
+    border: 1px solid #ccc;
+    cursor: not-allowed;
+}
+.close-pop {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    right: 14px;
+    top: 15px;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3FpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDoxODY3YzIxMC04NmNkLTc0NGEtYjY1Yi1hMTcxMmZjNDRhZTUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6REUxQTY1OTU0RjkwMTFFNUFFQjFBNDA3NUIxMTE3RDAiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6REUxQTY1OTQ0RjkwMTFFNUFFQjFBNDA3NUIxMTE3RDAiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjVmZDM5OWNiLTJmOWMtMmY0NS1hMjFjLWIyMDkwYmU5OGFmMyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoxODY3YzIxMC04NmNkLTc0NGEtYjY1Yi1hMTcxMmZjNDRhZTUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5qA99fAAAAtUlEQVR42pSTQQ6CMBBFBzIJl9CLaDyQRheUc7hDk57H4Em8BCv9TbqYTGbK2OTREHiP0kCXcx6JaAcmio8OHMDS47AHCdz/kGfwAkeuMol5CsgX8ARvVnIrouUr+LK4oRUx5XKB1VOsiCtbAR0p8uDJXkBGxjqbchl9Y7cHcb5asrcC/c6rWEnaCrQ2zIywIz/ATcjJi3BAplaEg7Ib4fpXnQOyGSmBBZzKjxGQSX1kn58AAwANBjue3tfwKgAAAABJRU5ErkJggg==) no-repeat;
+    cursor: pointer;
+    z-index: 199;
+}
