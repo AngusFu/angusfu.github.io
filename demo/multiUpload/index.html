@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link href="//cdn.bootcss.com/normalize/3.0.3/normalize.css" rel="stylesheet">
+    <script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <style>
+        .wrap {
+            position: relative;
+            color: #fff;
+            text-align: center;
+            line-height: 30px;
+            -webkit-user-select: none;
+        }
+        .picker {
+            width: 200px;
+            height: 30px;
+            background-color: #ff8400;
+            margin: 20px;
+            cursor: pointer;
+        }
+        .upload {
+            width: 200px;
+            height: 30px;
+            background-color: #ff8400;
+            margin: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="picker">选择文件</div>
+        <div class="upload">上传</div>
+    </div>
+
+    <script src="multiUpload.js"></script>
+    <script>
+        var handle = $('.picker').multiUpload({
+            url: '/upload',
+            maxSize: 200,
+            types: ['*'],
+            maxNum: 5,
+
+            beforeQueue: function (file) {
+                console.log(file);
+                return true;
+            },
+
+            afterQueue: function (result) {
+                console.log(result);
+            },
+
+            sucess: function () {
+                
+            },
+
+            progress: function () {
+                
+            },
+
+            error: function () {
+                alert(99999)
+            }
+        });
+
+
+        $('.upload').click(handle)
+    </script>
+</body>
+</html>

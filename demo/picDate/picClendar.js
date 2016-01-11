@@ -255,7 +255,7 @@ var Calendar = (function() {
         }
         $('.next').show();
 
-        this.go(now.getFullYear(), now.getMonth() + 2, this.triggerElem);
+        this.go(now.getFullYear(), now.getMonth(), this.triggerElem);
     };
 
     Calendar.prototype.go = function(year, month, triggerElem) {

@@ -1,0 +1,14 @@
+{
+  "name": "multi-upload",
+  "version": "1.0.0",
+  "description": "multiple file-uploader using FormData and Ajax",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "angusfu1126@qq.com",
+  "license": "MIT",
+  "devDependencies": {
+    "formidable": "^1.0.17"
+  }
+}
