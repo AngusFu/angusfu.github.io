@@ -4,12 +4,17 @@
   "description": "multiple file-uploader using FormData and Ajax",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./server.js"
   },
   "author": "angusfu1126@qq.com",
   "license": "MIT",
   "devDependencies": {
     "formidable": "^1.0.17",
+    "opn": "^3.0.3",
     "shelljs": "^0.5.3"
+  },
+  "repository": {
+     "type": "git",
+     "url": "git://github.com/AngusFu/multi-uploader.git"
   }
 }

@@ -1,17 +1,26 @@
 var http = require('http');
+
 var fs = require('fs');
+
 var util = require('util');
+var log = util.log;
 
 var formidable = require('formidable');
+
 var shelljs = require('shelljs/global');
 
+var ip = require('./lib/ip');
+var open = require('opn');
+
+
+//////////////////////////////////////////////////
 var server = http.createServer();
 var port = 6853;
 server.listen(port);
 
-var log = util.log;
-
 log('Http Server is listening ' + port + ' port.');
+
+open('http://' + (ip ? ip : '127.0.0.1') + ':' + port);
 
 if (!test('-e', './temp/')) {
     fs.mkdirSync('./temp/');
@@ -22,8 +31,8 @@ if (!test('-e', './upload/')) {
 
 server.on('request', function(request, response) {
     var filename = null;
-
     var url = require('url').parse(request.url);
+
     switch (url.pathname) {
         case '/upload':
             // parse a file upload
@@ -38,7 +47,6 @@ server.on('request', function(request, response) {
                     file = files[file];
                     fs.renameSync(file.path, './upload/' + file.name);
                 }
-                //
 
                 response.writeHead(200, {
                     'content-type': 'text/plain'
@@ -89,6 +97,5 @@ server.on('request', function(request, response) {
                 }
                 response.end();
             });
-
     }
 });
