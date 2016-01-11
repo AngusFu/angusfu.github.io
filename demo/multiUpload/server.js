@@ -38,6 +38,7 @@ server.on('request', function(request, response) {
                     file = files[file];
                     fs.renameSync(file.path, './upload/' + file.name);
                 }
+                //
 
                 response.writeHead(200, {
                     'content-type': 'text/plain'
