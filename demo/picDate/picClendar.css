@@ -4,8 +4,8 @@
     top: 0px;
     left: 0px;
     position: fixed;
-    width: 1903px;
-    height: 965px;
+    right: 0;
+    bottom: 0;
     opacity: 0.5;
     z-index: 10;
     background-color: rgb(51, 51, 51);
