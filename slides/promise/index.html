@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>异步场景下的 js 编程</title>
+    <link rel="stylesheet" href="./css/reveal.css">
+    <link rel="stylesheet" href="./css/theme/night.css" id="theme">
+    <link rel="stylesheet" href="./lib/css/zenburn.css">
+    <style>
+        section *, body, button, input, select, textarea {
+            font-family: 'helvetica neue',tahoma,'hiragino sans gb',stheiti,'wenquanyi micro hei',\5FAE\8F6F\96C5\9ED1,\5B8B\4F53,sans-serif !important;
+        }
+        code, code * {
+            font-family: monospace, '宋体' !important;
+        }
+        .hljs-comment {
+            font-style: italic !important;
+        }
+        button:focus {
+            outline: 0 !important;
+        }
+        pre {
+            font-size: .7em !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section 
+                data-markdown="index.md"
+                <!-- data-separator="===================================================">
+                <!-- data-separator-vertical="==="> -->
+            </section>
+        </div>
+    </div>
+    <script src="./lib/js/head.min.js"></script>
+    <script src="./js/reveal.js"></script>
+    <script>
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [{
+            src: './lib/js/classList.js',
+            condition: function() {
+                return !document.body.classList;
+            }
+        }, {
+            src: './plugin/markdown/marked.js',
+            condition: function() {
+                return !!document.querySelector('[data-markdown]');
+            }
+        }, {
+            src: './plugin/markdown/markdown.js',
+            condition: function() {
+                return !!document.querySelector('[data-markdown]');
+            }
+        }, {
+            src: './plugin/highlight/highlight.js',
+            async: true,
+            callback: function() {
+                hljs.initHighlightingOnLoad();
+            }
+        }/*, {
+            src: './plugin/notes/notes.js'
+        }*/]
+    });
+    </script>
+</body>
+
+</html>
