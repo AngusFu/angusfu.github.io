@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>css background hack</title>
+</head>
+
+<body>
+    <label for="rgba">颜色值</label>
+    <br>
+    <input id="rgba" type="text" value="rgba(255, 255, 255, .8)">
+    <br>
+    <div id="res1" style="width: 300px; height: 20px;background: rgba(255, 255, 255, .8)"></div>
+    <label for="filter">结果</label>
+    <br>
+    <input type="text" id="filter">
+    <br>
+    <div id="res2" style="width: 300px; height: 20px;"></div>
+    <button id="btn" data-clipboard-target="#filter">生成代码并拷贝</button>
+    
+    <!--[if !IE]-->
+    <script src="clipboard.min.js"></script>
+    <script>
+    new Clipboard('#btn');
+    </script>
+    <!--[endif]-->
+    <script>
+    var getResult = function getResult(val) {
+        return 'progid:DXImageTransform.Microsoft.gradient(startColorstr=#' + val + ', endColorstr=#' + val + ');';
+    };
+
+    // https://www.npmjs.com/package/rgba-regex
+    function rgbaRegex(options) {
+        options = options || {};
+
+        return options.exact ? /^rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d*(?:\.\d+)?)\)$/ : /rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d*(?:\.\d+)?)\)/ig;
+    }
+
+    var cache = ['', ' ', '  ', '   ', '    ', '     ', '      ', '       ', '        ', '         '];
+
+    function leftPad(str, len, ch) {
+        // convert `str` to `string`
+        str = str + '';
+
+        // doesn't need to pad
+        len = len - str.length;
+        if (len <= 0) return str;
+
+        // convert `ch` to `string`
+        if (!ch && ch !== 0) ch = ' ';
+        ch = ch + '';
+        if (ch === ' ' && len < 10) return cache[len] + str;
+        var pad = '';
+        while (true) {
+            if (len & 1) pad += ch;
+            len >>= 1;
+            if (len) ch += ch;
+            else break;
+        }
+        return pad + str;
+    }
+
+
+    var isIE = window.VBArray;
+
+    document.getElementById('btn').onclick = function() {
+        var rgba = document.getElementById('rgba').value,
+            regex = rgbaRegex(),
+            res = regex.exec(rgba);
+
+        if (!res || res.length < 4) {
+            alert('格式有误');
+            return;
+        }
+        res[4] = +res[4] > 1 ? 1 : res[4];
+        res = [Math.round(255 * res[4]).toString(16), (+res[1]).toString(16), (+res[2]).toString(16), (+res[3]).toString(16)];
+
+        for (var i = 0; i < res.length; i++) {
+            res[i] = leftPad(res[i], 2, '0');
+        }
+
+        if (!isIE) {
+            document.getElementById('res1').style.backgroundColor = rgba;
+            document.getElementById('res2').style.backgroundColor = '#' + res.slice(1).join('');
+        } else {
+            document.getElementById('res1').style.cssText += ';filter:' + getResult(res.join(''));
+            document.getElementById('res2').style.cssText += ';filter:' + getResult(res.join(''));
+        }
+        
+        document.getElementById('filter').value = 'filter:' + getResult(res.join(''));
+    };
+
+    document.getElementById('rgba').oninput =
+    document.getElementById('rgba').onchange = function() {
+        if (!isIE && rgbaRegex().test(this.value)) {
+            document.getElementById('res1').style.backgroundColor = this.value;
+        }
+    };
+    </script>
+</body>
+
+</html>
