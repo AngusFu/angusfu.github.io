@@ -1,8 +1,11 @@
 define('@weex-component/x', function (require, exports, module) {
 
 ;
+var stream = require('@weex-module/stream');
+
 module.exports = {
     data: function () {return {
+      content: 'lorem',
       intervalValue:"1000",
       isShowIndicators:"true",
       isAutoPlay:"true",
@@ -15,6 +18,15 @@ module.exports = {
     methods: {
       goWeexSite: function () {
         this.$openURL('http://alibaba.github.io/weex/')
+      },
+      update: function () {
+        var self = this;
+        stream.sendHttp({
+          method: 'GET',
+          url: 'http://fex.baidu.com', // can't not support CORS yet!
+        }, function(ret) {
+          self.content = ret;
+        });
       }
     }
 }
@@ -98,8 +110,11 @@ module.exports = {
     },
     {
       "type": "text",
+      "events": {
+        "click": "update"
+      },
       "attr": {
-        "value": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo impedit, dignissimos quam facilis nisi amet nobis doloribus iusto nemo perspiciatis, omnis rem laudantium, illo excepturi aperiam porro adipisci qui illum."
+        "value": function () {return this.content}
       }
     },
     {

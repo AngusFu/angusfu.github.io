@@ -6,7 +6,7 @@
         <text class="title">{{title}}</text>
       </div>
     </slider>
-    <text>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo impedit, dignissimos quam facilis nisi amet nobis doloribus iusto nemo perspiciatis, omnis rem laudantium, illo excepturi aperiam porro adipisci qui illum.</text>
+    <text onclick="update">{{content}}</text>
     <div class="container" onclick="goWeexSite" >
       <div class="cell">
           <image class="thumb" src="http://t.cn/RGE3AJt"></image>
@@ -41,8 +41,11 @@
 </style>
 
 <script>
+var stream = require('@weex-module/stream');
+
 module.exports = {
     data: {
+      content: 'lorem',
       intervalValue:"1000",
       isShowIndicators:"true",
       isAutoPlay:"true",
@@ -55,6 +58,15 @@ module.exports = {
     methods: {
       goWeexSite: function () {
         this.$openURL('http://alibaba.github.io/weex/')
+      },
+      update: function () {
+        var self = this;
+        stream.sendHttp({
+          method: 'GET',
+          url: 'http://fex.baidu.com', // can't not support CORS yet!
+        }, function(ret) {
+          self.content = ret;
+        });
       }
     }
 }
