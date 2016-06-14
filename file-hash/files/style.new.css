@@ -1,0 +1,166 @@
+body {
+    margin-top: 70px;
+    /*margin-bottom: 50px;*/
+    background-color: #f8f8f8;
+}
+
+pre, td {
+    white-space: pre-wrap;       
+    white-space: -moz-pre-wrap;  
+    white-space: -pre-wrap;      
+    white-space: -o-pre-wrap;    
+    word-wrap: break-word;       
+}
+.gold {color: #ffff00!important;}
+.red {color: red!important;}
+.blue {color: blue!important;}
+.green {color: green!important;}
+.grey {color: grey!important;}
+.strong{font-weight:bold;}
+.hidden, .hide{display: none;}
+
+.light {
+    background: #CCC;
+    color: #333;
+}
+
+.dark {
+    background: #333;
+    color: #CCC;
+}
+
+.grid {
+    text-align: center;
+}
+
+.banner {
+    text-align: center;
+    padding: 10px 0;
+}
+
+.table {
+    margin-bottom: 35px;
+}
+
+.banner button {
+    margin-top: 7px;
+}
+
+.divider {
+    width: 100%;
+    background: #CCC;
+    height: 1px;
+    margin: 25px 0;
+}
+
+.explainer {
+    font-weight: 200;
+    color: #222;
+    margin-bottom: 10px;
+}
+
+button {
+    margin-bottom: 10px;
+}
+
+img {
+    max-width: 100%;
+}
+
+ul.new_tools_list, ul.sitemap_list {
+    margin: 20px 0 20px 35px;
+}
+
+ul.friend_link_list {
+    margin: 20px 10px;
+}
+
+ul.new_tools_list li {
+    list-style-type:decimal;
+}
+
+ul.sitemap_list {
+    list-style-type:upper-roman;
+}
+ul.friend_link_list li {
+    list-style-type:none;
+}
+
+/* sitemap样式 */
+.site-nav{position:relative;width:100%;padding:5px 0;overflow:hidden;margin-bottom:10px}
+.site-nav .site-title{width:144px;height:35px;font-size:1em;color:#FFFFFF;text-align:center;line-height:35px;background:#75a3ef;z-index:500;margin:0 0 10px 1px;border-radius:4px}
+.site-nav .long-title{width: 240px;}
+.site-nav ul{width:100%;margin:0 auto;border-top:1px solid #ddd;border-left:1px solid #ddd;overflow:hidden;list-style:none}
+.site-nav li{float:left;width:165px;height:30px;overflow:hidden;border-right:1px solid #ddd;border-bottom:1px solid #ddd}
+.site-nav li a{background:#eee;display:inline-block;width:100%;color:#333;height:100%;line-height:31px;padding:0 10px;font-size:.9em;text-decoration:none}
+.site-nav li a:hover{color:#333;background:#ccc}
+.site-nav li a.new{color:red}
+@media only screen and (max-width: 767px) {
+    .site-nav li {
+        width:152px;
+    }
+}
+/* end sitemap 样式 */
+
+.footer {
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+#qrcode_ad {
+    position:fixed;
+    top:100px;
+    right:30px;
+    z-index:99999;
+    border: 1px solid #E5E5DB;
+    padding:5px;
+}
+
+/* 设置滚动条的样式 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+/* 滚动槽 */
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.3);
+    border-radius: 2px;
+}
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background: rgba(0,0,0,0.1);
+    -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.5);
+}
+::-webkit-scrollbar-thumb:window-inactive {
+    background: rgba(255,0,0,0.4);
+}
+
+@media only screen and (max-width: 999px) {
+    #qrcode_ad {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .navbar ul.pull-right {
+        display: none;
+    }
+}
+@keyframes pound {
+  from { transform: none; }
+  to { transform: scale(1.15); }
+}
+@keyframes for_ad {
+  from { transform: none; }
+  to { transform: scale(1.02); }
+}
+
+.gg_ad_shake:hover {
+    animation: for_ad .3s infinite;
+}
+
+.shake_logo:hover {
+  animation: pound .3s infinite;
+}

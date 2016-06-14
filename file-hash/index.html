@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://localhost:8080/workspace/aawork/filehash.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>HTML5 File Hash</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="stylesheet" href="./files/bijou.min.css">
+    <link rel="stylesheet" href="./files/style.new.css">
+    <script src="./files/jquery.min.js"></script>
+    <script src="./files/dropzone.min.js"></script>
+    <link rel="stylesheet" href="./files/dropzone.min.css">
+    <script type="text/javascript" src="./files/md5.js"></script>
+    <script type="text/javascript" src="./files/sha1.js"></script>
+    <script type="text/javascript" src="./files/sha256.js"></script>
+    <script type="text/javascript" src="./files/sha512.js"></script>
+    <script type="text/javascript" src="./files/sha3.js"></script>
+    <script type="text/javascript" src="./files/ripemd160.js"></script>
+    <script type="text/javascript" src="./files/crc32.js"></script>
+    <script src="./files/html5hash.js"></script>
+    <style type="text/css">
+    #hash_file {
+        border: 2px solid rgb(66, 158, 158);
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h3 class="explainer">在线计算文件Hash值（CRC-32，MD5，SHA1，SHA-256） - aTool在线工具</h3>
+        <ul class="new_tools_list">
+            <li>最大支持<span class="green strong">最大支持3G（1024*3M）的文件计算，包括crc32, md5, sha1, sha256, sha512, sha3 and ripdemd160。</span></li>
+        </ul>
+        <form action="http://localhost:8080/workspace/aawork/filehash.html#" class="dropzone dz-clickable" id="hash_file">
+            <div class="dz-message">
+                Drop files here or click to upload.<br>
+                <span class="note">(文件拖放到这里或者点击选择文件 <strong>计算文件HASH值</strong>)</span>
+            </div>
+        </form>
+        <form action="http://localhost:8080/workspace/aawork/filehash.html#">
+            <input type="checkbox" name="crc32switch" checked="checked">CRC-32
+            <input type="checkbox" name="MD5-switch" checked="checked">MD5
+            <input type="checkbox" name="SHA1-switch" checked="checked">SHA1
+            <input type="checkbox" name="RIPEMD-160-switch">RIPEMD-160
+            <input type="checkbox" name="SHA256-switch" checked="checked">SHA256
+            <input type="checkbox" name="SHA512-switch">SHA512
+            <input type="checkbox" name="SHA3-224-switch">SHA3-224
+            <input type="checkbox" name="SHA3-256-switch">SHA3-256
+            <input type="checkbox" name="SHA3-384-switch">SHA3-384
+            <input type="checkbox" name="SHA3-512-switch">SHA3-512
+        </form>
+    <div class="divider"></div>
+    <table class="table">
+        <tbody id="showTable">
+            <tr class="th">
+                <th width="25%">项目</th>
+                <th width="70%">项目值</th>
+            </tr>
+        </tbody>
+    </table>
+    <div class="divider"></div>
+    <h4 class="explainer">文件哈希计算 | File Hash Calculate</h4>
+    <ul class="new_tools_list">
+        <li>MD5是一个将任意长度的数据字符串转化成短的固定长度的值的单向操作。任意两个字符串不应有相同的散列值（即，有“很大可能”是不一样的，并且要人为地创造出来两个散列值相同的字符串应该是困难的）。</li>
+        <li>因此MD5经常用于校验字符串或者文件，因为如果文件的MD5不一样，说明文件内容也是不一样的，即经过修改的，如果发现下载的文件和给的md5值不一样，就需要慎重使用。</li>
+        <li>MD5文件校验用途非常多，例如：游戏patch包的校验，病毒文件确认，app提审校验等等，只要需要确认某一个文件的唯一性和正确性，都会使用md5作为校验。</li>
+        <li>因此我们也经常会使用用到计算文件md5的工具，在一般的后端语言中，都可以进行计算，但是会比较麻烦。</li>
+        <li>经过改进之后，支持几乎所有的hash算法，包括crc32, md5, sha1, sha256, sha512, sha3 and ripdemd160，完爆所有互联网上的加密工具。</li>
+        <li>本工具使用html5的api计算文件的md5,不会上传文件到后台，而只是使用html文件api在前端进行计算，非常方便，并且对于您的文件绝对安全。最大支持3G（1024*3M）的文件计算</li>
+    </ul>
+    <div class="divider"></div>
+
+
+
+</div><input type="file" multiple="multiple" class="dz-hidden-input" style="visibility: hidden; position: absolute; top: 0px; left: 0px; height: 0px; width: 0px;"><div id="cli_dialog_div"></div></body></html>
