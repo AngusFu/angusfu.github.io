@@ -69,9 +69,6 @@ module.exports = {
   "style": {
     "flexDirection": "column"
   },
-  "events": {
-    "click": "update"
-  },
   "children": [
     {
       "type": "div",
@@ -79,7 +76,7 @@ module.exports = {
         "container"
       ],
       "events": {
-        "click": "goWeexSite"
+        "click": "update"
       },
       "children": [
         {
