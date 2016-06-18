@@ -42,7 +42,8 @@
 
 <script>
 var stream = require('@weex-module/stream');
-
+// var cheerio = require('./c');
+    
 module.exports = {
     data: {
       content: 'lorem',
@@ -61,12 +62,13 @@ module.exports = {
       },
       update: function () {
         var self = this;
-        stream.sendHttp({
-          method: 'GET',
-          url: 'http://fex.baidu.com', // can't not support CORS yet!
-        }, function(ret) {
-          self.content = ret;
-        });
+        // stream.sendHttp({
+        //   method: 'GET',
+        //   url: 'http://fex.baidu.com', // can't not support CORS yet!
+        // }, function(ret) {
+        //   var $ = cheerio.load('<h2 class="title">Hello world</h2>');
+        //   self.content = $('.post-list li a').attr('href');
+        // });
       }
     }
 }
