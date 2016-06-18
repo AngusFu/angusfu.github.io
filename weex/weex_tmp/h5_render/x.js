@@ -34,6 +34,9 @@ module.exports = {
 
 
 ;module.exports.style = {
+  "text": {
+    "fontSize": 30
+  },
   "cell": {
     "marginTop": 10,
     "marginLeft": 10,
@@ -111,6 +114,9 @@ module.exports = {
     },
     {
       "type": "text",
+      "classList": [
+        "text"
+      ],
       "events": {
         "click": "update"
       },
