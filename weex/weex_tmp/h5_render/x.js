@@ -69,61 +69,10 @@ module.exports = {
   "style": {
     "flexDirection": "column"
   },
+  "events": {
+    "click": "update"
+  },
   "children": [
-    {
-      "type": "slider",
-      "classList": [
-        "slider"
-      ],
-      "attr": {
-        "interval": function () {return this.intervalValue},
-        "autoPlay": function () {return this.isAutoPlay}
-      },
-      "children": [
-        {
-          "type": "div",
-          "classList": [
-            "slider-pages"
-          ],
-          "repeat": function () {return this.itemList},
-          "events": {
-            "click": "goWeexSite"
-          },
-          "children": [
-            {
-              "type": "image",
-              "classList": [
-                "thumb"
-              ],
-              "attr": {
-                "src": function () {return this.pictureUrl}
-              }
-            },
-            {
-              "type": "text",
-              "classList": [
-                "title"
-              ],
-              "attr": {
-                "value": function () {return this.title}
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "classList": [
-        "text"
-      ],
-      "events": {
-        "click": "update"
-      },
-      "attr": {
-        "value": function () {return this.content}
-      }
-    },
     {
       "type": "div",
       "classList": [
