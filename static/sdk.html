@@ -383,7 +383,7 @@ var out=' '; var ic = AdType === 1, s = 'width:' + it.adw/DPR + 'px;' + 'height:
         var style = el.style;
 
         style.animationDelay = style.webkitAnimationDelay = 0;
-        style.animationDuration = style.webkitAnimationDuration = parseFloat(duration) + 's';
+        style.animationDuration = style.webkitAnimationDuration = parseFloat(duration/1000) + 's';
         style.animationName = style.webkitAnimationName = opacity < 1 ? 'fadeOut' : 'fadeIn';
 
         el.addEventListener('webkitAnimationEnd', function fn() {
