@@ -109,6 +109,14 @@ body,
     c.canvas.toDataURL();
 */
 
+.container .ad-wrap.fadeIn {
+    -webkit-animation:  fadeIn 1.5s 0;
+    animation:  fadeIn 1.5s 0;
+}
+.container .ad-wrap.fadeOut {
+    -webkit-animation:  fadeOut 1.5s 0;
+    animation:  fadeOut 1.5s 0;
+}
 @-webkit-keyframes fadeIn {
     0% {
         opacity: .1;
@@ -380,11 +388,11 @@ var out=' '; var ic = AdType === 1, s = 'width:' + it.adw/DPR + 'px;' + 'height:
     // }
 
     function fade(el, opacity, duration, callback) {
-        var style = el.style;
-
-        style.animationDelay = style.webkitAnimationDelay = 0;
-        style.animationDuration = style.webkitAnimationDuration = parseFloat(duration/1000) + 's';
-        style.animationName = style.webkitAnimationName = opacity < 1 ? 'fadeOut' : 'fadeIn';
+        if (opacity < 1) {
+            el.classList.add('fadeOut');
+        } else {
+            el.classList.add('fadeIn');
+        }
 
         el.addEventListener('webkitAnimationEnd', function fn() {
             if (callback) callback();
