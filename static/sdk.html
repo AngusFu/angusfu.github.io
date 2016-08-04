@@ -46,7 +46,7 @@ body,
 }
 .container .ad-wrap {
     /*display: none;*/
-    opacity: 1;
+    opacity: .1;
     position: relative;
 }
 .container .close {
@@ -107,48 +107,7 @@ body,
     c.fillStyle = 'rgba(0, 0, 0, .3)';
     c.fillRect(0, 0, 1, 1);
     c.canvas.toDataURL();
-*/
-
-.container .ad-wrap.fadeIn {
-    -webkit-animation:  fadeIn 3s 0;
-    animation:  fadeIn 3s 0;
-}
-.container .ad-wrap.fadeOut {
-    -webkit-animation:  fadeOut 3s 0;
-    animation:  fadeOut 3s 0;
-}
-@-webkit-keyframes fadeIn {
-    0% {
-        opacity: .1;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-@keyframes fadeIn {
-    0% {
-        opacity: .1;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-@-webkit-keyframes fadeOut {
-    0% {
-        opacity: 1;
-    }
-    100% {
-        opacity: .1;
-    }
-}
-@keyframes fadeOut {
-    0% {
-        opacity: 1;
-    }
-    100% {
-        opacity: .1;
-    }
-}</style></head><body><div class=wrapper><div class=container></div></div><script>function renderTmpl(it
+*/</style></head><body><div class=wrapper><div class=container></div></div><script>function renderTmpl(it
 /**/) {
 var out=' '; var ic = AdType === 1, s = 'width:' + it.adw/DPR + 'px;' + 'height:' + it.adh/DPR + 'px;' + 'margin-top:-' + it.adh/DPR/2 + 'px;' + 'margin-left:-' + it.adw/DPR/2 + 'px;'; out+=' <div class="ad-wrap" impid="'+( it.impid )+'" style="'+( ic ? s : '' )+'"> ';if(it.adm_type == 0){out+=' <img src="'+( it.adm )+'" alt=""> ';}else{out+=' <iframe id="iframe_'+( it.impid )+'" src="about:blank" frameborder="0" width="100%" height="100%" target="_blank"></iframe>  ';}out+='  ';if(AdType !== 6){out+=' <a href="javascript:;" class="close" impid="'+( it.impid )+'"></a> ';}out+=' <h5 class="spread" impid="'+( it.impid )+'">推广</h5> </div>';return out;
 }</script><script>
@@ -339,68 +298,53 @@ var out=' '; var ic = AdType === 1, s = 'width:' + it.adw/DPR + 'px;' + 'height:
         setTimeout(callback, 1000 / 60);
     };
 
-    // function prefixed(style, attr, value) {
-    //     var webkitAttr = attr.slice(0, 1).toUpperCase() + attr.slice(1);
-    //     style[attr] = style[webkitAttr] = value;
-    // };
+    function prefixed(style, attr, value) {
+        var webkitAttr = attr.slice(0, 1).toUpperCase() + attr.slice(1);
+        style[attr] = style[webkitAttr] = value;
+    };
 
-    // prefixed.get = function(style, attr) {
-    //     var webkitAttr = attr.slice(0, 1).toUpperCase() + attr.slice(1);
-    //     return style[attr] || style[webkitAttr] || '';
-    // };
-
-    // function fade(el, opacity, duration, callback) {
-    //     if (typeof duration === 'undefined') duration = 1000;
-    //     else if (typeof duration === 'function') {
-    //         callback = duration;
-    //         duration = 1000;
-    //     }
-
-    //     var oldTransition = prefixed.get(el.style, 'transition') || '';
-    //     prefixed(el.style, 'transition', 'opacity ' + (duration / 1000) + 's');
-
-    //     raf(function() {
-    //         raf(function() {
-    //             el.style.opacity = opacity;
-    //         });
-    //     });
-
-    //     // setTimeout(function() {
-    //     //     prefixed(el.style, 'transition', oldTransition);
-    //     //     if (callback) callback();
-    //     // }, duration);
-    //     el.addEventListener('webkitTransitionEnd', function fn() {
-    //         prefixed(el.style, 'transition', oldTransition);
-    //         raf(function() {
-    //             getComputedStyle(el, null);
-    //         });
-    //         if (callback) callback();
-    //         el.removeEventListener('webkitTransitionEnd', fn);
-    //     });
-    //     el.addEventListener('transitionend', function fn() {
-    //         prefixed(el.style, 'transition', oldTransition);
-    //         raf(function() {
-    //             getComputedStyle(el, null);
-    //         });
-    //         if (callback) callback();
-    //         el.removeEventListener('transitionend', fn);
-    //     });
-    // }
+    prefixed.get = function(style, attr) {
+        var webkitAttr = attr.slice(0, 1).toUpperCase() + attr.slice(1);
+        return style[attr] || style[webkitAttr] || '';
+    };
 
     function fade(el, opacity, duration, callback) {
-        if (opacity < 1) {
-            el.classList.add('fadeOut');
-        } else {
-            el.classList.add('fadeIn');
+        if (typeof duration === 'undefined') duration = 1000;
+        else if (typeof duration === 'function') {
+            callback = duration;
+            duration = 1000;
         }
 
-        el.addEventListener('webkitAnimationEnd', function fn() {
-            if (callback) callback();
-            el.removeEventListener('webkitAnimationEnd', fn);
+        var oldTransition = prefixed.get(el.style, 'transition') || '';
+        prefixed(el.style, 'transition', 'opacity ' + (duration / 1000) + 's');
+
+        raf(function() {
+            raf(function() {
+                el.style.opacity = opacity;
+            });
         });
-        el.addEventListener('animationend', function fn() {
+
+        // setTimeout(function() {
+        //     prefixed(el.style, 'transition', oldTransition);
+        //     if (callback) callback();
+        // }, duration);
+        el.addEventListener('webkitTransitionEnd', function fn() {
+            prefixed(el.style, 'transition', oldTransition);
+            raf(function() {
+                qs('.ad-wrap').clientHeight;
+                qs('body').clientHeight;
+            });
             if (callback) callback();
-            el.removeEventListener('animationend', fn);
+            el.removeEventListener('webkitTransitionEnd', fn);
+        });
+        el.addEventListener('transitionend', function fn() {
+            prefixed(el.style, 'transition', oldTransition);
+            raf(function() {
+                qs('.ad-wrap').clientHeight;
+                qs('body').clientHeight;
+            });
+            if (callback) callback();
+            el.removeEventListener('transitionend', fn);
         });
     }
 
