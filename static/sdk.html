@@ -332,6 +332,7 @@ var out=' '; var ic = AdType === 1, s = 'width:' + it.adw/DPR + 'px;' + 'height:
             prefixed(el.style, 'transition', oldTransition);
             raf(function() {
                 console.log(el.style.cssText);
+                document.body.innerHTML = el.style.cssText
             });
             if (callback) callback();
             el.removeEventListener('webkitTransitionEnd', fn);
@@ -340,6 +341,7 @@ var out=' '; var ic = AdType === 1, s = 'width:' + it.adw/DPR + 'px;' + 'height:
             prefixed(el.style, 'transition', oldTransition);
             raf(function() {
                 console.log(el.style.cssText);
+                document.body.innerHTML = el.style.cssText
             });
             if (callback) callback();
             el.removeEventListener('transitionend', fn);
