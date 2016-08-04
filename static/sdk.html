@@ -331,7 +331,7 @@ var out=' '; var ic = AdType === 1, s = 'width:' + it.adw/DPR + 'px;' + 'height:
         el.addEventListener('webkitTransitionEnd', function fn() {
             prefixed(el.style, 'transition', oldTransition);
             raf(function() {
-                getComputedStyle(el, null);
+                console.log(el.style.cssText);
             });
             if (callback) callback();
             el.removeEventListener('webkitTransitionEnd', fn);
@@ -339,7 +339,7 @@ var out=' '; var ic = AdType === 1, s = 'width:' + it.adw/DPR + 'px;' + 'height:
         el.addEventListener('transitionend', function fn() {
             prefixed(el.style, 'transition', oldTransition);
             raf(function() {
-                getComputedStyle(el, null);
+                console.log(el.style.cssText);
             });
             if (callback) callback();
             el.removeEventListener('transitionend', fn);
