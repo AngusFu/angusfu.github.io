@@ -298,75 +298,58 @@ var out=' '; var ic = AdType === 1, s = 'width:' + it.adw/DPR + 'px;' + 'height:
 })(this);
 
 
-// // https://github.com/juliangruber/fade/blob/master/README.md
-// ;(function(window, document) {
-//     window.raf = window.requestAnimationFrame || window.webkitRequestAnimationFrame || function (callback) {
-//         setTimeout(callback, 1000 / 60);
-//     };
+// https://github.com/juliangruber/fade/blob/master/README.md
+;(function(window, document) {
+    window.raf = window.requestAnimationFrame || window.webkitRequestAnimationFrame || function (callback) {
+        setTimeout(callback, 1000 / 60);
+    };
 
-//     function prefixed(style, attr, value) {
-//         var webkitAttr = attr.slice(0, 1).toUpperCase() + attr.slice(1);
-//         style[attr] = style[webkitAttr] = value;
-//     };
+    function prefixed(style, attr, value) {
+        var webkitAttr = attr.slice(0, 1).toUpperCase() + attr.slice(1);
+        style[attr] = style[webkitAttr] = value;
+    };
 
-//     prefixed.get = function(style, attr) {
-//         var webkitAttr = attr.slice(0, 1).toUpperCase() + attr.slice(1);
-//         return style[attr] || style[webkitAttr] || '';
-//     };
+    prefixed.get = function(style, attr) {
+        var webkitAttr = attr.slice(0, 1).toUpperCase() + attr.slice(1);
+        return style[attr] || style[webkitAttr] || '';
+    };
 
-//     function fade(el, opacity, duration, callback) {
-//         if (typeof duration === 'undefined') duration = 1000;
-//         else if (typeof duration === 'function') {
-//             callback = duration;
-//             duration = 1000;
-//         }
-
-//         var oldTransition = prefixed.get(el.style, 'transition') || '';
-//         prefixed(el.style, 'transition', 'opacity ' + (duration / 1000) + 's');
-
-//         raf(function() {
-//             raf(function() {
-//                 el.style.opacity = opacity;
-//             });
-//         });
-
-//         // setTimeout(function() {
-//         //     prefixed(el.style, 'transition', oldTransition);
-//         //     if (callback) callback();
-//         // }, duration);
-//         el.addEventListener('webkitTransitionEnd', function fn() {
-//             prefixed(el.style, 'transition', oldTransition);
-//             raf(function() {
-//                 qs('.ad-wrap').clientHeight;
-//                 qs('body').clientHeight;
-//             });
-//             if (callback) callback();
-//             el.removeEventListener('webkitTransitionEnd', fn);
-//         });
-//         el.addEventListener('transitionend', function fn() {
-//             prefixed(el.style, 'transition', oldTransition);
-//             raf(function() {
-//                 getComputedStyle(el, null);
-//                 getComputedStyle(el, null);
-//             });
-//             if (callback) callback();
-//             el.removeEventListener('transitionend', fn);
-//         });
-//     }
-
-//     window.fade = fade;
-// })(window, document);
-
-
-window.fade = function(el, opacity, duration, callback) {
-    console.log(opacity);
-    Velocity(el, { opacity: opacity }, {
-        duration: 1000,
-        complete: function() {
-            callback && callback();
+    function fade(el, opacity, duration, callback) {
+        if (typeof duration === 'undefined') duration = 1000;
+        else if (typeof duration === 'function') {
+            callback = duration;
+            duration = 1000;
         }
-     });
-}
+
+        var oldTransition = prefixed.get(el.style, 'transition') || '';
+        prefixed(el.style, 'transition', 'opacity ' + (duration / 1000) + 's');
+
+        raf(function() {
+            raf(function() {
+                el.style.opacity = opacity;
+            });
+        });
+
+        // setTimeout(function() {
+        //     prefixed(el.style, 'transition', oldTransition);
+        //     if (callback) callback();
+        // }, duration);
+        el.addEventListener('webkitTransitionEnd', function fn() {
+            prefixed(el.style, 'transition', oldTransition);
+            if (callback) callback();
+            el.removeEventListener('webkitTransitionEnd', fn);
+        });
+        el.addEventListener('transitionend', function fn() {
+            prefixed(el.style, 'transition', oldTransition);
+            if (callback) callback();
+            el.removeEventListener('transitionend', fn);
+        });
+    }
+
+    window.fade = fade;
+})(window, document);
+
+
 
 
 /**
@@ -937,6 +920,17 @@ window.fade = function(el, opacity, duration, callback) {
             AdType = +(adreq && adreq.adtype || 0);
 
             if (AdType === 1) appendInterstitialCSS();
+
+
+            // @HACK
+            // 酷派大神
+            // 插屏应用淡入淡出时性能问题导致渲染有 bug
+            // http://bug.corp.qihoo.net/show_bug.cgi?id=89295
+            if (AdType === 1) {
+                window.fade = function(el, opacity, duration, callback) {
+                    callback && callback();
+                };
+            }
 
             sllgo.inject(data.adres.ads[0]);
         });
