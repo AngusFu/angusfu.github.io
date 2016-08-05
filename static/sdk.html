@@ -928,6 +928,7 @@ var out=' '; var ic = AdType === 1, s = 'width:' + it.adw/DPR + 'px;' + 'height:
             // http://bug.corp.qihoo.net/show_bug.cgi?id=89295
             if (AdType === 1) {
                 window.fade = function(el, opacity, duration, callback) {
+                    el.style.opacity = opacity;
                     callback && callback();
                 };
             }
