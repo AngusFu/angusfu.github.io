@@ -747,6 +747,7 @@ var out=' '; var ic = AdType === 1, s = 'width:' + it.adw/DPR + 'px;' + 'height:
             // 保证打点事件能进来
             var js = [
                 '<scri','pt>',
+                    'document.documentElement.onclick = function(){alert(22)};'
                     'document.body.addEventListener("click", function(e) {',
                         'top.console.log(window.innerWidth);',
                         'top.console.log(window.innerHeight);',
