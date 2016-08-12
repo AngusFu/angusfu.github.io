@@ -748,7 +748,8 @@ var out=' '; var ic = AdType === 1, s = 'width:' + it.adw/DPR + 'px;' + 'height:
             var js = [
                 '<scri','pt>',
                     'document.body.addEventListener("click", function(e) {',
-                        'top.console.log("h5 clicked!!");',
+                        'top.console.log(window.innerWidth);',
+                        'top.console.log(window.innerHeight);',
                         'top.' + hbName + '.notify("adclicked",{',
                             'impid: "' + ad.impid + '",',
                             'x: e.pageX || 0,',
