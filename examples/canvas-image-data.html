@@ -6,9 +6,17 @@
   <title>Canvas Demo</title>
 </head>
 <body>
-<button id="invertbtn">invert</button>
-<button id="grayscalebtn">grayscale</button>
-<canvas id="canvas"></canvas>
+<style>
+div {text-align: center}
+canvas { display: block; margin: 20px auto; }
+</style>
+
+<div style="">
+  <canvas id="canvas" height="256" width="256"></canvas>
+  <button id="invertbtn">invert</button>
+  <button id="grayscalebtn">grayscale</button>
+</div>
+
 <script>
 var img = new Image();
 img.src = '/lenna.jpg';
