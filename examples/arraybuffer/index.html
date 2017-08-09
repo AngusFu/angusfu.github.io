@@ -39,6 +39,7 @@ function draw(img) {
     worker.postMessage(imageData.data);
   };
   worker.onmessage = function (e) {
+    console.log(e.data.buffer === imageData.data.buffer)
     imageData.data.set(e.data);
     ctx.putImageData(imageData, 0, 0);
   }
