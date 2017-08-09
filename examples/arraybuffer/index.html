@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Canvas Demo</title>
+</head>
+<body>
+<style>
+div {text-align: center}
+canvas { display: block; margin: 20px auto; }
+</style>
+
+<div style="">
+  <canvas id="canvas" height="256" width="256"></canvas>
+  <button id="invertbtn">invert</button>
+</div>
+
+<script>
+var img = new Image();
+img.src = '/lenna.jpg';
+img.onload = function() {
+  draw(this);
+};
+
+function draw(img) {
+  var canvas = document.getElementById('canvas');
+  var ctx = canvas.getContext('2d');
+ 
+  canvas.height = img.height;
+  canvas.width = img.width;
+  ctx.drawImage(img, 0, 0);
+ 
+  var imageData = ctx.getImageData(0,0,canvas.width, canvas.height);
+  var data = imageData.data;
+
+  var worker = new Worker('invertWorker.js');
+  var invert = function() {
+    worker.postMessage(imageData.data);
+  };
+  window.onmessage = function (e) {
+    imageData.data.set(e.data);
+    ctx.putImageData(imageData, 0, 0);
+  }
+
+  var invertbtn = document.getElementById('invertbtn');
+  invertbtn.addEventListener('click', invert);
+}
+  
+</script>
+</body>
+</html>
