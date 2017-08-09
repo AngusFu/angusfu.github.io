@@ -38,7 +38,7 @@ function draw(img) {
   var invert = function() {
     worker.postMessage(imageData.data);
   };
-  window.onmessage = function (e) {
+  worker.onmessage = function (e) {
     imageData.data.set(e.data);
     ctx.putImageData(imageData, 0, 0);
   }
