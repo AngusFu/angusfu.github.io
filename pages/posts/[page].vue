@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import postsData from '../data/posts.json'
+import postsData from '../../data/posts.json'
 
 const posts = postsData
 </script>
