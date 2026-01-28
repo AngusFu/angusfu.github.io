@@ -31,8 +31,8 @@ dist/
 # Generated data
 data/
 
-# Generated post pages (built from markdown)
-pages/post/*.vue
+# Generated data files (built from markdown)
+public/data/
 
 # Generated static pages (built from markdown)
 pages/about.vue

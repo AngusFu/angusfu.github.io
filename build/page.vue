@@ -1,7 +1,7 @@
 <template>
-  <Page :config="config">__MARKDOWN__</Page>
+  <Page v-if="pageData" :config="pageData.config" :markdown="pageData.markdown" :rendered-html="pageData.renderedHtml" />
 </template>
 
 <script setup>
-const config = __CONFIG__
+const { data: pageData } = await useFetch('/api/pages/__SLUG__')
 </script>

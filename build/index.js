@@ -1,5 +1,5 @@
 import { basename, resolve, dirname } from 'path'
-import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from 'fs'
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs'
 import { glob } from 'glob'
 import yaml from 'js-yaml'
 import matter from 'gray-matter'
@@ -11,19 +11,14 @@ import { renderRSS } from './rss.js'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-const POST_TMPL = readFileSync(resolve(__dirname, './post.vue')).toString()
 const PAGE_TMPL = readFileSync(resolve(__dirname, './page.vue')).toString()
 const siteConf = yaml.load(readFileSync(resolve(__dirname, '../config.yaml'), 'utf8'))
 
 // Ensure directories exist
 mkdirSync(resolve(__dirname, '../data'), { recursive: true })
-mkdirSync(resolve(__dirname, '../pages/post'), { recursive: true })
+mkdirSync(resolve(__dirname, '../public/data/posts'), { recursive: true })
+mkdirSync(resolve(__dirname, '../public/data/pages'), { recursive: true })
 mkdirSync(resolve(__dirname, '../public'), { recursive: true })
-
-function indent(str, spaces) {
-  const pad = ' '.repeat(spaces)
-  return str.split('\n').map(line => pad + line).join('\n')
-}
 
 const main = function (data) {
   const metaTags = {}
@@ -85,20 +80,16 @@ const main = function (data) {
   }, [])
   writeFileSync('./data/archives.json', JSON.stringify(archiveInfo))
 
-  // Generate posts data
+  // Generate posts data (summaries use rendered HTML stripped to plain text)
   writeFileSync('./data/posts.json', JSON.stringify(data.map(getPostAbstract)))
 
-  // Clear and regenerate post pages
-  const postDir = resolve(__dirname, '../pages/post')
-  if (existsSync(postDir)) {
-    rmSync(postDir, { recursive: true })
-  }
-  mkdirSync(postDir, { recursive: true })
-
+  // Generate individual post JSON data files (fetched via useFetch for SSR)
   data.forEach((item, index) => {
-    const content = makePostVue(makePostInfo(data, index))
-    const file = './pages/post/' + item.config.filename + '.vue'
-    writeFileSync(file, content)
+    const postInfo = makePostInfo(data, index)
+    // Include pre-rendered HTML for SSR fallback (markstream-vue enhances on client)
+    postInfo.meta.renderedHtml = item.renderedHtml
+    const jsonFile = resolve(__dirname, '../public/data/posts/' + item.config.filename + '.json')
+    writeFileSync(jsonFile, JSON.stringify(postInfo.meta))
   })
 }
 
@@ -112,9 +103,15 @@ async function processFiles() {
 
   const pageData = await Promise.all(pages.map(getFileInfo))
   pageData.forEach((item) => {
-    const content = PAGE_TMPL
-      .replace('__MARKDOWN__', indent(item.source, 6))
-      .replace('__CONFIG__', JSON.stringify(item.config))
+    // Generate JSON data file
+    const jsonFile = resolve(__dirname, '../public/data/pages/' + item.config.filename + '.json')
+    writeFileSync(jsonFile, JSON.stringify({
+      config: item.config,
+      markdown: item.rawMarkdown,
+      renderedHtml: item.renderedHtml
+    }))
+    // Generate minimal .vue file that fetches JSON via useFetch (SSR-compatible)
+    const content = PAGE_TMPL.replace(/__SLUG__/g, item.config.filename)
     writeFileSync('./pages/' + item.config.filename + '.vue', content)
   })
 
@@ -125,18 +122,11 @@ async function processFiles() {
 
 processFiles()
 
-function makePostVue(data) {
-  return POST_TMPL
-    .replace('__DATA_', JSON.stringify(data.meta))
-    .replace('__CONTENT__', data.content)
-}
-
 function makePostInfo(posts, index) {
   const post = posts[index]
   if (!post) return null
 
   const config = post.config
-  const content = post.source
   const prev = posts[index - 1]
   const next = posts[index + 1]
 
@@ -145,6 +135,7 @@ function makePostInfo(posts, index) {
     description: config.desc || config.description,
     keywords: (config.keywords || config.tags || []).join(','),
     pathname: encodeURIComponent(config.filename),
+    markdown: post.rawMarkdown,
     translation: config.from ? {
       author: config.author,
       social: config.social,
@@ -160,10 +151,7 @@ function makePostInfo(posts, index) {
       pathname: encodeURIComponent(next.config.filename)
     }
   }
-  return {
-    meta,
-    content
-  }
+  return { meta }
 }
 
 function makeTagsFile(map, file) {
@@ -190,7 +178,9 @@ function getPostAbstract(item) {
     description
   } = item.config
 
-  const summary = item.source
+  // Render HTML for summary extraction only
+  const renderedHtml = item.renderedHtml
+  const summary = renderedHtml
     .replace(/[\n\r\t]/g, '')
     .replace(/<svg[ >].*?<\/svg>/g, '')
     .replace(/<\/?[^>]*>/g, '')
@@ -220,7 +210,8 @@ async function getFileInfo(file) {
 function getFrontMatter(source) {
   const result = matter(source)
   return {
-    source: renderMd(result.content),
+    rawMarkdown: result.content,
+    renderedHtml: renderMd(result.content),
     config: result.data
   }
 }

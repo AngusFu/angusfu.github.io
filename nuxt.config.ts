@@ -84,9 +84,12 @@ export default defineNuxtConfig({
         posts.push(`${base}/${pages--}`)
       }
 
+      // Individual post routes (for dynamic [slug].vue)
+      const postRoutes = postData.map((p: any) => `/post/${p.pathname}`)
+
       nitroConfig.prerender = nitroConfig.prerender || {}
       nitroConfig.prerender.routes = nitroConfig.prerender.routes || []
-      nitroConfig.prerender.routes.push(...cates, ...tags, ...posts)
+      nitroConfig.prerender.routes.push(...cates, ...tags, ...posts, ...postRoutes)
     }
   },
 

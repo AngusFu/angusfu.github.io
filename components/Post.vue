@@ -19,7 +19,9 @@
             <br />著作权属于原作者，本译文仅用于学习、研究和交流目的，请勿用于商业目的。
           </p>
         </blockquote>
-        <slot></slot>
+        <!-- SSR: pre-rendered HTML from marked. Client: markstream-vue takes over -->
+        <MarkdownRender v-if="isMounted" :content="post.markdown" :final="true" />
+        <div v-else v-html="post.renderedHtml"></div>
       </div>
     </article>
     <nav class="pagination" v-if="prevPost.title || nextPost.title">
@@ -51,6 +53,7 @@ const runtimeConfig = useRuntimeConfig()
 const config = runtimeConfig.public
 
 const post = computed(() => props.data)
+const isMounted = ref(false)
 const prevPost = computed(() => props.data.prev || {})
 const nextPost = computed(() => props.data.next || {})
 const permLink = computed(() => config.site_url + '/post/' + props.data.pathname)
@@ -77,6 +80,7 @@ function onKeydown(e) {
 }
 
 onMounted(() => {
+  isMounted.value = true
   if (import.meta.client) {
     document.addEventListener('keydown', onKeydown)
   }
