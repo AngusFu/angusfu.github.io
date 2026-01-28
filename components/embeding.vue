@@ -1,3 +1,26 @@
+<template>
+  <div class="aspect-ratio" :style="{ padding: paddingV + ' 0' }" :data-ratio="ratio">
+    <iframe :src="src" width="100%" height="100%" scrolling="no" frameborder="0" allowfullscreen />
+  </div>
+</template>
+
+<script setup>
+const props = defineProps({
+  src: {
+    type: String,
+    required: true
+  },
+  ratio: {
+    type: [Number, String],
+    default: 1.532
+  }
+})
+
+const paddingV = computed(() => {
+  return ((1 / props.ratio / 2) * 100).toFixed(3) + '%'
+})
+</script>
+
 <style scoped>
 .aspect-ratio iframe {
   position: absolute;
@@ -7,7 +30,7 @@
   bottom: 0;
   margin: 0;
 }
-.aspect-ratio { 
+.aspect-ratio {
   position: relative;
   width: 100%;
   height: 0;
@@ -16,28 +39,3 @@
   overflow: hidden;
 }
 </style>
-<template>
-  <div class="aspect-ratio" :style="{padding: paddingV + ' 0'}" :data-ratio="ratio">
-    <iframe :src="src" width="100%" height="100%" scrolling="no" frameborder="0" allowfullscreen />
-  </div>
-</template>
-<script>
-import Vue from 'vue'
-export default {
-  props: {
-    src: {
-      type: String,
-      required: true
-    },
-    ratio: {
-      type: [Number, String],
-        default: 1.532
-    }
-  },
-  computed: {
-    paddingV () {
-      return ((1 / this.ratio / 2) * 100).toFixed(3) + '%'
-    }
-  }
-}
-</script>

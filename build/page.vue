@@ -1,13 +1,7 @@
 <template>
-  <page :config="config">__MARKDOWN__</page>
+  <Page :config="config">__MARKDOWN__</Page>
 </template>
 
-<script>
-export default {
-  computed: {
-    config() {
-      return __CONFIG__;
-    }
-  }
-};
+<script setup>
+const config = __CONFIG__
 </script>

@@ -1,22 +1,22 @@
-<template lang="html">
+<template>
   <div class="wrapper">
     <nav id="sidebar" class="behavior_1">
       <div class="wrap">
         <div class="profile" @click.prevent="hideSide">
-          <nuxt-link to="/">
-              <img :src="logo_url" :alt="title">
-          </nuxt-link>
-          <span>{{title}}</span>
+          <NuxtLink to="/">
+            <img :src="config.logo_url" :alt="config.title">
+          </NuxtLink>
+          <span>{{ config.title }}</span>
         </div>
         <ul class="buttons">
-          <li v-for="nav in navigation" :key="nav.label" @click="hideSide">
-            <nuxt-link v-if="nav.url.indexOf('http') === -1" :to="nav.url" :title="nav.label">
+          <li v-for="nav in config.navigation" :key="nav.label" @click="hideSide">
+            <NuxtLink v-if="nav.url.indexOf('http') === -1" :to="nav.url" :title="nav.label">
               <i :class="['iconfont', 'icon-' + nav.option]"></i>
-              <span>&nbsp;{{nav.label}}</span>
-            </nuxt-link>
+              <span>&nbsp;{{ nav.label }}</span>
+            </NuxtLink>
             <a v-else :href="nav.url" :title="nav.label" target="_blank">
               <i :class="['iconfont', 'icon-' + nav.option]"></i>
-              <span>&nbsp;{{nav.label}}</span>
+              <span>&nbsp;{{ nav.label }}</span>
             </a>
           </li>
         </ul>
@@ -24,105 +24,95 @@
 
       <ul class="buttons">
         <li>
-          <a v-if="github_url" :href="github_url" class="inline" rel="nofollow" target="_blank">
+          <a v-if="config.github_url" :href="config.github_url" class="inline" rel="nofollow" target="_blank">
             <i class="iconfont icon-github-v" title="GitHub"></i>
           </a>
-          <a v-if="twitter_url && twitter_url.indexOf('twitter.com') > -1" :href="twitter_url" class="inline"  rel="nofollow" target="_blank">
+          <a v-if="twitterUrl && twitterUrl.indexOf('twitter.com') > -1" :href="twitterUrl" class="inline" rel="nofollow" target="_blank">
             <i class="iconfont icon-twitter-v" title="Twitter"></i>
           </a>
-          <a v-if="twitter_url && twitter_url.indexOf('weibo.com') > -1" :href="twitter_url" class="inline"  rel="nofollow" target="_blank">
+          <a v-if="twitterUrl && twitterUrl.indexOf('weibo.com') > -1" :href="twitterUrl" class="inline" rel="nofollow" target="_blank">
             <i class="iconfont icon-weibo" title="weibo"></i>
           </a>
           <a class="inline" href="/atom.xml" target="_blank">
             <i class="iconfont icon-rss-v" title="RSS"></i>
           </a>
-          <nuxt-link class="inline" to="/search">
+          <NuxtLink class="inline" to="/search">
             <i class="iconfont icon-search" title="Search"></i>
-          </nuxt-link>
+          </NuxtLink>
         </li>
       </ul>
     </nav>
     <div id="header">
       <div class="btn-bar" @click.prevent="toggleSide"><i></i></div>
-      <h1><nuxt-link to="/">{{title}}</nuxt-link></h1>
-      <nuxt-link class="me" to="/about/">
-        <img :src="logo_url" :alt="title">
-      </nuxt-link>
+      <h1><NuxtLink to="/">{{ config.title }}</NuxtLink></h1>
+      <NuxtLink class="me" to="/about/">
+        <img :src="config.logo_url" :alt="config.title">
+      </NuxtLink>
     </div>
 
-    <div id="sidebar-mask" @click.prevent="toggleSide" :style="{display: sideMaskShow ? 'block' : 'none'}"></div>
+    <div id="sidebar-mask" @click.prevent="toggleSide" :style="{ display: sideMaskShow ? 'block' : 'none' }"></div>
 
     <div id="main" class="main">
-      <nuxt />
+      <slot />
       <footer id="footer" class="inner">
-        &copy; {{ currentYear }}&nbsp;-&nbsp; {{title}}
-        
-          <span>&nbsp;-&nbsp;</span>
-          <a
-            v-if="miitbeian"
-            target="_blank"
-            rel="nofollow"
-            class="external beian"
-            href="http://www.miitbeian.gov.cn/"
-          >{{miitbeian}}</a>
-          <a
-            v-else-if="mpsbeian"
-            target="_blank"
-            rel="nofollow"
-            class="external beian"
-            href="http://www.beian.gov.cn/"
-          >{{mpsbeian}}</a>
-          <nuxt-link v-else to="/">{{hostname}}</nuxt-link>
-          
+        &copy; {{ currentYear }}&nbsp;-&nbsp; {{ config.title }}
+        <span>&nbsp;-&nbsp;</span>
+        <a
+          v-if="config.miitbeian"
+          target="_blank"
+          rel="nofollow"
+          class="external beian"
+          href="http://www.miitbeian.gov.cn/"
+        >{{ config.miitbeian }}</a>
+        <a
+          v-else-if="config.mpsbeian"
+          target="_blank"
+          rel="nofollow"
+          class="external beian"
+          href="http://www.beian.gov.cn/"
+        >{{ config.mpsbeian }}</a>
+        <NuxtLink v-else to="/">{{ config.hostname }}</NuxtLink>
         <br />
-        Powered by&nbsp;<a target="_blank" href="https://nuxtjs.org">Nuxt.js</a>&nbsp;&amp;&nbsp;<a target="_blank" rel="nofollow" class="external" href="https://firekylin.org">FireKylin</a>
+        Powered by&nbsp;<a target="_blank" href="https://nuxt.com">Nuxt 3</a>&nbsp;&amp;&nbsp;<a target="_blank" rel="nofollow" class="external" href="https://firekylin.org">FireKylin</a>
       </footer>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  head() {
-    return {
-      title: "首页",
-      titleTemplate: `%s | ${this.$config.title}`,
-      meta: [{ name: "description", content: this.metaDescription }]
-    };
+<script setup>
+const runtimeConfig = useRuntimeConfig()
+const config = runtimeConfig.public
+
+const sideMaskShow = ref(false)
+const currentYear = new Date().getFullYear()
+const twitterUrl = config.twitter_url || ''
+
+useHead({
+  titleTemplate: (titleChunk) => {
+    return titleChunk ? `${titleChunk} | ${config.title}` : config.title
   },
-  data() {
-    const config = this.$config;
-    return {
-      ...config,
-      twitter_url: config.twitter_url || "",
-      currentYear: new Date().getFullYear(),
-      mpsbeian: config.mpsbeian || "",
-      miitbeian: config.miitbeian || "",
-      hostname: config.hostname || "",
-      sideMaskShow: false
-    };
-  },
-  computed: {
-    metaDescription() {
-      return this.$config.description;
-    }
-  },
-  methods: {
-    toggleSide() {
-      this.sideMaskShow = !document.body.classList.contains("side");
-      document.body.classList.toggle("side");
-    },
-    hideSide() {
-      document.body.classList.remove("side");
-      this.sideMaskShow = false;
-    }
+  meta: [
+    { name: 'description', content: config.description }
+  ]
+})
+
+function toggleSide() {
+  if (import.meta.client) {
+    sideMaskShow.value = !document.body.classList.contains('side')
+    document.body.classList.toggle('side')
   }
-};
+}
+
+function hideSide() {
+  if (import.meta.client) {
+    document.body.classList.remove('side')
+    sideMaskShow.value = false
+  }
+}
 </script>
 
 <style>
 #__nuxt,
-#__layout,
 .wrapper {
   width: 100%;
   height: 100%;

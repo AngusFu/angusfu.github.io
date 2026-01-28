@@ -1,29 +1,37 @@
-const { basename, resolve } = require('path')
-const fs = require('fs-extra')
-const glob = require('glob')
-const indent = require('indent')
-const yaml = require('js-yaml')
-const mkdirp = require('mkdirp')
-const yamlFront = require('yaml-front-matter')
+import { basename, resolve, dirname } from 'path'
+import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from 'fs'
+import { glob } from 'glob'
+import yaml from 'js-yaml'
+import matter from 'gray-matter'
+import { fileURLToPath } from 'url'
 
-const renderMd = require('./markded')
-const renderRSS = require('./rss')
+import { renderMd } from './marked.js'
+import { renderRSS } from './rss.js'
 
-const POST_TMPL = fs.readFileSync(resolve(__dirname, './post.vue')).toString()
-const PAGE_TMPL = fs.readFileSync(resolve(__dirname, './page.vue')).toString()
-const siteConf = yaml.safeLoad(fs.readFileSync(resolve(__dirname, '../config.yaml'), 'utf8'))
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
-mkdirp.sync(resolve(__dirname, '../data'))
-mkdirp.sync(resolve(__dirname, '../pages/post'))
-fs.writeFileSync(resolve(__dirname, '../static/CNAME'), siteConf.hostname)
+const POST_TMPL = readFileSync(resolve(__dirname, './post.vue')).toString()
+const PAGE_TMPL = readFileSync(resolve(__dirname, './page.vue')).toString()
+const siteConf = yaml.load(readFileSync(resolve(__dirname, '../config.yaml'), 'utf8'))
+
+// Ensure directories exist
+mkdirSync(resolve(__dirname, '../data'), { recursive: true })
+mkdirSync(resolve(__dirname, '../pages/post'), { recursive: true })
+mkdirSync(resolve(__dirname, '../public'), { recursive: true })
+
+function indent(str, spaces) {
+  const pad = ' '.repeat(spaces)
+  return str.split('\n').map(line => pad + line).join('\n')
+}
 
 const main = function (data) {
   const metaTags = {}
   const metaCates = {}
   const metaArchives = {}
 
-  fs.writeFile(
-    resolve(__dirname, '../static/atom.xml'),
+  writeFileSync(
+    resolve(__dirname, '../public/atom.xml'),
     renderRSS(data, siteConf)
   )
 
@@ -62,12 +70,12 @@ const main = function (data) {
     })
   })
 
-  // 生成标签汇总数据
+  // Generate tags summary data
   makeTagsFile(metaTags, './data/tags.json')
-  // 生成分类数据
+  // Generate categories data
   makeTagsFile(metaCates, './data/cates.json')
 
-  // 生成归档数据
+  // Generate archives data
   const archiveInfo = Object.keys(metaArchives).reduce((acc, key) => {
     acc.push({
       yearMonth: key,
@@ -75,45 +83,55 @@ const main = function (data) {
     })
     return acc
   }, [])
-  fs.writeFile('./data/archives.json', JSON.stringify(archiveInfo))
+  writeFileSync('./data/archives.json', JSON.stringify(archiveInfo))
 
-  // 生成标签和分类下面的文章
-  fs.writeFile('./data/posts.json', JSON.stringify(data.map(getPostAbstract)))
+  // Generate posts data
+  writeFileSync('./data/posts.json', JSON.stringify(data.map(getPostAbstract)))
 
-  fs.emptyDirSync(resolve(__dirname, '../pages/post'))
+  // Clear and regenerate post pages
+  const postDir = resolve(__dirname, '../pages/post')
+  if (existsSync(postDir)) {
+    rmSync(postDir, { recursive: true })
+  }
+  mkdirSync(postDir, { recursive: true })
+
   data.forEach((item, index) => {
     const content = makePostVue(makePostInfo(data, index))
     const file = './pages/post/' + item.config.filename + '.vue'
-    fs.writeFileSync(file, content)
+    writeFileSync(file, content)
   })
 }
 
-const postFiles = Array.from(glob.sync('./source/_post/*.md'))
-const pages = Array.from(glob.sync('./source/*.md'))
+const postFiles = await glob('./source/_post/*.md')
+const pages = await glob('./source/*.md')
 
-Promise
-  .all(postFiles.map(getFileInfo))
-  .then(data => data.sort((a, b) => b.config.date - a.config.date))
-  .then(main)
+async function processFiles() {
+  const postData = await Promise.all(postFiles.map(getFileInfo))
+  const sortedPosts = postData.sort((a, b) => b.config.date - a.config.date)
+  main(sortedPosts)
 
-Promise
-  .all(pages.map(getFileInfo))
-  .then(data => {
-    data.forEach((item, i) => {
-      const content = PAGE_TMPL
-        .replace('__MARKDOWN__', indent(item.source, 6))
-        .replace('__CONFIG__', JSON.stringify(item.config))
-      fs.writeFile('./pages/' + item.config.filename + '.vue', content)
-    })
+  const pageData = await Promise.all(pages.map(getFileInfo))
+  pageData.forEach((item) => {
+    const content = PAGE_TMPL
+      .replace('__MARKDOWN__', indent(item.source, 6))
+      .replace('__CONFIG__', JSON.stringify(item.config))
+    writeFileSync('./pages/' + item.config.filename + '.vue', content)
   })
 
-function makePostVue (data) {
+  console.log('Build completed successfully!')
+  console.log(`  - ${sortedPosts.length} posts processed`)
+  console.log(`  - ${pageData.length} pages processed`)
+}
+
+processFiles()
+
+function makePostVue(data) {
   return POST_TMPL
     .replace('__DATA_', JSON.stringify(data.meta))
     .replace('__CONTENT__', data.content)
 }
 
-function makePostInfo (posts, index) {
+function makePostInfo(posts, index) {
   const post = posts[index]
   if (!post) return null
 
@@ -125,7 +143,7 @@ function makePostInfo (posts, index) {
   const meta = {
     title: config.title,
     description: config.desc || config.description,
-    keywords: (config.keywords || config.tags).join(','),
+    keywords: (config.keywords || config.tags || []).join(','),
     pathname: encodeURIComponent(config.filename),
     translation: config.from ? {
       author: config.author,
@@ -148,8 +166,7 @@ function makePostInfo (posts, index) {
   }
 }
 
-function makeTagsFile (map, file) {
-  // 生成标签汇总数据
+function makeTagsFile(map, file) {
   const data = Object.keys(map).reduce((acc, key) => {
     acc.push({
       pathname: encodeURIComponent(key),
@@ -158,10 +175,10 @@ function makeTagsFile (map, file) {
     })
     return acc
   }, []).sort((a, b) => b.count - a.count)
-  fs.writeFile(file, JSON.stringify(data))
+  writeFileSync(file, JSON.stringify(data))
 }
 
-function getPostAbstract (item) {
+function getPostAbstract(item) {
   const {
     date,
     tags,
@@ -174,16 +191,16 @@ function getPostAbstract (item) {
   } = item.config
 
   const summary = item.source
-      .replace(/[\n\r\t]/g, '')
-      .replace(/<svg[ >].*?<\/svg>/g, '')
-      .replace(/<\/?[^>]*>/g, '')
-      .replace(/(?:%\d+[\w-]+)+/g, '')
-      .substr(0, 200).trim()
+    .replace(/[\n\r\t]/g, '')
+    .replace(/<svg[ >].*?<\/svg>/g, '')
+    .replace(/<\/?[^>]*>/g, '')
+    .replace(/(?:%\d+[\w-]+)+/g, '')
+    .substr(0, 200).trim()
 
   return {
     user: editor || siteConf.site_owner || 'admin',
     title,
-    tags,
+    tags: tags || [],
     category,
     date,
     create_time: date.toISOString().slice(0, 10),
@@ -192,22 +209,18 @@ function getPostAbstract (item) {
   }
 }
 
-function getFileInfo (file) {
-  return fs.readFile(file)
-    .then(getFrontMatter)
-    .then(data => {
-      const filename = basename(file).replace(/\.(?:md|markdown)$/, '')
-      data.config.filename = filename
-      return data
-    })
+async function getFileInfo(file) {
+  const source = readFileSync(file, 'utf8')
+  const data = getFrontMatter(source)
+  const filename = basename(file).replace(/\.(?:md|markdown)$/, '')
+  data.config.filename = filename
+  return data
 }
 
-function getFrontMatter (source) {
-  const result = yamlFront.loadFront(source, '__mdContent')
-  const { __mdContent } = result
-  delete result.__mdContent
+function getFrontMatter(source) {
+  const result = matter(source)
   return {
-    source: renderMd(__mdContent),
-    config: result
+    source: renderMd(result.content),
+    config: result.data
   }
 }

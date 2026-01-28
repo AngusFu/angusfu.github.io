@@ -1,13 +1,7 @@
 <template>
-  <post :data="data">__CONTENT__</post>
+  <Post :data="data">__CONTENT__</Post>
 </template>
 
-<script>
-export default {
-  computed: {
-    data() {
-      return __DATA_;
-    }
-  }
-};
+<script setup>
+const data = __DATA_
 </script>
