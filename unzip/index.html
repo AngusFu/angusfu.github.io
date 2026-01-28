@@ -106,6 +106,8 @@
             flex-direction: column;
             overflow: hidden;
             z-index: 10;
+            /* 确保高度计算正确 */
+            height: 100%;
         }
 
         .browser-header {
@@ -115,6 +117,7 @@
             align-items: center;
             gap: 0.5rem;
             background: rgba(15, 23, 42, 0.5);
+            flex-shrink: 0;
         }
 
         .back-btn {
@@ -157,6 +160,7 @@
             background: rgba(0,0,0,0.2);
             padding: 0.25rem 0.5rem;
             border-radius: 9999px;
+            flex-shrink: 0;
         }
 
         /* 面包屑导航 */
@@ -170,6 +174,7 @@
             scrollbar-width: none;
             background: rgba(15, 23, 42, 0.3);
             min-height: 40px;
+            flex-shrink: 0;
         }
 
         .breadcrumb::-webkit-scrollbar {
@@ -208,11 +213,14 @@
             white-space: nowrap;
         }
 
-        /* 文件列表 */
+        /* 文件列表 - 关键修复 */
         .file-list {
             flex: 1;
             overflow-y: auto;
+            overflow-x: hidden;
             padding: 0.5rem;
+            /* 确保可以滚动 */
+            min-height: 0;
         }
 
         .file-item {
@@ -293,6 +301,7 @@
             align-items: center;
             justify-content: space-between;
             background: rgba(30, 41, 59, 0.5);
+            flex-shrink: 0;
         }
 
         .preview-title {
@@ -318,6 +327,7 @@
             display: flex;
             gap: 0.5rem;
             margin-left: 0.5rem;
+            flex-shrink: 0;
         }
 
         .icon-btn {
@@ -331,6 +341,7 @@
             align-items: center;
             justify-content: center;
             transition: all 0.2s;
+            flex-shrink: 0;
         }
 
         .icon-btn:hover {
@@ -486,6 +497,7 @@
             cursor: pointer;
             padding: 0.5rem;
             margin-right: 0.5rem;
+            flex-shrink: 0;
         }
 
         /* 桌面端布局 */
@@ -662,9 +674,8 @@
         let currentPath = [];
         let currentFile = null;
         let pathStack = [];
-        let currentFileContent = null; // 存储当前文件内容用于复制
+        let currentFileContent = null;
 
-        // file-type-mime 库实例
         const fileTypeParser = window.fileTypeMime;
 
         document.getElementById('fileInput').addEventListener('change', handleFileSelect);
@@ -699,7 +710,6 @@
                 renderCurrentDirectory();
                 updateBreadcrumb();
                 
-                // 重置预览区
                 document.getElementById('previewHeader').style.display = 'none';
                 document.getElementById('previewContent').innerHTML = `
                     <div class="empty-state">
@@ -889,10 +899,8 @@
             return '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>';
         }
 
-        // 检测文件类型
         async function detectFileType(arrayBuffer) {
             try {
-                // 使用 file-type-mime 检测
                 const result = fileTypeParser.parse(arrayBuffer);
                 if (result) {
                     return result;
@@ -900,12 +908,9 @@
             } catch (e) {
                 console.log('file-type detection failed:', e);
             }
-            
-            // 如果检测失败，返回未知类型
             return null;
         }
 
-        // 判断是否为文本类型
         function isTextType(mimeType) {
             if (!mimeType) return false;
             const textTypes = [
@@ -932,17 +937,14 @@
             return textTypes.some(type => mimeType.startsWith(type)) || mimeType.includes('script');
         }
 
-        // 判断是否为图片类型
         function isImageType(mimeType) {
             return mimeType && mimeType.startsWith('image/');
         }
 
-        // 判断是否为视频类型
         function isVideoType(mimeType) {
             return mimeType && mimeType.startsWith('video/');
         }
 
-        // 获取 highlight.js 语言标识
         function getHighlightLanguage(filename, mimeType) {
             const ext = filename.split('.').pop().toLowerCase();
             const languageMap = {
@@ -981,7 +983,6 @@
                 'csv': 'plaintext'
             };
             
-            // 根据 MIME 类型调整
             if (mimeType) {
                 if (mimeType.includes('javascript')) return 'javascript';
                 if (mimeType.includes('json')) return 'json';
@@ -1009,27 +1010,21 @@
             document.getElementById('previewTitle').textContent = fileItem._name;
             document.getElementById('previewMeta').textContent = formatFileSize(fileItem._file?._data?.uncompressedSize || 0);
             
-            // 清空操作按钮
             document.getElementById('previewActions').innerHTML = '';
             
             document.getElementById('previewContent').innerHTML = '<div class="loading"><div class="spinner"></div>加载中...</div>';
             
-            // 移动端切换到预览视图
             if (window.innerWidth <= 768) {
                 document.getElementById('fileBrowser').classList.add('hidden');
             }
             
             try {
-                // 获取文件内容作为 ArrayBuffer 用于类型检测
                 const arrayBuffer = await fileItem._file.async('arraybuffer');
                 
-                // 检测文件类型
                 const fileType = await detectFileType(arrayBuffer);
                 const mimeType = fileType ? fileType.mime : null;
                 
-                // 根据类型处理
                 if (isImageType(mimeType)) {
-                    // 图片预览
                     const blob = new Blob([arrayBuffer]);
                     const url = URL.createObjectURL(blob);
                     document.getElementById('previewContent').innerHTML = `
@@ -1040,7 +1035,6 @@
                     addDownloadButton();
                     
                 } else if (isVideoType(mimeType)) {
-                    // 视频预览
                     const blob = new Blob([arrayBuffer], { type: mimeType });
                     const url = URL.createObjectURL(blob);
                     document.getElementById('previewContent').innerHTML = `
@@ -1054,9 +1048,8 @@
                     addDownloadButton();
                     
                 } else if (isTextType(mimeType) || fileItem._file._data.uncompressedSize < 1024 * 1024) {
-                    // 文本/代码预览（小于1MB的也尝试作为文本）
                     const content = new TextDecoder('utf-8', { fatal: false }).decode(arrayBuffer);
-                    currentFileContent = content; // 保存内容用于复制
+                    currentFileContent = content;
                     
                     const language = getHighlightLanguage(fileItem._name, mimeType);
                     
@@ -1066,23 +1059,19 @@
                         </div>
                     `;
                     
-                    // 语法高亮
                     document.querySelectorAll('pre code').forEach((block) => {
                         hljs.highlightElement(block);
                     });
                     
-                    // 添加复制按钮
                     addCopyButton();
                     addDownloadButton();
                     
                 } else {
-                    // 二进制文件，只显示下载
                     throw new Error('binary');
                 }
                 
             } catch (error) {
                 if (error.message === 'binary') {
-                    // 二进制文件预览
                     const fileSize = formatFileSize(fileItem._file?._data?.uncompressedSize || 0);
                     document.getElementById('previewContent').innerHTML = `
                         <div class="binary-preview">
@@ -1111,7 +1100,6 @@
             }
         }
 
-        // 添加复制按钮
         function addCopyButton() {
             const actions = document.getElementById('previewActions');
             const copyBtn = document.createElement('button');
@@ -1127,10 +1115,8 @@
             actions.appendChild(copyBtn);
         }
 
-        // 添加下载按钮
         function addDownloadButton() {
             const actions = document.getElementById('previewActions');
-            // 检查是否已存在下载按钮
             if (actions.querySelector('[title="下载文件"]')) return;
             
             const downloadBtn = document.createElement('button');
@@ -1147,7 +1133,6 @@
             actions.appendChild(downloadBtn);
         }
 
-        // 复制内容
         async function copyContent() {
             if (!currentFileContent) return;
             
@@ -1155,7 +1140,6 @@
                 await navigator.clipboard.writeText(currentFileContent);
                 showToast('已复制到剪贴板');
                 
-                // 显示复制成功状态
                 const copyBtn = document.querySelector('[title="复制内容"]');
                 if (copyBtn) {
                     copyBtn.classList.add('copied');
@@ -1179,7 +1163,6 @@
             }
         }
 
-        // 显示 Toast 提示
         function showToast(message) {
             const toast = document.getElementById('toast');
             toast.textContent = message;
