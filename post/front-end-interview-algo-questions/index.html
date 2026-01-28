@@ -1,19 +1,28 @@
-<!doctype html>
-<html data-n-head-ssr data-n-head="">
-  <head>
-    <title data-n-head="true">关于前端常见算法面试题的一些思考 | 文蔺的博客</title><meta data-n-head="true" charset="utf-8"><meta data-n-head="true" name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"><meta data-n-head="true" name="description" content="文蔺的前端学习记录，国外技术文章翻译，个人学习心得等等这些都会记录在这里。"><meta data-n-head="true" name="keywords" content="算法,JavaScript,原创"><meta data-n-head="true" name="description" content="关于前端常见算法面试题的一些思考"><link data-n-head="true" rel="shortcut icon" href="/favicon.ico"><link rel="stylesheet" href="/static/0501d49c081ea86e209e.css">
-  </head>
-  <body data-n-head="">
-    <div data-server-rendered="true" id="__nuxt"><!----><div id="__layout"><div class="wrapper"><nav id="sidebar" class="behavior_1"><div class="wrap"><div class="profile"><a href="/" class="nuxt-link-active"><img src="/imgs/avatar.jpg" alt="文蔺的博客"></a> <span>文蔺的博客</span></div> <ul class="buttons"><li><a href="/" title="主页" class="nuxt-link-active"><i class="iconfont icon-home"></i> <span> 主页</span></a></li><li><a href="/archives" title="归档"><i class="iconfont icon-archive"></i> <span> 归档</span></a></li><li><a href="/slides" title="Slides"><i class="iconfont icon-archive"></i> <span> Slides</span></a></li><li><a href="/about" title="关于"><i class="iconfont icon-user"></i> <span> 关于</span></a></li><li><a href="/link" title="关注"><i class="iconfont icon-link"></i> <span> 关注</span></a></li><li><a href="/collection" title="收藏"><i class="iconfont icon-archive"></i> <span> 收藏</span></a></li></ul></div> <ul class="buttons"><li><a href="https://github.com/AngusFu/" rel="nofollow" target="_blank" class="inline"><i title="GitHub" class="iconfont icon-github-v"></i></a> <!----> <!----> <a href="/atom.xml" target="_blank" class="inline"><i title="RSS" class="iconfont icon-rss-v"></i></a> <a href="/search" class="inline"><i title="Search" class="iconfont icon-search"></i></a></li></ul></nav> <div id="header"><div class="btn-bar"><i></i></div> <h1><a href="/" class="nuxt-link-active">文蔺的博客</a></h1> <a href="/about/" class="me"><img src="/imgs/avatar.jpg" alt="文蔺的博客"></a></div> <div id="sidebar-mask" style="display:none"></div> <div id="main" class="main"><div id="page-post"><article class="post detail"><div class="meta"><div class="date">2016-10-26</div></div> <h1 class="title">关于前端常见算法面试题的一些思考</h1> <div class="entry-content"><!----> <p>今天上班时间，读了 <a href="http://www.jackpu.com/" target="_blank">@JackPu</a> 的新文章<a href="http://www.jackpu.com/qian-duan-mian-shi-zhong-de-chang-jian-de-suan-fa-wen-ti/" target="_blank">《前端面试中的常见的算法问题》</a>。内容虽然看起挺基础，但可以有不少思考，同时也是一次挺好的复习。</p> <p>其中，有几个问题，想出了一些不同的解决办法，做了下笔记，并且进行了简单的性能测试。关于排序，这次没有深看。接下来有空时，再研究一番。</p> <h2 id="-palindromic-words-">判断回文(Palindromic Words)</h2> <p>结果是，使用循环来判断，性能远高于数组方法。接下来，在其他一些例子中也能看到，借用数组方法，往往很耗性能。</p> <pre><code class="hljs lang-javascript">
+<!DOCTYPE html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+<title>关于前端常见算法面试题的一些思考 | 文蔺的博客</title>
+<style>body{color:#666;margin:0;padding:0;-webkit-text-size-adjust:none;transition:transform .2s cubic-bezier(.4,.01,.165,.99);-webkit-tap-highlight-color:transparent;font-family:Helvetica Neue,Arial,Hiragino Sans GB,STHeiti,Microsoft YaHei;-webkit-font-smoothing:antialiased;-webkit-overflow-scrolling:touch}body,html{height:100%;width:100%}h1,h2,h3,h4,h5,h6{margin:0;padding:0}a,a:hover{color:#2479cc;text-decoration:none}ol,ul{padding:0}*{box-sizing:border-box}body.side{position:fixed;transform:translate3D(250px,0,0)}#main{background-color:#fff;max-width:1390px;padding-left:290px;padding-right:40px;-webkit-overflow-scrolling:touch}h1.intro{background-color:#f6f9fa;color:#999;padding:20px 30px;text-align:center}textarea.codespan,textarea.pre-area{display:none}.nuxt-progress{background-color:#d59613!important}@font-face{font-family:iconfont;src:url(/_nuxt/iconfont.CmbQAa6e.eot);src:url(/_nuxt/iconfont.CmbQAa6e.eot?#iefix) format("embedded-opentype"),url(/_nuxt/iconfont.DzG65zpK.ttf) format("truetype"),url(/_nuxt/iconfont.BPH69LT9.svg#iconfont) format("svg")}.iconfont{font-family:iconfont!important;font-size:16px;font-style:normal;-webkit-font-smoothing:antialiased;-webkit-text-stroke-width:.2px;-moz-osx-font-smoothing:grayscale}.icon-weibo:before{content:""}.icon-archive:before{content:""}.icon-user:before{content:""}.icon-rss-v:before{content:""}.icon-tags:before{content:""}.icon-home:before{content:""}.icon-search:before{content:""}.icon-googleplus:before{content:""}.icon-weixin:before{content:""}.icon-mail:before{content:""}.icon-twitter-v:before{content:""}.icon-linkedin:before{content:""}.icon-stackoverflow:before{content:""}.icon-github-v:before{content:""}.icon-facebook:before{content:""}.icon-right:before{content:""}.icon-left:before{content:""}.icon-link:before{content:""}.icon-https:before{content:""}.hljs{background:#fff;color:#333;display:block;overflow-x:auto;padding:.5em;-webkit-text-size-adjust:none}.hljs-comment,.lang-bash .hljs-shebang,.lang-java .hljs-javadoc,.lang-javascript .hljs-javadoc,.lang-rust .hljs-preprocessor{color:#969896}.hljs-string,.lang-apache .hljs-sqbracket,.lang-c .hljs-preprocessor,.lang-coffeescript .hljs-regexp,.lang-coffeescript .hljs-subst,.lang-cpp .hljs-preprocessor,.lang-javascript .hljs-regexp,.lang-json .hljs-attribute,.lang-less .hljs-built_in,.lang-makefile .hljs-variable,.lang-markdown .hljs-blockquote,.lang-markdown .hljs-emphasis,.lang-markdown .hljs-link_label,.lang-markdown .hljs-strong,.lang-markdown .hljs-value,.lang-nginx .hljs-number,.lang-nginx .hljs-regexp,.lang-objectivec .hljs-preprocessor .hljs-title,.lang-perl .hljs-regexp,.lang-php .hljs-regexp,.lang-scss .hljs-built_in,.lang-xml .hljs-value{color:#df5000}.hljs-keyword,.lang-css .hljs-at_rule,.lang-css .hljs-important,.lang-go .hljs-typename,.lang-haskell .hljs-type,.lang-http .hljs-request,.lang-ini .hljs-setting,.lang-java .hljs-javadoctag,.lang-javascript .hljs-javadoctag,.lang-javascript .hljs-tag,.lang-less .hljs-at_rule,.lang-less .hljs-tag,.lang-nginx .hljs-title,.lang-objectivec .hljs-preprocessor,.lang-php .hljs-phpdoc,.lang-scss .hljs-at_rule,.lang-scss .hljs-important,.lang-scss .hljs-tag,.lang-sql .hljs-built_in,.lang-stylus .hljs-at_rule,.lang-swift .hljs-preprocessor{color:#a71d5d}.lang-apache .hljs-cbracket,.lang-apache .hljs-common,.lang-apache .hljs-keyword,.lang-bash .hljs-built_in,.lang-bash .hljs-literal,.lang-c .hljs-built_in,.lang-c .hljs-number,.lang-coffeescript .hljs-built_in,.lang-coffeescript .hljs-literal,.lang-coffeescript .hljs-number,.lang-cpp .hljs-built_in,.lang-cpp .hljs-number,.lang-cs .hljs-built_in,.lang-cs .hljs-number,.lang-css .hljs-attribute,.lang-css .hljs-function,.lang-css .hljs-hexcolor,.lang-css .hljs-number,.lang-go .hljs-built_in,.lang-go .hljs-constant,.lang-haskell .hljs-number,.lang-http .hljs-attribute,.lang-http .hljs-literal,.lang-java .hljs-number,.lang-javascript .hljs-built_in,.lang-javascript .hljs-literal,.lang-javascript .hljs-number,.lang-json .hljs-number,.lang-less .hljs-attribute,.lang-less .hljs-function,.lang-less .hljs-hexcolor,.lang-less .hljs-number,.lang-makefile .hljs-keyword,.lang-markdown .hljs-link_reference,.lang-nginx .hljs-built_in,.lang-objectivec .hljs-built_in,.lang-objectivec .hljs-literal,.lang-objectivec .hljs-number,.lang-php .hljs-literal,.lang-php .hljs-number,.lang-puppet .hljs-function,.lang-python .hljs-number,.lang-ruby .hljs-constant,.lang-ruby .hljs-number,.lang-ruby .hljs-prompt,.lang-ruby .hljs-subst .hljs-keyword,.lang-ruby .hljs-symbol,.lang-rust .hljs-number,.lang-scss .hljs-attribute,.lang-scss .hljs-function,.lang-scss .hljs-hexcolor,.lang-scss .hljs-number,.lang-scss .hljs-preprocessor,.lang-sql .hljs-number,.lang-stylus .hljs-attribute,.lang-stylus .hljs-hexcolor,.lang-stylus .hljs-number,.lang-stylus .hljs-params,.lang-swift .hljs-built_in,.lang-swift .hljs-number{color:#0086b3}.lang-apache .hljs-tag,.lang-cs .hljs-xmlDocTag,.lang-css .hljs-tag,.lang-stylus .hljs-tag,.lang-xml .hljs-title{color:#63a35c}.lang-bash .hljs-variable,.lang-cs .hljs-preprocessor,.lang-cs .hljs-preprocessor .hljs-keyword,.lang-css .hljs-attr_selector,.lang-css .hljs-value,.lang-ini .hljs-keyword,.lang-ini .hljs-value,.lang-javascript .hljs-tag .hljs-title,.lang-makefile .hljs-constant,.lang-nginx .hljs-variable,.lang-scss .hljs-variable,.lang-xml .hljs-tag{color:#333}.lang-bash .hljs-title,.lang-c .hljs-title,.lang-coffeescript .hljs-title,.lang-cpp .hljs-title,.lang-cs .hljs-title,.lang-css .hljs-class,.lang-css .hljs-id,.lang-css .hljs-pseudo,.lang-diff .hljs-chunk,.lang-haskell .hljs-pragma,.lang-haskell .hljs-title,.lang-ini .hljs-title,.lang-java .hljs-title,.lang-javascript .hljs-title,.lang-less .hljs-class,.lang-less .hljs-id,.lang-less .hljs-pseudo,.lang-makefile .hljs-title,.lang-objectivec .hljs-title,.lang-perl .hljs-sub,.lang-php .hljs-title,.lang-puppet .hljs-title,.lang-python .hljs-decorator,.lang-python .hljs-title,.lang-ruby .hljs-parent,.lang-ruby .hljs-title,.lang-rust .hljs-title,.lang-scss .hljs-class,.lang-scss .hljs-id,.lang-scss .hljs-pseudo,.lang-stylus .hljs-class,.lang-stylus .hljs-id,.lang-stylus .hljs-pseudo,.lang-stylus .hljs-title,.lang-swift .hljs-title,.lang-xml .hljs-attribute{color:#795da3}.lang-coffeescript .hljs-attribute,.lang-coffeescript .hljs-reserved{color:#1d3e81}.lang-diff .hljs-chunk{font-weight:700}.lang-diff .hljs-addition{background-color:#eaffea;color:#55a532}.lang-diff .hljs-deletion{background-color:#ffecec;color:#bd2c00}.lang-markdown .hljs-link_url{text-decoration:underline}#sidebar{background-color:#202020;height:100%;left:0;overflow:auto;position:fixed;top:0;width:250px;z-index:1;-webkit-overflow-scrolling:touch}#sidebar li,#sidebar ul{list-style:none;margin:0;padding:0}#sidebar .profile{padding-bottom:10px;padding-top:40px}#sidebar .profile a,#sidebar .profile img{border-radius:70px;height:140px;overflow:hidden;width:140px}#sidebar .profile a{display:block;margin:0 auto}#sidebar .profile span{color:#999;display:block;font-size:18px;padding:10px 0;text-align:center}#sidebar .buttons{margin:0 0 20px}#sidebar .buttons li{display:block;font-size:16px;height:45px;line-height:45px;width:100%}#sidebar .buttons li a{color:#999;display:block;padding-left:25px;text-decoration:none;transition:color .2s cubic-bezier(.4,.01,.165,.99)}#sidebar .buttons li a i,#sidebar .buttons li a span{display:inline-block;vertical-align:middle}#sidebar .buttons li a i{font-size:20px;height:45px;line-height:45px;margin-right:20px;text-align:center;width:25px}#sidebar .buttons li a:hover{color:#999c}#sidebar .buttons li a.inline{display:inline-block;width:40px}#sidebar-mask{background-color:#fff0;display:none;inset:0;overflow:hidden;position:absolute;z-index:999}#header{background-color:#323436;display:none;height:50px;left:0;line-height:50px;overflow:hidden;position:fixed;top:0;width:100%;z-index:9}body.side #header .btn-bar:before{top:25px;transform:rotate(-45deg);width:24px}body.side #header .btn-bar:after{bottom:24px;transform:rotate(45deg);width:24px}body.side #header .btn-bar i{opacity:0}#header h1{font-size:16px;text-align:center}#header h1 a{color:#999}#header .btn-bar{height:50px;left:0;position:absolute;top:0;width:50px}#header .btn-bar i,#header .btn-bar:after,#header .btn-bar:before{background-color:#999;height:1px;left:14px;position:absolute;transition:all .2s cubic-bezier(.4,.01,.165,.99) .3s;width:22px}#header .btn-bar i{opacity:1;top:25px}#header .btn-bar:before{content:"";top:17px}#header .btn-bar:after{bottom:16px;content:""}#header a.me,#header a.me img{border-radius:30px;height:30px;overflow:hidden;width:30px}#header a.me{position:absolute;right:10px;top:10px}.pagination{border-bottom:1px solid #ddd;border-top:1px solid #fff;line-height:20px;overflow:hidden;padding:20px 0;position:relative;width:100%}.pagination .next,.pagination .prev{max-width:45%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pagination .prev{float:left}.pagination .next{float:right}.pagination .center{margin:auto;text-align:center;width:80px}article{border-bottom:1px solid #ddd;border-top:1px solid #fff;padding:30px 0;position:relative;word-wrap:break-word}article .meta{color:#555;float:right;font-size:.9em;line-height:2;position:relative;text-align:right;width:auto}article .meta a{color:#999}article .meta .comment,article .meta .date,article .meta .tags{position:relative}article h1.title{color:#333;font-size:2em;font-weight:300;line-height:35px;margin-bottom:25px}article h1.title a{color:#333}article h1.title a:hover{color:#2479cc;transition:color .3s}article strong{font-weight:700}article em{font-style:italic}article blockquote{background-color:#f8f8f8;border-left:5px solid #2479cc;margin:10px 0 0;padding:15px 20px}article blockquote p{margin-bottom:0}article blockquote a{word-break:break-all;word-wrap:break-word}article code{background-color:#f2f2f2;border-radius:5px;font-family:Consolas,Courier New,Courier,mono,serif;font-size:80%;margin:0 2px;padding:4px 5px;vertical-align:middle}article pre{border-left:5px solid #ccc;color:#5d6a6a;font-family:Consolas,Liberation Mono,Courier,monospace;font-size:14px;line-height:1.6;padding:.6em;word-break:break-all;word-wrap:break-word;overflow:hidden;position:relative;white-space:pre-wrap}article pre code{background-color:transparent;border:0;border-radius:0;display:block;font-size:100%;margin:0;padding:0;position:relative}article pre b.name{color:#eee;font-size:60px;line-height:1;pointer-events:none;position:absolute;right:10px;top:10px}@media screen and (max-width:768px){article pre b.name{font-size:30px}}article img{border:1px solid #ccc;display:block;margin:10px 0 5px;max-width:100%;padding:0}article table{border:0;border-collapse:collapse;border-spacing:0}article table td,article table th{border:0}article table th{border-bottom:2px solid #848484;padding:6px 20px;text-align:left}article table td{border-bottom:1px solid #d0d0d0;padding:6px 20px}article .expire-tips{background-color:#ffffc0;border:1px solid #e2e2e2;border-left:5px solid #fff000;color:#333;font-size:15px;padding:5px 10px}article .aliyun-tips{background-color:#f0f8f4;border:1px solid #e2e2e2;border-left:5px solid #7cc4a0;font-size:15px;padding:5px 10px}article .post-info{font-size:14px}article .entry-content{font-size:16px;line-height:1.8;word-wrap:break-word}article .entry-content .date{color:#999;font-size:14px;font-style:italic}article .entry-content blockquote,article .entry-content dl,article .entry-content h1,article .entry-content h2,article .entry-content h3,article .entry-content h4,article .entry-content h5,article .entry-content h6,article .entry-content iframe,article .entry-content ol,article .entry-content p,article .entry-content pre,article .entry-content table,article .entry-content ul{margin-top:15px}article .entry-content blockquote>p:first-of-type,article .entry-content dl dl,article .entry-content dl ol,article .entry-content dl ul,article .entry-content ol dl,article .entry-content ol ol,article .entry-content ol ul,article .entry-content ul dl,article .entry-content ul ol,article .entry-content ul ul{margin-top:0}article .entry-content dl,article .entry-content ol,article .entry-content ul{margin-left:25px}article.tags section a{border:1px solid rgba(36,121,204,.8);border-radius:4px;color:#2479cccc;display:inline-block;font-size:14px;height:40px;line-height:40px;margin:0 15px 10px 0;padding:0 15px;text-decoration:none;transition:color .2s cubic-bezier(.4,.01,.165,.99),border .2s cubic-bezier(.4,.01,.165,.99)}article.tags section a:hover{border-color:#2479cc;color:#2479cc}a.anchor{display:block;position:relative;visibility:hidden}article .firekylin-code>ul{background-color:#fff;list-style:decimal;margin:0 0 0 40px;padding:0}article .firekylin-code li{border-left:1px solid #ddd;list-style:decimal-leading-zero;padding-left:2px;position:relative}article .firekylin-code li.mark{background-color:#fffbdd!important}article .firekylin-code li:hover{background-color:#f3f3f3!important}article .firekylin-code .line-num{cursor:pointer;height:100%;left:-40px;position:absolute;top:0;width:40px}article .firekylin-code li:nth-of-type(2n){background-color:#fcfcfc;color:inherit}article .entry-content pre .firekylin-code{background-color:#eee}#search .wrapper{margin-right:72px}#search form{position:relative}#search .wrapper input{box-sizing:border-box;padding:4px 6px;width:100%}#search .submit,#search .wrapper input{-webkit-appearance:none;border:1px solid #bbb;border-radius:0;display:block;font-size:16px;height:40px;outline:0}#search .submit{background-color:#e7e7e7;border-left:0;color:#222;position:absolute;right:0;top:0;width:72px}#searchResult{min-height:350px;overflow-x:hidden}#searchResult .info{border-bottom:1px solid #e9e9e9;color:#676767;font-size:13px;padding:15px 0}#searchResult .no-result{background-color:#fff4c2;border:1px solid #fc3;font-size:13px;margin:15px 0;padding:5px}#searchResult .hot-words,#searchResult .loading{margin-top:20px}#searchResult .hot-words a{margin-right:20px}#searchResult .item{padding:.5em 0 .3em}#searchResult .item .title a{font-size:16px;text-decoration:underline}#searchResult .item .title .type{background-color:#eee;border-radius:3px;color:#888;display:inline-block;font-size:13px;margin-right:8px;padding:0 5px}#searchResult .item .desc{font-size:14px;line-height:1.6}#searchResult .item .tags{font-size:14px;line-height:1.8}#searchResult .item .tags a{color:#666;margin-right:12px}#searchResult .item .desc b,#searchResult .item .title b{color:#c00;font-weight:400}#footer{border-top:1px solid #fff;font-size:.9em;line-height:1.8;padding:15px;text-align:center}#footer .beian{color:#666}#comments{border-bottom:1px solid #ddd;border-top:1px solid #fff;min-height:350px;padding:30px 0}#comments h1.title{font-size:25px;font-weight:300;line-height:35px;margin-bottom:20px}@media screen and (max-width:768px){#header{display:block;transform:translateZ(0);transition:all .2s cubic-bezier(.4,.01,.165,.99)}a.anchor{top:-50px}#sidebar.behavior_1{transform:translate3D(-250px,0,0)}#sidebar.behavior_2{transform:translateZ(0)}#sidebar{transition:transform .2s cubic-bezier(.4,.01,.165,.99)}#sidebar .profile{padding-bottom:20px;padding-top:20px}#sidebar .profile a,#sidebar .profile img{border-radius:100px;height:100px;width:100px}#sidebar .profile span{display:none}}@media screen and (min-width:769px)and (max-width:1024px){#sidebar{width:75px}#sidebar .profile{padding-top:20px}#sidebar .profile a,#sidebar .profile img{border-radius:40px;height:40px;width:40px}#sidebar .profile span{display:none}#sidebar .buttons li a{padding:0}#sidebar .buttons li a.inline{width:100%}#sidebar .buttons li a i{display:block;font-size:18px;margin:0 auto}#sidebar .buttons li a span{display:none}}@media screen and (min-width:768px)and (max-width:1024px){#main{padding-left:115px}}@media screen and (max-width:769px){#main{min-height:100%;padding-left:10px;padding-right:10px;padding-top:50px;width:100%}article{background-color:#fff;padding:10px}article .meta{display:none}article h1{font-size:22px;margin:0;padding:5px 0 10px}article .desc{color:#999;font-size:14px}article p.more{font-size:14px;margin:5px 0}}</style>
+<style>.error-page{align-items:center;background:#f7f8fb;color:#47494e;display:flex;flex-direction:column;font-family:sans-serif;font-weight:100!important;justify-content:center;inset:0;padding:1rem;position:fixed;text-align:center;z-index:9999;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased}.error-page .error{max-width:450px}.error-page .title{color:#47494e;font-size:1.5rem;margin-bottom:8px;margin-top:15px}.error-page .description{color:#7f828b;line-height:21px;margin-bottom:10px}.error-page a{color:#7f828b!important;text-decoration:none}.error-page .clear-btn{background:#47494e;border:none;border-radius:4px;color:#fff;cursor:pointer;margin-top:20px;padding:10px 20px}.error-page .clear-btn:hover{background:#5a5c61}</style>
+<style>#__nuxt,.wrapper{height:100%;width:100%}.main{height:100%}.main>article,.main>div,.main>section{border-bottom:0;margin-bottom:-81px;min-height:100%}.main>article:after,.main>div:after,.main>section:after{content:"";display:block;height:81px}.main>#footer{border-top:0;position:relative;z-index:1}</style>
+<link rel="stylesheet" href="/_nuxt/style.CrTe0RXR.css" crossorigin>
+<link rel="preload" as="fetch" crossorigin="anonymous" href="/post/front-end-interview-algo-questions/_payload.json?596f84e1-7d61-444d-a8ad-625589d4e662">
+<link rel="modulepreload" as="script" crossorigin href="/_nuxt/Du-K4N_a.js">
+<link rel="modulepreload" as="script" crossorigin href="/_nuxt/B3NVNVF9.js">
+<link rel="modulepreload" as="script" crossorigin href="/_nuxt/MSmBdU9l.js">
+<link rel="modulepreload" as="script" crossorigin href="/_nuxt/CaNb7KN_.js">
+<script type="module" src="/_nuxt/Du-K4N_a.js" crossorigin></script>
+<link rel="shortcut icon" href="/favicon.ico">
+<meta name="description" content="关于前端常见算法面试题的一些思考">
+<meta name="keywords" content="算法,JavaScript,原创"></head><body><div id="__nuxt"><div class="wrapper"><nav id="sidebar" class="behavior_1"><div class="wrap"><div class="profile"><a href="/" class=""><img src="/imgs/avatar.jpg" alt="文蔺的博客"></a><span>文蔺的博客</span></div><ul class="buttons"><!--[--><li><a href="/" class="" title="主页"><i class="iconfont icon-home"></i><span> 主页</span></a></li><li><a href="/archives" class="" title="归档"><i class="iconfont icon-archive"></i><span> 归档</span></a></li><li><a href="/slides" class="" title="Slides"><i class="iconfont icon-archive"></i><span> Slides</span></a></li><li><a href="/about" class="" title="关于"><i class="iconfont icon-user"></i><span> 关于</span></a></li><li><a href="/link" class="" title="关注"><i class="iconfont icon-link"></i><span> 关注</span></a></li><li><a href="/collection" class="" title="收藏"><i class="iconfont icon-archive"></i><span> 收藏</span></a></li><!--]--></ul></div><ul class="buttons"><li><a href="https://github.com/AngusFu/" class="inline" rel="nofollow" target="_blank"><i class="iconfont icon-github-v" title="GitHub"></i></a><!----><!----><a class="inline" href="/atom.xml" target="_blank"><i class="iconfont icon-rss-v" title="RSS"></i></a><a href="/search" class="inline"><i class="iconfont icon-search" title="Search"></i></a></li></ul></nav><div id="header"><div class="btn-bar"><i></i></div><h1><a href="/" class="">文蔺的博客</a></h1><a href="/about/" class="me"><img src="/imgs/avatar.jpg" alt="文蔺的博客"></a></div><div id="sidebar-mask" style="display:none;"></div><div id="main" class="main"><!--[--><div id="page-post"><article class="post detail"><div class="meta"><div class="date">2016-10-26</div></div><h1 class="title">关于前端常见算法面试题的一些思考</h1><div class="entry-content"><!----><!--[--><p>今天上班时间，读了 <a href="http://www.jackpu.com/" target="_blank" rel="noopener">@JackPu</a> 的新文章<a href="http://www.jackpu.com/qian-duan-mian-shi-zhong-de-chang-jian-de-suan-fa-wen-ti/" target="_blank" rel="noopener">《前端面试中的常见的算法问题》</a>。内容虽然看起挺基础，但可以有不少思考，同时也是一次挺好的复习。</p><p>其中，有几个问题，想出了一些不同的解决办法，做了下笔记，并且进行了简单的性能测试。关于排序，这次没有深看。接下来有空时，再研究一番。</p><h2>判断回文(Palindromic Words)</h2><p>结果是，使用循环来判断，性能远高于数组方法。接下来，在其他一些例子中也能看到，借用数组方法，往往很耗性能。</p><pre><code class="hljs lang-javascript">
 <span class="hljs-comment">// Array methods</span>
-<span class="hljs-keyword">const</span> isPalindromicA = <span class="hljs-function"><span class="hljs-params">w</span> =></span> w === w.split(<span class="hljs-string">''</span>).reverse().join(<span class="hljs-string">''</span>);
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">isPalindromicA</span> = w =&gt; w === w.<span class="hljs-title function_">split</span>(<span class="hljs-string">&#39;&#39;</span>).<span class="hljs-title function_">reverse</span>().<span class="hljs-title function_">join</span>(<span class="hljs-string">&#39;&#39;</span>);
 
 <span class="hljs-comment">// while loop</span>
-<span class="hljs-keyword">const</span> isPalindromicB = <span class="hljs-function">(<span class="hljs-params">w</span>) =></span> {
-
-    <span class="hljs-keyword">let</span> len = w.length;
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">isPalindromicB</span> = (<span class="hljs-params">w</span>) =&gt; {
+    
+    <span class="hljs-keyword">let</span> len = w.<span class="hljs-property">length</span>;
     <span class="hljs-comment">// 感谢 @拉比克魔王 的指点</span>
-    <span class="hljs-keyword">let</span> start = <span class="hljs-built_in">Math</span>.ceil(len / <span class="hljs-number">2</span>);
+    <span class="hljs-keyword">let</span> start = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">ceil</span>(len / <span class="hljs-number">2</span>);
     <span class="hljs-keyword">while</span> (start &lt; len) {
       <span class="hljs-keyword">if</span> (w[start] !== w[len - start - <span class="hljs-number">1</span>]) {
             <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
@@ -25,45 +34,46 @@
 
 <span class="hljs-comment">// -------------------------------------------------</span>
 <span class="hljs-comment">// perf test</span>
-<span class="hljs-comment">// first let's generate a fake word with, say 20 chars</span>
-<span class="hljs-keyword">var</span> word = (<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+<span class="hljs-comment">// first let&#39;s generate a fake word with, say 20 chars</span>
+<span class="hljs-keyword">var</span> word = (<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
     <span class="hljs-keyword">var</span> len = <span class="hljs-number">20</span>;
     <span class="hljs-keyword">var</span> arr = [];
     <span class="hljs-keyword">while</span> (len--) {
-        arr.push(<span class="hljs-number">97</span> + ((<span class="hljs-built_in">Math</span>.random()* <span class="hljs-number">26</span>) | <span class="hljs-number">0</span>));
+        arr.<span class="hljs-title function_">push</span>(<span class="hljs-number">97</span> + ((<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>()* <span class="hljs-number">26</span>) | <span class="hljs-number">0</span>));
     }
-    <span class="hljs-keyword">return</span> <span class="hljs-built_in">String</span>.fromCharCode.apply(<span class="hljs-built_in">String</span>, arr);
+    <span class="hljs-keyword">return</span> <span class="hljs-title class_">String</span>.<span class="hljs-property">fromCharCode</span>.<span class="hljs-title function_">apply</span>(<span class="hljs-title class_">String</span>, arr);
 })();
 
 <span class="hljs-comment">// times</span>
 <span class="hljs-keyword">var</span> t = <span class="hljs-number">2e4</span>;
 <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>;
 
-<span class="hljs-built_in">console</span>.time(<span class="hljs-string">'Array method'</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">time</span>(<span class="hljs-string">&#39;Array method&#39;</span>);
 <span class="hljs-keyword">while</span> (i &lt; t) {
-    isPalindromicA(word);
+    <span class="hljs-title function_">isPalindromicA</span>(word);
     i++;
 }
-<span class="hljs-built_in">console</span>.timeEnd(<span class="hljs-string">'Array method'</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">timeEnd</span>(<span class="hljs-string">&#39;Array method&#39;</span>);
 
 i = <span class="hljs-number">0</span>;
-<span class="hljs-built_in">console</span>.time(<span class="hljs-string">'Loop'</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">time</span>(<span class="hljs-string">&#39;Loop&#39;</span>);
 <span class="hljs-keyword">while</span> (i &lt; t) {
-    isPalindromicB(word);
+    <span class="hljs-title function_">isPalindromicB</span>(word);
     i++;
 }
-<span class="hljs-built_in">console</span>.timeEnd(<span class="hljs-string">'Loop'</span>);</code></pre><h2 id="-">数组去重</h2> <p>ES 5 方法性能更好，高一倍以上。不过笔试、面试时，附上 <code>Set</code> 的办法，肯定会更好。</p> <pre><code class="hljs lang-javascript">
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">timeEnd</span>(<span class="hljs-string">&#39;Loop&#39;</span>);
+</code></pre><h2>数组去重</h2><p>ES 5 方法性能更好，高一倍以上。不过笔试、面试时，附上 <code>Set</code> 的办法，肯定会更好。</p><pre><code class="hljs lang-javascript">
 <span class="hljs-comment">// ES 5</span>
-<span class="hljs-keyword">const</span> uniqueES5 = <span class="hljs-function">(<span class="hljs-params">arr</span>) =></span> {
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">uniqueES5</span> = (<span class="hljs-params">arr</span>) =&gt; {
     <span class="hljs-keyword">var</span> cache = {};
-    <span class="hljs-keyword">return</span> arr.filter(<span class="hljs-function">(<span class="hljs-params">item</span>) =></span> {
+    <span class="hljs-keyword">return</span> arr.<span class="hljs-title function_">filter</span>(<span class="hljs-function">(<span class="hljs-params">item</span>) =&gt;</span> {
         <span class="hljs-keyword">return</span> cache[item] ? <span class="hljs-literal">false</span> : (cache[item] = <span class="hljs-literal">true</span>);
     });
 };
 
 <span class="hljs-comment">// ES6 method</span>
 <span class="hljs-comment">// 为啥用了 Array.from 呢，保持类型一致啊</span>
-<span class="hljs-keyword">const</span> uniqueES6 = <span class="hljs-function">(<span class="hljs-params">arr</span>) =></span> <span class="hljs-built_in">Array</span>.from(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>(arr));
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">uniqueES6</span> = (<span class="hljs-params">arr</span>) =&gt; <span class="hljs-title class_">Array</span>.<span class="hljs-title function_">from</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Set</span>(arr));
 
 
 <span class="hljs-comment">// -------------------------------------------------</span>
@@ -75,57 +85,58 @@ i = <span class="hljs-number">0</span>;
 <span class="hljs-keyword">var</span> array = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">3</span>, <span class="hljs-number">2</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">4</span>];
 
 i = <span class="hljs-number">0</span>;
-<span class="hljs-built_in">console</span>.time(<span class="hljs-string">'ES5 filter + cache'</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">time</span>(<span class="hljs-string">&#39;ES5 filter + cache&#39;</span>);
 <span class="hljs-keyword">while</span> (i &lt; t) {
-    uniqueES5(array);
+    <span class="hljs-title function_">uniqueES5</span>(array);
     i++;
 }
-<span class="hljs-built_in">console</span>.timeEnd(<span class="hljs-string">'ES5 filter + cache'</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">timeEnd</span>(<span class="hljs-string">&#39;ES5 filter + cache&#39;</span>);
 
 i = <span class="hljs-number">0</span>;
-<span class="hljs-built_in">console</span>.time(<span class="hljs-string">'ES6 Set'</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">time</span>(<span class="hljs-string">&#39;ES6 Set&#39;</span>);
 <span class="hljs-keyword">while</span> (i &lt; t) {
-    uniqueES6(array);
+    <span class="hljs-title function_">uniqueES6</span>(array);
     i++;
 }
-<span class="hljs-built_in">console</span>.timeEnd(<span class="hljs-string">'ES6 Set'</span>);</code></pre><h2 id="-">统计一个字符串出现最多的字母</h2> <p>正则表达式的办法，临时想起来的，运行起来还是要慢，至少慢了一半。所以有时候还是要老老实实写代码，奇淫巧技少用。</p> <pre><code class="hljs lang-javascript">
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">timeEnd</span>(<span class="hljs-string">&#39;ES6 Set&#39;</span>);
+</code></pre><h2>统计一个字符串出现最多的字母</h2><p>正则表达式的办法，临时想起来的，运行起来还是要慢，至少慢了一半。所以有时候还是要老老实实写代码，奇淫巧技少用。</p><pre><code class="hljs lang-javascript">
 <span class="hljs-comment">// 黑科技</span>
-<span class="hljs-keyword">const</span> findMaxDuplicateCharRegex = <span class="hljs-function">(<span class="hljs-params">chars</span>) =></span> {
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">findMaxDuplicateCharRegex</span> = (<span class="hljs-params">chars</span>) =&gt; {
     <span class="hljs-comment">// 先对字符进行排序</span>
-    chars = chars.split(<span class="hljs-string">''</span>).sort().join(<span class="hljs-string">''</span>);
+    chars = chars.<span class="hljs-title function_">split</span>(<span class="hljs-string">&#39;&#39;</span>).<span class="hljs-title function_">sort</span>().<span class="hljs-title function_">join</span>(<span class="hljs-string">&#39;&#39;</span>);
     <span class="hljs-comment">// 获取相同字符序列</span>
     <span class="hljs-keyword">let</span> regex = <span class="hljs-regexp">/(.)(\1)+/g</span>;
 
     <span class="hljs-keyword">let</span> temp = <span class="hljs-literal">null</span>;
     <span class="hljs-keyword">let</span> max = <span class="hljs-number">0</span>;
-    <span class="hljs-keyword">let</span> char = <span class="hljs-string">''</span>;
+    <span class="hljs-keyword">let</span> char = <span class="hljs-string">&#39;&#39;</span>;
 
-    <span class="hljs-keyword">while</span> (temp = regex.exec(chars)) {
-        <span class="hljs-keyword">if</span> (temp[<span class="hljs-number">0</span>].length > max) {
+    <span class="hljs-keyword">while</span> (temp = regex.<span class="hljs-title function_">exec</span>(chars)) {
+        <span class="hljs-keyword">if</span> (temp[<span class="hljs-number">0</span>].<span class="hljs-property">length</span> &gt; max) {
             char = temp[<span class="hljs-number">1</span>];
-            max = temp[<span class="hljs-number">0</span>].length;
+            max = temp[<span class="hljs-number">0</span>].<span class="hljs-property">length</span>;
         }
     }
     <span class="hljs-keyword">return</span> char;
 };
 
 <span class="hljs-comment">// see http://www.jackpu.com/qian-duan-mian-shi-zhong-de-chang-jian-de-suan-fa-wen-ti/</span>
-<span class="hljs-keyword">var</span> findMaxDuplicateCharNormal = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">str</span>) </span>{
-    <span class="hljs-keyword">if</span> (str.length == <span class="hljs-number">1</span>) {
+<span class="hljs-keyword">var</span> findMaxDuplicateCharNormal = <span class="hljs-keyword">function</span>(<span class="hljs-params">str</span>) {
+    <span class="hljs-keyword">if</span> (str.<span class="hljs-property">length</span> == <span class="hljs-number">1</span>) {
         <span class="hljs-keyword">return</span> str;
     }
     <span class="hljs-keyword">let</span> charObj = {};
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; str.length; i++) {
-        <span class="hljs-keyword">if</span> (!charObj[str.charAt(i)]) {
-            charObj[str.charAt(i)] = <span class="hljs-number">1</span>;
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; str.<span class="hljs-property">length</span>; i++) {
+        <span class="hljs-keyword">if</span> (!charObj[str.<span class="hljs-title function_">charAt</span>(i)]) {
+            charObj[str.<span class="hljs-title function_">charAt</span>(i)] = <span class="hljs-number">1</span>;
         } <span class="hljs-keyword">else</span> {
-            charObj[str.charAt(i)] += <span class="hljs-number">1</span>;
+            charObj[str.<span class="hljs-title function_">charAt</span>(i)] += <span class="hljs-number">1</span>;
         }
     }
-    <span class="hljs-keyword">let</span> maxChar = <span class="hljs-string">''</span>,
+    <span class="hljs-keyword">let</span> maxChar = <span class="hljs-string">&#39;&#39;</span>,
         maxValue = <span class="hljs-number">1</span>;
     <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> k <span class="hljs-keyword">in</span> charObj) {
-        <span class="hljs-keyword">if</span> (charObj[k] >= maxValue) {
+        <span class="hljs-keyword">if</span> (charObj[k] &gt;= maxValue) {
             maxChar = k;
             maxValue = charObj[k];
         }
@@ -137,14 +148,14 @@ i = <span class="hljs-number">0</span>;
 <span class="hljs-comment">// -------------------------------------------------</span>
 <span class="hljs-comment">// perf test</span>
 
-<span class="hljs-comment">// first let's generate a random string with 30 chars</span>
-<span class="hljs-keyword">var</span> chars = (<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+<span class="hljs-comment">// first let&#39;s generate a random string with 30 chars</span>
+<span class="hljs-keyword">var</span> chars = (<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
     <span class="hljs-keyword">var</span> len = <span class="hljs-number">30</span>;
     <span class="hljs-keyword">var</span> arr = [];
     <span class="hljs-keyword">while</span> (len--) {
-        arr.push(<span class="hljs-number">97</span> + ((<span class="hljs-built_in">Math</span>.random()* <span class="hljs-number">26</span>) | <span class="hljs-number">0</span>));
+        arr.<span class="hljs-title function_">push</span>(<span class="hljs-number">97</span> + ((<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>()* <span class="hljs-number">26</span>) | <span class="hljs-number">0</span>));
     }
-    <span class="hljs-keyword">return</span> <span class="hljs-built_in">String</span>.fromCharCode.apply(<span class="hljs-built_in">String</span>, arr);
+    <span class="hljs-keyword">return</span> <span class="hljs-title class_">String</span>.<span class="hljs-property">fromCharCode</span>.<span class="hljs-title function_">apply</span>(<span class="hljs-title class_">String</span>, arr);
 })();
 
 <span class="hljs-comment">// times</span>
@@ -152,20 +163,21 @@ i = <span class="hljs-number">0</span>;
 <span class="hljs-keyword">var</span> i;
 
 i = <span class="hljs-number">0</span>;
-<span class="hljs-built_in">console</span>.time(<span class="hljs-string">'正常方法'</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">time</span>(<span class="hljs-string">&#39;正常方法&#39;</span>);
 <span class="hljs-keyword">while</span> (i &lt; t) {
-    findMaxDuplicateCharNormal(chars);
+    <span class="hljs-title function_">findMaxDuplicateCharNormal</span>(chars);
     i++;
 }
-<span class="hljs-built_in">console</span>.timeEnd(<span class="hljs-string">'正常方法'</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">timeEnd</span>(<span class="hljs-string">&#39;正常方法&#39;</span>);
 
 i = <span class="hljs-number">0</span>;
-<span class="hljs-built_in">console</span>.time(<span class="hljs-string">'正则方法'</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">time</span>(<span class="hljs-string">&#39;正则方法&#39;</span>);
 <span class="hljs-keyword">while</span> (i &lt; t) {
-    findMaxDuplicateCharRegex(chars);
+    <span class="hljs-title function_">findMaxDuplicateCharRegex</span>(chars);
     i++;
 }
-<span class="hljs-built_in">console</span>.timeEnd(<span class="hljs-string">'正则方法'</span>);</code></pre><h2 id="-">不借助临时变量，进行两个整数的交换</h2> <p>三种方式均可。没有做性能测试。</p> <pre><code class="hljs lang-javascript">
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">timeEnd</span>(<span class="hljs-string">&#39;正则方法&#39;</span>);
+</code></pre><h2>不借助临时变量，进行两个整数的交换</h2><p>三种方式均可。没有做性能测试。</p><pre><code class="hljs lang-javascript">
 <span class="hljs-keyword">let</span> a = <span class="hljs-number">1</span>;
 <span class="hljs-keyword">let</span> b = <span class="hljs-number">2</span>;
 
@@ -180,9 +192,10 @@ a = b - a;
 <span class="hljs-comment">// 异或</span>
 a = a ^ b;
 b = a ^ b;
-a = b ^ a;</code></pre><h2 id="-">斐波那契数列</h2> <p>联想到了三种方式：动态规划；<a href="http://es6.ruanyifeng.com/#docs/function#尾递归" target="_blank">尾递归</a>；generator（算不上一个解决方案，只是临时想到的）。</p> <p>上述三种方式中，动态规划最快，计算 fib(1000) 20000 次耗时 170 ms；尾递归耗时 200 ms 左右，generator 耗时 2800 ms 左右。</p> <pre><code class="hljs lang-javascript">
+a = b ^ a;
+</code></pre><h2>斐波那契数列</h2><p>联想到了三种方式：动态规划；<a href="http://es6.ruanyifeng.com/#docs/function#尾递归" target="_blank" rel="noopener">尾递归</a>；generator（算不上一个解决方案，只是临时想到的）。</p><p>上述三种方式中，动态规划最快，计算 fib(1000) 20000 次耗时 170 ms；尾递归耗时 200 ms 左右，generator 耗时 2800 ms 左右。</p><pre><code class="hljs lang-javascript">
 <span class="hljs-comment">// 动态规划</span>
-<span class="hljs-keyword">const</span> fibonacciDynamic = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">n</span>) </span>{
+<span class="hljs-keyword">const</span> fibonacciDynamic = <span class="hljs-keyword">function</span> (<span class="hljs-params">n</span>) {
     <span class="hljs-keyword">let</span> array = [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>];
 
     <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> i = <span class="hljs-number">2</span>; i &lt; n + <span class="hljs-number">1</span>; i++){
@@ -193,16 +206,16 @@ a = b ^ a;</code></pre><h2 id="-">斐波那契数列</h2> <p>联想到了三种�
 };
 
 <span class="hljs-comment">// 尾递归</span>
-<span class="hljs-keyword">const</span> fibonacciTailCall = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">n , ac1 = <span class="hljs-number">1</span> , ac2 = <span class="hljs-number">1</span></span>) </span>{
+<span class="hljs-keyword">const</span> fibonacciTailCall = <span class="hljs-keyword">function</span> (<span class="hljs-params">n , ac1 = <span class="hljs-number">1</span> , ac2 = <span class="hljs-number">1</span></span>) {
     <span class="hljs-keyword">if</span>( n &lt;= <span class="hljs-number">1</span> ) {
         <span class="hljs-keyword">return</span> ac2
     }
-    <span class="hljs-keyword">return</span> fibonacciTailCall(n - <span class="hljs-number">1</span>, ac2, ac1 + ac2);
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_">fibonacciTailCall</span>(n - <span class="hljs-number">1</span>, ac2, ac1 + ac2);
 };
 
 <span class="hljs-comment">// generator</span>
-<span class="hljs-keyword">const</span> fibonacciGenerator = (<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-    <span class="hljs-function"><span class="hljs-keyword">function</span> *<span class="hljs-title">fib</span>(<span class="hljs-params"></span>) </span>{
+<span class="hljs-keyword">const</span> fibonacciGenerator = (<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) {
+    <span class="hljs-keyword">function</span> *<span class="hljs-title function_">fib</span>(<span class="hljs-params"></span>) {
         <span class="hljs-keyword">let</span> a = <span class="hljs-number">0</span>, b = <span class="hljs-number">1</span>, sum = <span class="hljs-number">0</span>;
 
         <span class="hljs-keyword">while</span> (<span class="hljs-literal">true</span>) {
@@ -212,15 +225,15 @@ a = b ^ a;</code></pre><h2 id="-">斐波那契数列</h2> <p>联想到了三种�
             <span class="hljs-keyword">yield</span> sum;
         }
     }
-
-    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">n</span>) </span>{
-        <span class="hljs-keyword">var</span> iterator = fib();
+    
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">function</span> (<span class="hljs-params">n</span>) {
+        <span class="hljs-keyword">var</span> iterator = <span class="hljs-title function_">fib</span>();
         <span class="hljs-keyword">let</span> result = <span class="hljs-number">0</span>;
 
         <span class="hljs-keyword">while</span> (n--) {
-            result = iterator.next();
+            result = iterator.<span class="hljs-title function_">next</span>();
         }
-        <span class="hljs-keyword">return</span> result.value;
+        <span class="hljs-keyword">return</span> result.<span class="hljs-property">value</span>;
     };
 }());
 
@@ -234,39 +247,40 @@ a = b ^ a;</code></pre><h2 id="-">斐波那契数列</h2> <p>联想到了三种�
 <span class="hljs-keyword">var</span> i;
 
 i = <span class="hljs-number">0</span>;
-<span class="hljs-built_in">console</span>.time(<span class="hljs-string">'动态规划'</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">time</span>(<span class="hljs-string">&#39;动态规划&#39;</span>);
 <span class="hljs-keyword">while</span> (i &lt; t) {
-    fibonacciDynamic(n);
+    <span class="hljs-title function_">fibonacciDynamic</span>(n);
     i++;
 }
-<span class="hljs-built_in">console</span>.timeEnd(<span class="hljs-string">'动态规划'</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">timeEnd</span>(<span class="hljs-string">&#39;动态规划&#39;</span>);
 
 
 i = <span class="hljs-number">0</span>;
-<span class="hljs-built_in">console</span>.time(<span class="hljs-string">'尾递归'</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">time</span>(<span class="hljs-string">&#39;尾递归&#39;</span>);
 <span class="hljs-keyword">while</span> (i &lt; t) {
-    fibonacciTailCall(n);
+    <span class="hljs-title function_">fibonacciTailCall</span>(n);
     i++;
 }
-<span class="hljs-built_in">console</span>.timeEnd(<span class="hljs-string">'尾递归'</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">timeEnd</span>(<span class="hljs-string">&#39;尾递归&#39;</span>);
 
 
 i = <span class="hljs-number">0</span>;
-<span class="hljs-built_in">console</span>.time(<span class="hljs-string">'generator'</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">time</span>(<span class="hljs-string">&#39;generator&#39;</span>);
 <span class="hljs-keyword">while</span> (i &lt; t) {
-    fibonacciGenerator(n);
+    <span class="hljs-title function_">fibonacciGenerator</span>(n);
     i++;
 }
-<span class="hljs-built_in">console</span>.timeEnd(<span class="hljs-string">'generator'</span>);</code></pre><h2 id="-">正数组的最大差值</h2> <p>出乎意料地，这次 Math 方法竟然败给看 for 循环。不用说，reduce 超级慢，比 Math 还慢近十倍。</p> <p>声明：Math 只是在本案例中比 for 循环慢，实际上如果只是单独取数组中的最大值或最小值，Math 还是很厉害的。实测：随机生成一个长度为 20 的数组（100 以内的正整数），寻找最大值，运行 10^6 次，Math 完胜，不到 1s 搞定，for 循环直接卡死。所以还是得看具体情况。</p> <pre><code class="hljs lang-javascript">
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">timeEnd</span>(<span class="hljs-string">&#39;generator&#39;</span>);
+</code></pre><h2>正数组的最大差值</h2><p>出乎意料地，这次 Math 方法竟然败给看 for 循环。不用说，reduce 超级慢，比 Math 还慢近十倍。</p><p>声明：Math 只是在本案例中比 for 循环慢，实际上如果只是单独取数组中的最大值或最小值，Math 还是很厉害的。实测：随机生成一个长度为 20 的数组（100 以内的正整数），寻找最大值，运行 10^6 次，Math 完胜，不到 1s 搞定，for 循环直接卡死。所以还是得看具体情况。</p><pre><code class="hljs lang-javascript">
 <span class="hljs-comment">// 使用 Math </span>
-<span class="hljs-keyword">const</span> getMaxGap = <span class="hljs-function">(<span class="hljs-params">array</span>) =></span> <span class="hljs-built_in">Math</span>.max.apply(<span class="hljs-built_in">Math</span>, array) - <span class="hljs-built_in">Math</span>.min.apply(<span class="hljs-built_in">Math</span>, array);
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">getMaxGap</span> = (<span class="hljs-params">array</span>) =&gt; <span class="hljs-title class_">Math</span>.<span class="hljs-property">max</span>.<span class="hljs-title function_">apply</span>(<span class="hljs-title class_">Math</span>, array) - <span class="hljs-title class_">Math</span>.<span class="hljs-property">min</span>.<span class="hljs-title function_">apply</span>(<span class="hljs-title class_">Math</span>, array);
 
 <span class="hljs-comment">// 使用 reduce</span>
-<span class="hljs-keyword">const</span> getMaxDiff = <span class="hljs-function">(<span class="hljs-params">array</span>) =></span> {
-    <span class="hljs-keyword">if</span> (array.length &lt; <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> arrary[<span class="hljs-number">0</span>];
+<span class="hljs-keyword">const</span> <span class="hljs-title function_">getMaxDiff</span> = (<span class="hljs-params">array</span>) =&gt; {
+    <span class="hljs-keyword">if</span> (array.<span class="hljs-property">length</span> &lt; <span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> arrary[<span class="hljs-number">0</span>];
 
-    array = array.reduce(<span class="hljs-function">(<span class="hljs-params">[max, min], el</span>) =></span> {
-       max = el > max ? el : max;
+    array = array.<span class="hljs-title function_">reduce</span>(<span class="hljs-function">(<span class="hljs-params">[max, min], el</span>) =&gt;</span> {
+       max = el &gt; max ? el : max;
        min = el &lt; min ? el : min;
        <span class="hljs-keyword">return</span> [max, min];
     }, array);
@@ -275,18 +289,18 @@ i = <span class="hljs-number">0</span>;
 };
 
 <span class="hljs-comment">// see http://www.jackpu.com/qian-duan-mian-shi-zhong-de-chang-jian-de-suan-fa-wen-ti/</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getMaxProfit</span>(<span class="hljs-params">arr</span>) </span>{
+<span class="hljs-keyword">function</span> <span class="hljs-title function_">getMaxProfit</span>(<span class="hljs-params">arr</span>) {
     <span class="hljs-keyword">var</span> minPrice = arr[<span class="hljs-number">0</span>];
     <span class="hljs-keyword">var</span> maxProfit = <span class="hljs-number">0</span>;
 
-    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; arr.length; i++) {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; arr.<span class="hljs-property">length</span>; i++) {
         <span class="hljs-keyword">var</span> currentPrice = arr[i];
 
-        minPrice = <span class="hljs-built_in">Math</span>.min(minPrice, currentPrice);
+        minPrice = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(minPrice, currentPrice);
 
         <span class="hljs-keyword">var</span> potentialProfit = currentPrice - minPrice;
 
-        maxProfit = <span class="hljs-built_in">Math</span>.max(maxProfit, potentialProfit);
+        maxProfit = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(maxProfit, potentialProfit);
     }
 
     <span class="hljs-keyword">return</span> maxProfit;
@@ -304,37 +318,28 @@ i = <span class="hljs-number">0</span>;
 <span class="hljs-keyword">var</span> i;
 
 i = <span class="hljs-number">0</span>;
-<span class="hljs-built_in">console</span>.time(<span class="hljs-string">'Math'</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">time</span>(<span class="hljs-string">&#39;Math&#39;</span>);
 <span class="hljs-keyword">while</span> (i &lt; t) {
-    getMaxGap(array);
+    <span class="hljs-title function_">getMaxGap</span>(array);
     i++;
 }
-<span class="hljs-built_in">console</span>.timeEnd(<span class="hljs-string">'Math'</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">timeEnd</span>(<span class="hljs-string">&#39;Math&#39;</span>);
 
 i = <span class="hljs-number">0</span>;
-<span class="hljs-built_in">console</span>.time(<span class="hljs-string">'Reduce'</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">time</span>(<span class="hljs-string">&#39;Reduce&#39;</span>);
 <span class="hljs-keyword">while</span> (i &lt; t) {
-    getMaxDiff(array);
+    <span class="hljs-title function_">getMaxDiff</span>(array);
     i++;
 }
-<span class="hljs-built_in">console</span>.timeEnd(<span class="hljs-string">'Reduce'</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">timeEnd</span>(<span class="hljs-string">&#39;Reduce&#39;</span>);
 
 
 i = <span class="hljs-number">0</span>;
-<span class="hljs-built_in">console</span>.time(<span class="hljs-string">'Normal'</span>);
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">time</span>(<span class="hljs-string">&#39;Normal&#39;</span>);
 <span class="hljs-keyword">while</span> (i &lt; t) {
-    getMaxProfit(array);
+    <span class="hljs-title function_">getMaxProfit</span>(array);
     i++;
 }
-<span class="hljs-built_in">console</span>.timeEnd(<span class="hljs-string">'Normal'</span>);</code></pre><p>对算法的了解还十分浅薄，错误肯定有，希望读者指教。还需要钻研更多。感谢 <a href="http://www.jackpu.com/" target="_blank">@JackPu</a> 的文章带来的启发和思考。</p> <div class="tip">
-补注：<br>
-本文在描述测试结果会进行一些对比，也会使用一些“失败”“不如”等字眼，但测试比较主要是满足好奇心。实际工作中，多数人应该不会碰到那么大的计算量，因此几乎不用担心（多数情况下），多关注其他方面的优化吧。<br>
-另外，请不要对某些说法（正数组的差值例子中所说 Math 败给 for 循环）产生刻板印象（我自己就是，这次之后总感觉 Math 是不是不给力。被自己误会到了囧），具体情况具体分析，另外，多操作，多做实验。<br>
-如果本文一些不严谨的说法给您的学习、工作造成负面影响，还请谅解。如有问题，欢迎随时和我联系。
-</div></div></article> <nav class="pagination"><a href="/post/js-set-immediate" title="关于 setImmediate" class="prev">« 关于 setImmediate</a> <a href="/post/javascript-weekly-306-notes" title="JavaScript Weekly 306 阅读笔记" class="next">JavaScript Weekly 306 阅读笔记 »</a></nav></div> <footer id="footer" class="inner">
-      © 2022 -  文蔺的博客
-      
-        <span> - </span> <a href="/" class="nuxt-link-active">www.wemlion.com</a> <br>
-      Powered by <a target="_blank" href="https://nuxtjs.org">Nuxt.js</a> & <a target="_blank" rel="nofollow" href="https://firekylin.org" class="external">FireKylin</a></footer></div></div></div></div><script>window.__NUXT__={layout:"default",data:[{}],error:null,serverRendered:!0}</script><script src="/static/c418fb652629ac1ad5ca.js" defer></script><script src="/static/8da21cfcb5258589988b.js" defer></script><script src="/static/a04af2434d342797c405.js" defer></script><script src="/static/a9e13b4b84fcd888d410.js" defer></script><script src="/static/0329710550037b626a84.js" defer></script>
-  </body>
-</html>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">timeEnd</span>(<span class="hljs-string">&#39;Normal&#39;</span>);
+</code></pre><p>对算法的了解还十分浅薄，错误肯定有，希望读者指教。还需要钻研更多。感谢 <a href="http://www.jackpu.com/" target="_blank" rel="noopener">@JackPu</a> 的文章带来的启发和思考。</p><div class="tip"> 补注：<br> 本文在描述测试结果会进行一些对比，也会使用一些“失败”“不如”等字眼，但测试比较主要是满足好奇心。实际工作中，多数人应该不会碰到那么大的计算量，因此几乎不用担心（多数情况下），多关注其他方面的优化吧。<br> 另外，请不要对某些说法（正数组的差值例子中所说 Math 败给 for 循环）产生刻板印象（我自己就是，这次之后总感觉 Math 是不是不给力。被自己误会到了囧），具体情况具体分析，另外，多操作，多做实验。<br> 如果本文一些不严谨的说法给您的学习、工作造成负面影响，还请谅解。如有问题，欢迎随时和我联系。 </div><!--]--></div></article><nav class="pagination"><a href="/post/20161027-reading" class="prev" title="2016 年 10 月 27 日阅读笔记">« 2016 年 10 月 27 日阅读笔记</a><a href="/post/javascript-weekly-306-notes" class="next" title="JavaScript Weekly 306 阅读笔记">JavaScript Weekly 306 阅读笔记 »</a></nav></div><!--]--><footer id="footer" class="inner"> © 2026 -  文蔺的博客 <span> - </span><a href="/" class="">www.wemlion.com</a><br> Powered by <a target="_blank" href="https://nuxt.com">Nuxt 3</a> &amp; <a target="_blank" rel="nofollow" class="external" href="https://firekylin.org">FireKylin</a></footer></div></div></div><div id="teleports"></div><script>window.__NUXT__={};window.__NUXT__.config={public:{title:"文蔺的博客",description:"文蔺的前端学习记录，国外技术文章翻译，个人学习心得等等这些都会记录在这里。",favicon:"/img/favicon.ico",site_owner:"文蔺",hostname:"www.wemlion.com",github_url:"https://github.com/AngusFu/",logo_url:"/imgs/avatar.jpg",navigation:[{url:"/",option:"home",label:"主页"},{url:"/archives",option:"archive",label:"归档"},{url:"/slides",option:"archive",label:"Slides"},{url:"/about",option:"user",label:"关于"},{url:"/link",option:"link",label:"关注"},{url:"/collection",option:"archive",label:"收藏"}],page_size:10,site_url:"https://www.wemlion.com"},app:{baseURL:"/",buildId:"596f84e1-7d61-444d-a8ad-625589d4e662",buildAssetsDir:"/_nuxt/",cdnURL:""}}</script>
+<script type="application/json" data-nuxt-data="nuxt-app" data-ssr="true" id="__NUXT_DATA__" data-src="/post/front-end-interview-algo-questions/_payload.json?596f84e1-7d61-444d-a8ad-625589d4e662">[{"state":1,"once":3,"_errors":4,"serverRendered":6,"path":7,"prerenderedAt":8},["Reactive",2],{},["Set"],["ShallowReactive",5],{},true,"/post/front-end-interview-algo-questions",1769604843462]</script></body></html>

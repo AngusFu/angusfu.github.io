@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ZIP 文件预览器</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- 使用 file-type-mime 进行文件类型检测 -->
+    <script src="https://cdn.jsdelivr.net/npm/file-type-mime@0.4.7/dist/index.umd.min.js"></script>
+    <!-- highlight.js 代码高亮 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: rgba(30, 41, 59, 0.95);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent: #3b82f6;
+            --accent-light: #60a5fa;
+            --border: rgba(148, 163, 184, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .header {
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--text-primary);
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 左侧文件浏览器 */
+        .file-browser {
+            width: 100%;
+            max-width: 400px;
+            background: var(--bg-tertiary);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .browser-header {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.375rem;
+            width: 32px;
+            height: 32px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.1);
+            color: var(--text-primary);
+        }
+
+        .back-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .path-display {
+            flex: 1;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        .file-count {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: rgba(0,0,0,0.2);
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+        }
+
+        /* 面包屑导航 */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+            scrollbar-width: none;
+            background: rgba(15, 23, 42, 0.3);
+            min-height: 40px;
+        }
+
+        .breadcrumb::-webkit-scrollbar {
+            display: none;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            flex-shrink: 0;
+        }
+
+        .breadcrumb-link {
+            color: var(--accent-light);
+            text-decoration: none;
+            font-size: 0.8125rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            white-space: nowrap;
+        }
+
+        .breadcrumb-link:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .breadcrumb-separator {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        .breadcrumb-current {
+            color: var(--text-secondary);
+            font-size: 0.8125rem;
+            padding: 0.25rem 0.5rem;
+            white-space: nowrap;
+        }
+
+        /* 文件列表 */
+        .file-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 0.25rem;
+            border: 1px solid transparent;
+        }
+
+        .file-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .file-item.active {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+
+        .file-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .folder-icon {
+            color: #fbbf24;
+        }
+
+        .file-icon-svg {
+            color: var(--text-secondary);
+        }
+
+        .file-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .file-name {
+            font-size: 0.9375rem;
+            color: var(--text-primary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        .file-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .file-arrow {
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        /* 右侧预览区 */
+        .preview-area {
+            flex: 1;
+            background: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-width: 0;
+        }
+
+        .preview-header {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(30, 41, 59, 0.5);
+        }
+
+        .preview-title {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+        }
+
+        .preview-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: var(--bg-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            margin-left: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-left: 0.5rem;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .icon-btn:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--text-primary);
+        }
+
+        .icon-btn.copied {
+            color: #10b981;
+        }
+
+        .preview-content {
+            flex: 1;
+            overflow: auto;
+            padding: 1rem;
+            background: var(--bg-primary);
+        }
+
+        /* 空状态 */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .empty-icon {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        /* 图片预览 */
+        .image-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100%;
+            background: repeating-conic-gradient(var(--bg-secondary) 0% 25%, transparent 0% 50%) 50% / 20px 20px;
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 0.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 视频预览 */
+        .video-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100%;
+            background: var(--bg-secondary);
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+
+        .video-preview {
+            max-width: 100%;
+            max-height: 70vh;
+            border-radius: 0.5rem;
+        }
+
+        /* 代码预览 */
+        .code-preview {
+            background: var(--bg-secondary);
+            border-radius: 0.5rem;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+
+        .code-preview pre {
+            margin: 0;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.8125rem;
+            line-height: 1.6;
+            background: transparent;
+        }
+
+        .code-preview code {
+            font-family: inherit;
+            font-size: inherit;
+            line-height: inherit;
+        }
+
+        /* highlight.js 样式调整 */
+        .hljs {
+            background: transparent !important;
+            padding: 0 !important;
+        }
+
+        /* 二进制文件预览 */
+        .binary-preview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .binary-icon {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1.5rem;
+            opacity: 0.5;
+            color: var(--text-secondary);
+        }
+
+        .binary-info {
+            margin-bottom: 1.5rem;
+        }
+
+        .binary-filename {
+            font-size: 1.125rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            word-break: break-all;
+        }
+
+        .binary-type {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .binary-size {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* 返回按钮（预览区） */
+        .preview-back {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.5rem;
+            margin-right: 0.5rem;
+        }
+
+        /* 桌面端布局 */
+        @media (min-width: 769px) {
+            .file-browser {
+                width: 350px;
+                max-width: 350px;
+            }
+            
+            .mobile-header {
+                display: none !important;
+            }
+        }
+
+        /* 移动端布局 */
+        @media (max-width: 768px) {
+            .file-browser {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                max-width: none;
+                z-index: 50;
+                transition: transform 0.3s ease;
+                background: var(--bg-primary);
+            }
+
+            .file-browser.hidden {
+                transform: translateX(-100%);
+            }
+
+            .preview-area {
+                width: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                z-index: 40;
+            }
+
+            .preview-back {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .preview-actions {
+                gap: 0.25rem;
+            }
+        }
+
+        /* 加载动画 */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            gap: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast 提示 */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-size: 0.875rem;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div style="display: flex; align-items: center;">
+                <div class="logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                    </svg>
+                    ZIP 预览器
+                </div>
+            </div>
+            <div class="file-input-wrapper">
+                <input type="file" id="fileInput" accept=".zip" style="display: none;">
+                <button class="btn" onclick="document.getElementById('fileInput').click()">选择文件</button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- 左侧文件浏览器 -->
+            <div class="file-browser" id="fileBrowser">
+                <div class="browser-header">
+                    <button class="back-btn" id="backBtn" onclick="goBack()" disabled>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <div class="path-display" id="pathDisplay">根目录</div>
+                    <div class="file-count" id="fileCount"></div>
+                </div>
+                
+                <!-- 面包屑导航 -->
+                <div class="breadcrumb" id="breadcrumb"></div>
+                
+                <!-- 文件列表 -->
+                <div class="file-list" id="fileList">
+                    <div class="empty-state">
+                        <p>请选择 ZIP 文件</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧预览区 -->
+            <div class="preview-area" id="previewArea">
+                <div class="preview-header" id="previewHeader" style="display: none;">
+                    <button class="preview-back" onclick="showFileBrowser()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <div class="preview-title" id="previewTitle">文件名</div>
+                    <div class="preview-meta" id="previewMeta">0 KB</div>
+                    <div class="preview-actions" id="previewActions"></div>
+                </div>
+                <div class="preview-content" id="previewContent">
+                    <div class="empty-state">
+                        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                        </svg>
+                        <h3>选择文件预览</h3>
+                        <p>点击左侧文件查看内容</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast 提示 -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        let currentZip = null;
+        let fileTree = {};
+        let currentPath = [];
+        let currentFile = null;
+        let pathStack = [];
+        let currentFileContent = null; // 存储当前文件内容用于复制
+
+        // file-type-mime 库实例
+        const fileTypeParser = window.fileTypeMime;
+
+        document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+
+        document.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+
+        document.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const files = e.dataTransfer.files;
+            if (files.length > 0 && files[0].name.endsWith('.zip')) {
+                loadZipFile(files[0]);
+            }
+        });
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) loadZipFile(file);
+        }
+
+        async function loadZipFile(file) {
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                currentZip = await JSZip.loadAsync(arrayBuffer);
+                
+                buildFileTree();
+                currentPath = [];
+                pathStack = [];
+                renderCurrentDirectory();
+                updateBreadcrumb();
+                
+                // 重置预览区
+                document.getElementById('previewHeader').style.display = 'none';
+                document.getElementById('previewContent').innerHTML = `
+                    <div class="empty-state">
+                        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                        <h3>ZIP 已加载</h3>
+                        <p>共 ${Object.keys(currentZip.files).filter(p => !currentZip.files[p].dir).length} 个文件</p>
+                    </div>
+                `;
+            } catch (error) {
+                alert('无法解析 ZIP 文件: ' + error.message);
+            }
+        }
+
+        function buildFileTree() {
+            fileTree = { _type: 'folder', _children: {} };
+            
+            Object.keys(currentZip.files).forEach(path => {
+                if (path.endsWith('/')) return;
+                
+                const parts = path.split('/').filter(p => p);
+                let current = fileTree;
+                
+                parts.forEach((part, index) => {
+                    const isLast = index === parts.length - 1;
+                    
+                    if (!current._children[part]) {
+                        current._children[part] = isLast ? {
+                            _type: 'file',
+                            _name: part,
+                            _path: path,
+                            _file: currentZip.files[path]
+                        } : {
+                            _type: 'folder',
+                            _name: part,
+                            _children: {}
+                        };
+                    }
+                    current = current._children[part];
+                });
+            });
+        }
+
+        function getCurrentFolder() {
+            let current = fileTree;
+            for (const part of currentPath) {
+                current = current._children[part];
+            }
+            return current;
+        }
+
+        function renderCurrentDirectory() {
+            const folder = getCurrentFolder();
+            const listEl = document.getElementById('fileList');
+            const countEl = document.getElementById('fileCount');
+            const pathEl = document.getElementById('pathDisplay');
+            const backBtn = document.getElementById('backBtn');
+            
+            pathEl.textContent = currentPath.length === 0 ? '根目录' : currentPath[currentPath.length - 1];
+            backBtn.disabled = currentPath.length === 0;
+            
+            listEl.innerHTML = '';
+            
+            if (!folder || !folder._children) {
+                countEl.textContent = '0 项';
+                return;
+            }
+            
+            const items = Object.values(folder._children).sort((a, b) => {
+                if (a._type !== b._type) return a._type === 'folder' ? -1 : 1;
+                return a._name.localeCompare(b._name);
+            });
+            
+            countEl.textContent = `${items.length} 项`;
+            
+            items.forEach(item => {
+                const el = createFileItem(item);
+                listEl.appendChild(el);
+            });
+        }
+
+        function createFileItem(item) {
+            const div = document.createElement('div');
+            div.className = 'file-item';
+            
+            const isFolder = item._type === 'folder';
+            const iconSvg = isFolder 
+                ? `<svg class="file-icon folder-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>`
+                : `<svg class="file-icon file-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${getFileIcon(item._name)}</svg>`;
+            
+            const metaText = isFolder 
+                ? `${Object.keys(item._children || {}).length} 项`
+                : formatFileSize(item._file?._data?.uncompressedSize || 0);
+            
+            const arrowSvg = isFolder 
+                ? `<svg class="file-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>`
+                : '';
+            
+            div.innerHTML = `
+                ${iconSvg}
+                <div class="file-info">
+                    <div class="file-name">${item._name}</div>
+                    <div class="file-meta">${metaText}</div>
+                </div>
+                ${arrowSvg}
+            `;
+            
+            div.onclick = () => {
+                if (isFolder) {
+                    enterFolder(item._name);
+                } else {
+                    selectFile(item, div);
+                }
+            };
+            
+            return div;
+        }
+
+        function enterFolder(folderName) {
+            pathStack.push([...currentPath]);
+            currentPath.push(folderName);
+            renderCurrentDirectory();
+            updateBreadcrumb();
+        }
+
+        function goBack() {
+            if (pathStack.length > 0) {
+                currentPath = pathStack.pop();
+                renderCurrentDirectory();
+                updateBreadcrumb();
+            }
+        }
+
+        function updateBreadcrumb() {
+            const el = document.getElementById('breadcrumb');
+            el.innerHTML = '';
+            
+            const rootLink = document.createElement('a');
+            rootLink.className = 'breadcrumb-link';
+            rootLink.textContent = '根目录';
+            rootLink.href = '#';
+            rootLink.onclick = (e) => {
+                e.preventDefault();
+                currentPath = [];
+                pathStack = [];
+                renderCurrentDirectory();
+                updateBreadcrumb();
+            };
+            el.appendChild(rootLink);
+            
+            currentPath.forEach((part, index) => {
+                const separator = document.createElement('span');
+                separator.className = 'breadcrumb-separator';
+                separator.textContent = '/';
+                el.appendChild(separator);
+                
+                if (index === currentPath.length - 1) {
+                    const current = document.createElement('span');
+                    current.className = 'breadcrumb-current';
+                    current.textContent = part;
+                    el.appendChild(current);
+                } else {
+                    const link = document.createElement('a');
+                    link.className = 'breadcrumb-link';
+                    link.textContent = part;
+                    link.href = '#';
+                    const pathIndex = index;
+                    link.onclick = (e) => {
+                        e.preventDefault();
+                        currentPath = currentPath.slice(0, pathIndex + 1);
+                        pathStack = pathStack.slice(0, pathIndex);
+                        renderCurrentDirectory();
+                        updateBreadcrumb();
+                    };
+                    el.appendChild(link);
+                }
+            });
+        }
+
+        function getFileIcon(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'].includes(ext)) {
+                return '<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>';
+            }
+            return '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>';
+        }
+
+        // 检测文件类型
+        async function detectFileType(arrayBuffer) {
+            try {
+                // 使用 file-type-mime 检测
+                const result = fileTypeParser.parse(arrayBuffer);
+                if (result) {
+                    return result;
+                }
+            } catch (e) {
+                console.log('file-type detection failed:', e);
+            }
+            
+            // 如果检测失败，返回未知类型
+            return null;
+        }
+
+        // 判断是否为文本类型
+        function isTextType(mimeType) {
+            if (!mimeType) return false;
+            const textTypes = [
+                'text/',
+                'application/json',
+                'application/javascript',
+                'application/xml',
+                'application/xhtml+xml',
+                'application/sql',
+                'application/x-httpd-php',
+                'application/x-sh',
+                'application/x-bash',
+                'application/x-typescript',
+                'application/x-yaml',
+                'application/x-toml',
+                'application/x-markdown',
+                'application/x-ruby',
+                'application/x-python',
+                'application/x-perl',
+                'application/x-lua',
+                'application/x-csh',
+                'application/x-zsh'
+            ];
+            return textTypes.some(type => mimeType.startsWith(type)) || mimeType.includes('script');
+        }
+
+        // 判断是否为图片类型
+        function isImageType(mimeType) {
+            return mimeType && mimeType.startsWith('image/');
+        }
+
+        // 判断是否为视频类型
+        function isVideoType(mimeType) {
+            return mimeType && mimeType.startsWith('video/');
+        }
+
+        // 获取 highlight.js 语言标识
+        function getHighlightLanguage(filename, mimeType) {
+            const ext = filename.split('.').pop().toLowerCase();
+            const languageMap = {
+                'js': 'javascript',
+                'jsx': 'javascript',
+                'ts': 'typescript',
+                'tsx': 'typescript',
+                'html': 'xml',
+                'htm': 'xml',
+                'xml': 'xml',
+                'css': 'css',
+                'json': 'json',
+                'py': 'python',
+                'java': 'java',
+                'c': 'c',
+                'cpp': 'cpp',
+                'h': 'cpp',
+                'hpp': 'cpp',
+                'php': 'php',
+                'rb': 'ruby',
+                'go': 'go',
+                'rs': 'rust',
+                'md': 'markdown',
+                'yaml': 'yaml',
+                'yml': 'yaml',
+                'sql': 'sql',
+                'sh': 'bash',
+                'bash': 'bash',
+                'zsh': 'bash',
+                'ps1': 'powershell',
+                'bat': 'dos',
+                'cmd': 'dos',
+                'vue': 'xml',
+                'log': 'plaintext',
+                'txt': 'plaintext',
+                'csv': 'plaintext'
+            };
+            
+            // 根据 MIME 类型调整
+            if (mimeType) {
+                if (mimeType.includes('javascript')) return 'javascript';
+                if (mimeType.includes('json')) return 'json';
+                if (mimeType.includes('xml')) return 'xml';
+                if (mimeType.includes('css')) return 'css';
+                if (mimeType.includes('php')) return 'php';
+                if (mimeType.includes('sql')) return 'sql';
+                if (mimeType.includes('python')) return 'python';
+                if (mimeType.includes('ruby')) return 'ruby';
+                if (mimeType.includes('perl')) return 'perl';
+                if (mimeType.includes('bash') || mimeType.includes('shell')) return 'bash';
+            }
+            
+            return languageMap[ext] || 'plaintext';
+        }
+
+        async function selectFile(fileItem, element) {
+            currentFile = fileItem;
+            currentFileContent = null;
+            
+            document.querySelectorAll('.file-item').forEach(el => el.classList.remove('active'));
+            if (element) element.classList.add('active');
+            
+            document.getElementById('previewHeader').style.display = 'flex';
+            document.getElementById('previewTitle').textContent = fileItem._name;
+            document.getElementById('previewMeta').textContent = formatFileSize(fileItem._file?._data?.uncompressedSize || 0);
+            
+            // 清空操作按钮
+            document.getElementById('previewActions').innerHTML = '';
+            
+            document.getElementById('previewContent').innerHTML = '<div class="loading"><div class="spinner"></div>加载中...</div>';
+            
+            // 移动端切换到预览视图
+            if (window.innerWidth <= 768) {
+                document.getElementById('fileBrowser').classList.add('hidden');
+            }
+            
+            try {
+                // 获取文件内容作为 ArrayBuffer 用于类型检测
+                const arrayBuffer = await fileItem._file.async('arraybuffer');
+                
+                // 检测文件类型
+                const fileType = await detectFileType(arrayBuffer);
+                const mimeType = fileType ? fileType.mime : null;
+                
+                // 根据类型处理
+                if (isImageType(mimeType)) {
+                    // 图片预览
+                    const blob = new Blob([arrayBuffer]);
+                    const url = URL.createObjectURL(blob);
+                    document.getElementById('previewContent').innerHTML = `
+                        <div class="image-container">
+                            <img src="${url}" class="image-preview" alt="${fileItem._name}">
+                        </div>
+                    `;
+                    addDownloadButton();
+                    
+                } else if (isVideoType(mimeType)) {
+                    // 视频预览
+                    const blob = new Blob([arrayBuffer], { type: mimeType });
+                    const url = URL.createObjectURL(blob);
+                    document.getElementById('previewContent').innerHTML = `
+                        <div class="video-container">
+                            <video class="video-preview" controls>
+                                <source src="${url}" type="${mimeType}">
+                                您的浏览器不支持视频播放
+                            </video>
+                        </div>
+                    `;
+                    addDownloadButton();
+                    
+                } else if (isTextType(mimeType) || fileItem._file._data.uncompressedSize < 1024 * 1024) {
+                    // 文本/代码预览（小于1MB的也尝试作为文本）
+                    const content = new TextDecoder('utf-8', { fatal: false }).decode(arrayBuffer);
+                    currentFileContent = content; // 保存内容用于复制
+                    
+                    const language = getHighlightLanguage(fileItem._name, mimeType);
+                    
+                    document.getElementById('previewContent').innerHTML = `
+                        <div class="code-preview">
+                            <pre><code class="language-${language}">${escapeHtml(content)}</code></pre>
+                        </div>
+                    `;
+                    
+                    // 语法高亮
+                    document.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+                    
+                    // 添加复制按钮
+                    addCopyButton();
+                    addDownloadButton();
+                    
+                } else {
+                    // 二进制文件，只显示下载
+                    throw new Error('binary');
+                }
+                
+            } catch (error) {
+                if (error.message === 'binary') {
+                    // 二进制文件预览
+                    const fileSize = formatFileSize(fileItem._file?._data?.uncompressedSize || 0);
+                    document.getElementById('previewContent').innerHTML = `
+                        <div class="binary-preview">
+                            <svg class="binary-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                            <div class="binary-info">
+                                <div class="binary-filename">${fileItem._name}</div>
+                                <div class="binary-type">二进制文件</div>
+                                <div class="binary-size">${fileSize}</div>
+                            </div>
+                            <button class="btn" onclick="downloadCurrentFile()">下载文件</button>
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('previewContent').innerHTML = `
+                        <div class="empty-state">
+                            <p>无法预览: ${error.message}</p>
+                            <button class="btn" onclick="downloadCurrentFile()" style="margin-top: 1rem;">下载文件</button>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // 添加复制按钮
+        function addCopyButton() {
+            const actions = document.getElementById('previewActions');
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'icon-btn';
+            copyBtn.title = '复制内容';
+            copyBtn.innerHTML = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+            `;
+            copyBtn.onclick = copyContent;
+            actions.appendChild(copyBtn);
+        }
+
+        // 添加下载按钮
+        function addDownloadButton() {
+            const actions = document.getElementById('previewActions');
+            // 检查是否已存在下载按钮
+            if (actions.querySelector('[title="下载文件"]')) return;
+            
+            const downloadBtn = document.createElement('button');
+            downloadBtn.className = 'icon-btn';
+            downloadBtn.title = '下载文件';
+            downloadBtn.innerHTML = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+            `;
+            downloadBtn.onclick = downloadCurrentFile;
+            actions.appendChild(downloadBtn);
+        }
+
+        // 复制内容
+        async function copyContent() {
+            if (!currentFileContent) return;
+            
+            try {
+                await navigator.clipboard.writeText(currentFileContent);
+                showToast('已复制到剪贴板');
+                
+                // 显示复制成功状态
+                const copyBtn = document.querySelector('[title="复制内容"]');
+                if (copyBtn) {
+                    copyBtn.classList.add('copied');
+                    copyBtn.innerHTML = `
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    `;
+                    setTimeout(() => {
+                        copyBtn.classList.remove('copied');
+                        copyBtn.innerHTML = `
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        `;
+                    }, 2000);
+                }
+            } catch (err) {
+                showToast('复制失败');
+            }
+        }
+
+        // 显示 Toast 提示
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        function showFileBrowser() {
+            document.getElementById('fileBrowser').classList.remove('hidden');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatFileSize(bytes) {
+            if (!bytes) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function downloadCurrentFile() {
+            if (!currentFile) return;
+            currentFile._file.async('blob').then(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = currentFile._name;
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+        }
+    </script>
+</body>
+</html>

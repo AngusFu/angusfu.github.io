@@ -1,0 +1,41 @@
+import{_ as e}from"./CaNb7KN_.js";import{c as p,w as c,o,a as s,b as a}from"./Du-K4N_a.js";const d={__name:"ajax-requests-in-react",setup(r){const n={title:"[译] React 中的 AJAX 请求：获取数据的方法与时机",description:"React 中的 AJAX 请求：获取数据的方法与时机",keywords:"翻译,React",pathname:"ajax-requests-in-react",translation:{author:"Dave Ceddia",social:"https://daveceddia.com/",from:"https://daveceddia.com/ajax-requests-in-react/"},create_time:"2016-12-07",prev:{title:"[译] Bluebird 高性能揭秘",pathname:"javascript-performance-fundamentals-make-bluebird-fast"},next:{title:"前端界面 Modal 的控制",pathname:"accessible-modal"}};return(i,l)=>{const t=e;return o(),p(t,{data:n},{default:c(()=>[...l[0]||(l[0]=[s("p",null,"React 新手一开始可能会问到这样一个问题，“在 React 中如何发送 AJAX 请求呢？”",-1),s("p",null,"本文正要回答该问题。",-1),s("p",null,"首先：React 本身对获取数据的方式并无任何特殊偏好。实际上，在 React 的图景中，根本就不知道“服务器”这种东西的存在。",-1),s("p",null,[a("React 只是使用 "),s("strong",null,"props"),a(" 和 "),s("strong",null,"state"),a(" 两处的数据进行组件渲染。")],-1),s("p",null,"因此，想要使用来自服务端的数据，必须将数据放入组件的 props 或 state 中。",-1),s("p",null,"你完全可以按照喜好使用服务、数据模型（额，“建立抽象”）完成这个过程，但归根结底只不过是通过 props 和 state 渲染组件。",-1),s("h4",null,"选择 HTTP 工具库",-1),s("p",null,"要从服务端拿到数据，首先得有一个 HTTP 工具库。现成的轮子数都数不清。它们最终做的事情都一样，但在一些特性上有所不同。",-1),s("p",null,[a("喜欢 Promise？那就试试 "),s("a",{href:"https://github.com/mzabriskie/axios",target:"_blank",rel:"noopener"},"axios"),a(" 吧。")],-1),s("p",null,[a("不喜欢 Promise，对回调函数情有独钟？可以看一眼 "),s("a",{href:"https://github.com/visionmedia/superagent",target:"_blank",rel:"noopener"},"superagent"),a("。")],-1),s("p",null,[a("要不试试将要成为标准的一些工具？"),s("a",{href:"https://github.com/github/fetch",target:"_blank",rel:"noopener"},"fetch"),a(" 可能是你的菜。")],-1),s("p",null,"这些其实根本不重要。没有“最佳”工具。",-1),s("p",null,[a("有些人可能会说，"),s("code",null,"fetch"),a(" 是最好的，因为 fetch 差不多已经是标准了。但我敢打赌，就算fetch "),s("strong",null,"真正"),a("成为标准，还是会有人喜欢、使用一些与之匹敌的 HTTP 工具库。所以随你怎么选咯。")],-1),s("p",null,[a("我个人比较喜欢 "),s("a",{href:"https://github.com/mzabriskie/axios",target:"_blank",rel:"noopener"},"axios"),a("，这也是本文示例所使用的。不过，认真的说，如果你偏偏不喜欢它，那就选其他的呗。")],-1),s("h4",null,"获取数据",-1),s("p",null,"下面是一个简单的示例组件，它从 Reddit 站点获取文章列表。先看一眼，后面会讲述代码是如何工作的。",-1),s("pre",null,[s("code",{class:"hljs lang-javascript"},[s("span",{class:"hljs-keyword"},"import"),a(),s("span",{class:"hljs-title class_"},"React"),a(),s("span",{class:"hljs-keyword"},"from"),a(),s("span",{class:"hljs-string"},"'react'"),a(`;
+`),s("span",{class:"hljs-keyword"},"import"),a(),s("span",{class:"hljs-title class_"},"ReactDOM"),a(),s("span",{class:"hljs-keyword"},"from"),a(),s("span",{class:"hljs-string"},"'react-dom'"),a(`;
+`),s("span",{class:"hljs-keyword"},"import"),a(" axios "),s("span",{class:"hljs-keyword"},"from"),a(),s("span",{class:"hljs-string"},"'axios'"),a(`;
+
+`),s("span",{class:"hljs-keyword"},"class"),a(),s("span",{class:"hljs-title class_"},"FetchDemo"),a(),s("span",{class:"hljs-keyword"},"extends"),a(),s("span",{class:"hljs-title class_ inherited__"},"React.Component"),a(` {
+  `),s("span",{class:"hljs-title function_"},"constructor"),a("("),s("span",{class:"hljs-params"},"props"),a(`) {
+    `),s("span",{class:"hljs-variable language_"},"super"),a(`(props);
+
+    `),s("span",{class:"hljs-variable language_"},"this"),a("."),s("span",{class:"hljs-property"},"state"),a(` = {
+      `),s("span",{class:"hljs-attr"},"posts"),a(`: []
+    };
+  }
+
+  `),s("span",{class:"hljs-title function_"},"componentDidMount"),a("("),s("span",{class:"hljs-params"}),a(`) {
+    axios.`),s("span",{class:"hljs-title function_"},"get"),a("("),s("span",{class:"hljs-string"},[a("`http://www.reddit.com/r/"),s("span",{class:"hljs-subst"},[a("${"),s("span",{class:"hljs-variable language_"},"this"),a(".props.subreddit}")]),a(".json`")]),a(`)
+      .`),s("span",{class:"hljs-title function_"},"then"),a("("),s("span",{class:"hljs-function"},[s("span",{class:"hljs-params"},"res"),a(" =>")]),a(` {
+        `),s("span",{class:"hljs-keyword"},"const"),a(" posts = res."),s("span",{class:"hljs-property"},"data"),a("."),s("span",{class:"hljs-property"},"data"),a("."),s("span",{class:"hljs-property"},"children"),a("."),s("span",{class:"hljs-title function_"},"map"),a("("),s("span",{class:"hljs-function"},[s("span",{class:"hljs-params"},"obj"),a(" =>")]),a(" obj."),s("span",{class:"hljs-property"},"data"),a(`);
+        `),s("span",{class:"hljs-variable language_"},"this"),a("."),s("span",{class:"hljs-title function_"},"setState"),a(`({ posts });
+      });
+  }
+
+  `),s("span",{class:"hljs-title function_"},"render"),a("("),s("span",{class:"hljs-params"}),a(`) {
+    `),s("span",{class:"hljs-keyword"},"return"),a(` (
+      `),s("span",{class:"language-xml"},[s("span",{class:"hljs-tag"},[a("<"),s("span",{class:"hljs-name"},"div"),a(">")]),a(`
+        `),s("span",{class:"hljs-tag"},[a("<"),s("span",{class:"hljs-name"},"h1"),a(">")]),a("{`/r/${this.props.subreddit}`}"),s("span",{class:"hljs-tag"},[a("</"),s("span",{class:"hljs-name"},"h1"),a(">")]),a(`
+        `),s("span",{class:"hljs-tag"},[a("<"),s("span",{class:"hljs-name"},"ul"),a(">")]),a(`
+          {this.state.posts.map(post =>
+            `),s("span",{class:"hljs-tag"},[a("<"),s("span",{class:"hljs-name"},"li"),a(),s("span",{class:"hljs-attr"},"key"),a("="),s("span",{class:"hljs-string"},"{post.id}"),a(">")]),a("{post.title}"),s("span",{class:"hljs-tag"},[a("</"),s("span",{class:"hljs-name"},"li"),a(">")]),a(`
+          )}
+        `),s("span",{class:"hljs-tag"},[a("</"),s("span",{class:"hljs-name"},"ul"),a(">")]),a(`
+      `),s("span",{class:"hljs-tag"},[a("</"),s("span",{class:"hljs-name"},"div"),a(">")])]),a(`
+    );
+  }
+}
+
+`),s("span",{class:"hljs-title class_"},"ReactDOM"),a("."),s("span",{class:"hljs-title function_"},"render"),a(`(
+  `),s("span",{class:"language-xml"},[s("span",{class:"hljs-tag"},[a("<"),s("span",{class:"hljs-name"},"FetchDemo"),a(),s("span",{class:"hljs-attr"},"subreddit"),a("="),s("span",{class:"hljs-string"},'"reactjs"'),a("/>")])]),a(`,
+  `),s("span",{class:"hljs-variable language_"},"document"),a("."),s("span",{class:"hljs-title function_"},"getElementById"),a("("),s("span",{class:"hljs-string"},"'root'"),a(`)
+);
+`)])],-1),s("h3",null,"如何工作",-1),s("p",null,[a("首先引入 "),s("code",null,"axios"),a("。")],-1),s("pre",null,[s("code",{class:"hljs lang-javascript"},[s("span",{class:"hljs-keyword"},"import"),a(" axios "),s("span",{class:"hljs-keyword"},"from"),a(),s("span",{class:"hljs-string"},"'axios'"),a(`;
+`)])],-1),s("p",null,[a("constructor 方法非常标准，调用 "),s("code",null,"super"),a("，然后初始化 state，设置一个空的 "),s("code",null,"posts"),a(" 数组。")],-1),s("p",null,[a("真正神奇的事情发生在 "),s("code",null,"componentDidMount"),a(" 方法中。组件首次“挂载”（mount）时，该方法就会执行。在组件生命周期中，该方法只会执行"),s("strong",null,"一次"),a("。")],-1),s("p",null,[s("strong",null,[a("TL;DR: 在 "),s("code",null,"componentDidMount"),a(" 方法中获取服务端数据")])],-1),s("p",null,[s("code",null,"componentDidMount"),a(" 方法中，根据传入的"),s("code",null,"subreddit"),a("属性，调用 "),s("code",null,"axios.get"),a(" 方法获取数据。反引号中是 ES6 模板字符串，可能如你所想，"),s("code",null,"${...}"),a(" 部分会被其中表达式的值所替换，因此传给 "),s("code",null,"axios.get"),a(" 的 URL 实际上是 "),s("code",null,"http://www.reddit.com/r/reactjs.json"),a("。")],-1),s("p",null,"此处需注意两点，和 Reddit 有关：",-1),s("ul",null,[s("li",null,[s("p",null,[a("可以在 Reddit 网站下面所有的 URL 后面添加 "),s("code",null,".json"),a(" 后缀，以获取 JSON 格式的内容。")])]),s("li",null,[s("p",null,[a("如果去掉 "),s("code",null,"www"),a("，会产生 CORS 错误（至少我碰到了这个错误）。")])])],-1),s("p",null,[a("因为 Axios 使用了 Promise，所以可以通过 "),s("code",null,".then"),a(" 方法链式处理响应。经过一些处理后，"),s("code",null,"posts"),a(" 被提取出来了，紧接着是重点：")],-1),s("p",null,[a("传入新的 posts 数组，使用 "),s("code",null,"this.setState"),a(" 方法更新组件状态。这会导致重新渲染，接下来文章列表就显示出来了。")],-1),s("p",null,"这就是所有的一切啦哈哈！",-1),s("h3",null,"思考题：添加加载指示",-1),s("p",null,'知道怎样修改代码，在请求尚未返回时添加一个 "Loading..." 消息吗？',-1),s("p",null,"提示：在 state 中设置一个标志，一旦请求完成则将其切换其值。在 render 函数中使用这个标志显示加载提示。",-1),s("p",null,[a("如果想看示例代码（包括加载提示以及附加奖励 "),s("code",null,"error state"),s("del",null,[a("），可以点击"),s("a",{href:"https://daveceddia.com/freebies/react-ajax-example.zip",target:"_blank",rel:"noopener"},"这里"),a("下载可运行的例子，无需注册哟")])],-1),s("p",null,[a("解压文件，依次执行 "),s("code",null,"npm install"),a(" 和 "),s("code",null,"npm start"),a("。示例基于棒棒哒 "),s("a",{href:"https://daveceddia.com/create-react-app-official-project-generator",target:"_blank",rel:"noopener"},"Create React App"),a(" 创建。")],-1)])]),_:1})}}};export{d as default};
