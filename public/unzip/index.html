@@ -600,6 +600,8 @@
             color: var(--text-primary);
             font-size: 0.9375rem;
             overflow-wrap: break-word;
+            min-width: 0;
+            max-width: 100%;
         }
 
         .markdown-preview h1, .markdown-preview h2, .markdown-preview h3,
@@ -640,6 +642,7 @@
             padding: 1rem;
             overflow-x: auto;
             margin-bottom: 1em;
+            max-width: 100%;
         }
 
         .markdown-preview pre code {
@@ -669,21 +672,29 @@
 
         .markdown-preview li > ul, .markdown-preview li > ol { margin-bottom: 0; }
 
-        .markdown-preview table {
-            width: 100%;
-            border-collapse: collapse;
+        .markdown-preview .table-wrapper {
+            overflow-x: auto;
             margin-bottom: 1em;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .markdown-preview table {
+            border-collapse: collapse;
+            min-width: 100%;
+            white-space: nowrap;
         }
 
         .markdown-preview th, .markdown-preview td {
             border: 1px solid var(--border);
             padding: 0.5em 0.75em;
             text-align: left;
+            white-space: normal;
         }
 
         .markdown-preview th {
             background: var(--bg-secondary);
             font-weight: 600;
+            white-space: nowrap;
         }
 
         .markdown-preview tr:nth-child(even) { background: rgba(30, 41, 59, 0.3); }
@@ -1297,6 +1308,14 @@
 
                 const htmlContent = marked.parse(content);
                 previewContent.innerHTML = `<div class="markdown-preview">${htmlContent}</div>`;
+
+                // 将 table 包裹在可滚动容器中，防止溢出
+                previewContent.querySelectorAll('.markdown-preview > table').forEach((table) => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'table-wrapper';
+                    table.parentNode.insertBefore(wrapper, table);
+                    wrapper.appendChild(table);
+                });
 
                 // 对渲染后的代码块应用语法高亮
                 previewContent.querySelectorAll('pre code').forEach((block) => {
