@@ -181,16 +181,20 @@ function hideSide() {
 .theme-icon {
   display: inline-block;
   vertical-align: middle;
-  width: 25px;
-  height: 45px;
-  padding: 12.5px 2.5px;
-  box-sizing: border-box;
-  margin-right: 20px;
+  width: 20px;
+  height: 20px;
   color: #999;
   transition: color .2s cubic-bezier(.4,.01,.165,.99);
 }
 
 .theme-toggle:hover .theme-icon {
   color: rgba(153,153,153,.8);
+}
+
+@media screen and (min-width:769px) and (max-width:1024px) {
+  .theme-icon {
+    display: block;
+    margin: 0 auto;
+  }
 }
 </style>
