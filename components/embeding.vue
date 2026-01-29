@@ -1,6 +1,6 @@
 <template>
   <div class="aspect-ratio" :style="{ padding: paddingV + ' 0' }" :data-ratio="ratio">
-    <iframe :src="src" width="100%" height="100%" scrolling="no" frameborder="0" allowfullscreen />
+    <iframe :src="src" width="100%" height="100%" scrolling="no" frameborder="0" allowfullscreen sandbox="allow-scripts allow-same-origin allow-popups" />
   </div>
 </template>
 
