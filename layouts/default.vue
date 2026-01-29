@@ -179,9 +179,13 @@ function hideSide() {
 }
 
 .theme-icon {
-  width: 18px;
-  height: 18px;
+  display: inline-block;
   vertical-align: middle;
+  width: 25px;
+  height: 45px;
+  padding: 12.5px 2.5px;
+  box-sizing: border-box;
+  margin-right: 20px;
   color: #999;
   transition: color .2s cubic-bezier(.4,.01,.165,.99);
 }

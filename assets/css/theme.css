@@ -79,19 +79,19 @@
   /* Backgrounds */
   --bg-main: #1a1b26;
   --bg-intro: #24253a;
-  --bg-code-inline: #2a2b3d;
-  --bg-code-block: #1e1f2e;
+  --bg-code-inline: #2d2f44;
+  --bg-code-block: #282a3a;
   --bg-blockquote: #22233a;
   --bg-tips-expire: #3a3520;
   --bg-tips-aliyun: #1e2e26;
   --bg-search-btn: #2a2b3d;
   --bg-search-no-result: #3a3520;
   --bg-search-type: #2a2b3d;
-  --bg-firekylin-code: #1e1f2e;
-  --bg-firekylin-code-even: #222336;
-  --bg-firekylin-code-hover: #2a2b42;
+  --bg-firekylin-code: #282a3a;
+  --bg-firekylin-code-even: #2c2e40;
+  --bg-firekylin-code-hover: #33355a;
   --bg-firekylin-code-mark: #3a3520;
-  --bg-firekylin-code-wrap: #252638;
+  --bg-firekylin-code-wrap: #2d2f44;
   --bg-diff-add: #1a2e1a;
   --bg-diff-del: #2e1a1a;
   --bg-article-mobile: #1a1b26;
@@ -101,7 +101,7 @@
   --text-heading: #c0caf5;
   --text-secondary: #737aa2;
   --text-meta: #9aa5ce;
-  --text-code: #9aa5ce;
+  --text-code: #c0caf5;
   --text-search-highlight: #f7768e;
   --text-search-info: #9aa5ce;
   --text-search-tag: #a9b1d6;
@@ -136,9 +136,9 @@
   --bg-sidebar-mask: rgba(0, 0, 0, 0.5);
 
   /* Highlight.js dark theme (Tokyo Night inspired) */
-  --hljs-bg: #1e1f2e;
-  --hljs-text: #a9b1d6;
-  --hljs-comment: #565f89;
+  --hljs-bg: #282a3a;
+  --hljs-text: #c0caf5;
+  --hljs-comment: #6b7394;
   --hljs-string: #9ece6a;
   --hljs-keyword: #bb9af7;
   --hljs-number: #ff9e64;

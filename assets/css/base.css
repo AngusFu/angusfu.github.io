@@ -1,6 +1,7 @@
 body {
   margin: 0;
   padding: 0;
+  background-color: var(--bg-main);
   color: var(--text-primary);
   -webkit-text-size-adjust: none;
   -webkit-transition: -webkit-transform 0.2s
