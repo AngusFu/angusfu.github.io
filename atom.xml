@@ -2,60 +2,60 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>文蔺的博客</title>
   <link href="/atom.xml" rel="self"/>
-  <link href="https://www.wemlion.com/"/>
-  <updated>2026-01-29T12:22:47.686Z</updated>
-  <id>https://www.wemlion.com/</id>
+  <link href="https://angusfu.github.io/"/>
+  <updated>2026-01-29T12:37:49.926Z</updated>
+  <id>https://angusfu.github.io/</id>
   <author>
     <name>文蔺</name>
   </author>
   <entry>
     <title>Node.js 中的一些安全问题</title>
-    <link href="https://www.wemlion.com/post/node-security/"/>
-    <id>https://www.wemlion.com/node-security/</id>
+    <link href="https://angusfu.github.io/post/node-security/"/>
+    <id>https://angusfu.github.io/node-security/</id>
   </entry>
   <entry>
     <title>如何写技术文章</title>
-    <link href="https://www.wemlion.com/post/writing-a-tech-article/"/>
-    <id>https://www.wemlion.com/writing-a-tech-article/</id>
+    <link href="https://angusfu.github.io/post/writing-a-tech-article/"/>
+    <id>https://angusfu.github.io/writing-a-tech-article/</id>
   </entry>
   <entry>
     <title>讲给前端的 OpenResty</title>
-    <link href="https://www.wemlion.com/post/openresty-for-frontend/"/>
-    <id>https://www.wemlion.com/openresty-for-frontend/</id>
+    <link href="https://angusfu.github.io/post/openresty-for-frontend/"/>
+    <id>https://angusfu.github.io/openresty-for-frontend/</id>
   </entry>
   <entry>
     <title>某官网开发手记</title>
-    <link href="https://www.wemlion.com/post/relection-on-static-sites-development/"/>
-    <id>https://www.wemlion.com/relection-on-static-sites-development/</id>
+    <link href="https://angusfu.github.io/post/relection-on-static-sites-development/"/>
+    <id>https://angusfu.github.io/relection-on-static-sites-development/</id>
   </entry>
   <entry>
     <title>d8 安装手记</title>
-    <link href="https://www.wemlion.com/post/install-d8/"/>
-    <id>https://www.wemlion.com/install-d8/</id>
+    <link href="https://angusfu.github.io/post/install-d8/"/>
+    <id>https://angusfu.github.io/install-d8/</id>
   </entry>
   <entry>
     <title>Clean Code</title>
-    <link href="https://www.wemlion.com/post/clean-code/"/>
-    <id>https://www.wemlion.com/clean-code/</id>
+    <link href="https://angusfu.github.io/post/clean-code/"/>
+    <id>https://angusfu.github.io/clean-code/</id>
   </entry>
   <entry>
     <title>前端挖坑不完全指南</title>
-    <link href="https://www.wemlion.com/post/never-do-this-in-fed/"/>
-    <id>https://www.wemlion.com/never-do-this-in-fed/</id>
+    <link href="https://angusfu.github.io/post/never-do-this-in-fed/"/>
+    <id>https://angusfu.github.io/never-do-this-in-fed/</id>
   </entry>
   <entry>
     <title>移动端跨平台框架 flutter 简介</title>
-    <link href="https://www.wemlion.com/post/flutter-slides/"/>
-    <id>https://www.wemlion.com/flutter-slides/</id>
+    <link href="https://angusfu.github.io/post/flutter-slides/"/>
+    <id>https://angusfu.github.io/flutter-slides/</id>
   </entry>
   <entry>
     <title>读《第五项修炼》</title>
-    <link href="https://www.wemlion.com/post/fifth-discipline/"/>
-    <id>https://www.wemlion.com/fifth-discipline/</id>
+    <link href="https://angusfu.github.io/post/fifth-discipline/"/>
+    <id>https://angusfu.github.io/fifth-discipline/</id>
   </entry>
   <entry>
     <title>读《管理的常识》</title>
-    <link href="https://www.wemlion.com/post/common-sense-on-management/"/>
-    <id>https://www.wemlion.com/common-sense-on-management/</id>
+    <link href="https://angusfu.github.io/post/common-sense-on-management/"/>
+    <id>https://angusfu.github.io/common-sense-on-management/</id>
   </entry>
 </feed>
