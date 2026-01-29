@@ -1,7 +1,7 @@
 
 article {
-  border-bottom:1px solid #ddd;
-  border-top:1px solid #fff;
+  border-bottom:1px solid var(--border-main);
+  border-top:1px solid var(--border-light);
   position:relative;
   padding:30px 0;
   word-wrap: break-word;
@@ -11,7 +11,7 @@ article {
 article .meta {
   position:relative;
   float:right;
-  color:#555;
+  color:var(--text-meta);
   font-size: .9em;
   line-height: 2;
   width:auto;
@@ -19,7 +19,7 @@ article .meta {
 }
 
 article .meta a {
-  color:#999;
+  color:var(--text-secondary);
 }
 
 article .meta .date,
@@ -29,7 +29,7 @@ article .meta .tags {
 }
 
 article h1.title {
-  color:#333;
+  color:var(--text-heading);
   font-size:2em;
   font-weight:300;
   line-height:35px;
@@ -37,11 +37,11 @@ article h1.title {
 }
 
 article h1.title a {
-  color:#333;
+  color:var(--text-heading);
 }
 
 article h1.title a:hover {
-  color:#2479CC;
+  color:var(--color-link);
   transition:color .3s;
 }
 
@@ -56,8 +56,8 @@ article em {
 article blockquote {
   margin:10px 0 0 0;
   padding:15px 20px;
-  border-left:5px solid #2479CC;
-  background-color: #f8f8f8;
+  border-left:5px solid var(--color-link);
+  background-color: var(--bg-blockquote);
 }
 
 article blockquote p{
@@ -74,18 +74,18 @@ article code {
   font-size: 80%;
   margin: 0 2px;
   padding: 4px 5px;
-  background-color: #f2f2f2;
+  background-color: var(--bg-code-inline);
   vertical-align: middle;
   border-radius: 5px;
 }
 
-article pre {    
+article pre {
   font-family: "Consolas","Liberation Mono",Courier,monospace;
     font-size: 14px;
     line-height: 1.6;
-  color: #5d6a6a;
+  color: var(--text-code);
   padding: 0.6em;
-  border-left:5px solid #ccc;
+  border-left:5px solid var(--border-code);
   word-break: break-all;
   word-wrap: break-word;
   white-space: pre-wrap;
@@ -110,7 +110,7 @@ article pre b.name {
   top: 10px;
   right: 10px;
   font-size: 60px;
-  color: #eee;
+  color: var(--text-code-name);
   pointer-events: none;
 }
 @media screen and (max-width:768px) {
@@ -119,10 +119,10 @@ article pre b.name {
   }
 }
 
-article img { 
+article img {
   padding: 0;
   display:block;
-  border:1px solid #ccc;
+  border:1px solid var(--border-img);
   margin:10px 0 5px 0;
   max-width: 100%;
 }
@@ -138,32 +138,32 @@ article table td {
   border: 0;
 }
 
-article table th { 
-  border-bottom: 2px solid #848484; 
-  text-align: left; 
+article table th {
+  border-bottom: 2px solid var(--border-table-head);
+  text-align: left;
   padding: 6px 20px;
 }
 
 article table td {
-  border-bottom: 1px solid #d0d0d0; 
+  border-bottom: 1px solid var(--border-table-cell);
   padding: 6px 20px;
 }
 
 article .expire-tips {
   padding: 5px 10px;
   font-size: 15px;
-  border: 1px solid #e2e2e2;
-  background-color: #ffffc0;
-  border-left: 5px solid #fff000;
-  color: #333;
+  border: 1px solid var(--border-tips-expire);
+  background-color: var(--bg-tips-expire);
+  border-left: 5px solid var(--border-tips-expire-left);
+  color: var(--text-heading);
 }
 
 article .aliyun-tips {
   padding: 5px 10px;
   font-size: 15px;
-  border: 1px solid #e2e2e2;
-  background-color:#f0f8f4;
-    border-left: 5px solid #7cc4a0;
+  border: 1px solid var(--border-tips-aliyun);
+  background-color:var(--bg-tips-aliyun);
+    border-left: 5px solid var(--border-tips-aliyun-left);
 }
 
 article .post-info {
@@ -177,7 +177,7 @@ article .entry-content {
 }
 
 article .entry-content .date {
-  color:#999;
+  color:var(--text-secondary);
   font-size:14px;
   font-style:italic;
 }
@@ -234,8 +234,8 @@ article.tags section a {
   padding: 0 15px;
   height: 40px;
   line-height: 40px;
-  color: rgba(36,121,204,.8);
-  border: 1px solid rgba(36,121,204,.8);
+  color: var(--color-link-tag-border);
+  border: 1px solid var(--color-link-tag-border);
   border-radius: 4px;
   margin: 0 15px 10px 0;
   text-decoration: none;
@@ -243,8 +243,8 @@ article.tags section a {
   transition: color .2s cubic-bezier(.4,.01,.165,.99),border .2s cubic-bezier(.4,.01,.165,.99);
 }
 article.tags section a:hover {
-  color: #2479CC;
-  border-color: #2479CC;
+  color: var(--color-link);
+  border-color: var(--color-link);
 }
 a.anchor {
   display: block;
@@ -255,22 +255,22 @@ a.anchor {
 /* 文章内代码行号高亮 */
 article .firekylin-code > ul {
   list-style: decimal;
-  background-color: #fff;
+  background-color: var(--bg-firekylin-code);
   margin: 0;
   margin-left: 40px;
   padding: 0;
 }
 article .firekylin-code li {
   list-style: decimal-leading-zero;
-  border-left: 1px solid #ddd;
+  border-left: 1px solid var(--border-firekylin-code);
   padding-left: 2px;
   position: relative;
 }
 article .firekylin-code li.mark {
-  background-color: #fffbdd !important;
+  background-color: var(--bg-firekylin-code-mark) !important;
 }
 article .firekylin-code li:hover {
-  background-color: #f3f3f3 !important;
+  background-color: var(--bg-firekylin-code-hover) !important;
 }
 article .firekylin-code .line-num {
   width: 40px;
@@ -282,9 +282,9 @@ article .firekylin-code .line-num {
   cursor: pointer;
 }
 article .firekylin-code li:nth-of-type(even) {
-  background-color: #fcfcfc;
+  background-color: var(--bg-firekylin-code-even);
   color: inherit;
 }
 article .entry-content pre .firekylin-code {
-  background-color: #eee;
+  background-color: var(--bg-firekylin-code-wrap);
 }

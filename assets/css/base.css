@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  color: #666;
+  color: var(--text-primary);
   -webkit-text-size-adjust: none;
   -webkit-transition: -webkit-transform 0.2s
     cubic-bezier(0.4, 0.01, 0.165, 0.99);
@@ -31,7 +31,7 @@ h6 {
 }
 a,
 a:hover {
-  color: #2479cc;
+  color: var(--color-link);
   text-decoration: none;
 }
 ul,
@@ -50,7 +50,7 @@ body.side {
 }
 
 #main {
-  background-color: #fff;
+  background-color: var(--bg-main);
   padding-left: 290px;
   padding-right: 40px;
   max-width: 1390px;
@@ -58,9 +58,9 @@ body.side {
 }
 h1.intro {
   padding: 20px 30px;
-  background-color: #f6f9fa;
+  background-color: var(--bg-intro);
   text-align: center;
-  color: #999;
+  color: var(--text-secondary);
 }
 
 textarea.pre-area,
@@ -69,5 +69,5 @@ textarea.codespan {
 }
 
 .nuxt-progress {
-  background-color: #d59613 !important;
+  background-color: var(--color-progress) !important;
 }

@@ -95,7 +95,7 @@
 
 @media screen and (max-width:769px) {
   article {
-    background-color: #fff;
+    background-color: var(--bg-article-mobile);
     padding: 10px;
   }
   article .meta {
@@ -107,7 +107,7 @@
     margin: 0;
   }
   article .desc {
-    color: #999;
+    color: var(--text-secondary);
     font-size: 14px;
   }
   article p.more {

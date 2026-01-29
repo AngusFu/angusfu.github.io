@@ -1,6 +1,6 @@
 #comments {
-  border-top:1px solid #fff;
-  border-bottom:1px solid #ddd;
+  border-top:1px solid var(--border-light);
+  border-bottom:1px solid var(--border-main);
   padding:30px 0;
   min-height:350px;
 }
