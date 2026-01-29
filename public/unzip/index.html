@@ -673,31 +673,98 @@
         .markdown-preview li > ul, .markdown-preview li > ol { margin-bottom: 0; }
 
         .markdown-preview .table-wrapper {
-            overflow-x: auto;
+            position: relative;
             margin-bottom: 1em;
-            -webkit-overflow-scrolling: touch;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            overflow: hidden;
         }
+
+        .markdown-preview .table-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(148,163,184,0.35) transparent;
+        }
+
+        .markdown-preview .table-scroll::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .markdown-preview .table-scroll::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.3);
+        }
+
+        .markdown-preview .table-scroll::-webkit-scrollbar-thumb {
+            background: rgba(148,163,184,0.35);
+            border-radius: 3px;
+        }
+
+        .markdown-preview .table-scroll::-webkit-scrollbar-thumb:hover {
+            background: rgba(148,163,184,0.55);
+        }
+
+        /* 左右渐隐阴影提示可滚动 */
+        .markdown-preview .table-wrapper::before,
+        .markdown-preview .table-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 24px;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .markdown-preview .table-wrapper::before {
+            left: 0;
+            background: linear-gradient(to right, var(--bg-primary), transparent);
+        }
+
+        .markdown-preview .table-wrapper::after {
+            right: 0;
+            background: linear-gradient(to left, var(--bg-primary), transparent);
+        }
+
+        .markdown-preview .table-wrapper.shadow-left::before { opacity: 1; }
+        .markdown-preview .table-wrapper.shadow-right::after { opacity: 1; }
 
         .markdown-preview table {
             border-collapse: collapse;
             min-width: 100%;
-            white-space: nowrap;
         }
 
         .markdown-preview th, .markdown-preview td {
-            border: 1px solid var(--border);
-            padding: 0.5em 0.75em;
+            padding: 0.625em 0.875em;
             text-align: left;
+            white-space: nowrap;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .markdown-preview td {
             white-space: normal;
         }
 
         .markdown-preview th {
-            background: var(--bg-secondary);
+            background: rgba(15, 23, 42, 0.6);
             font-weight: 600;
-            white-space: nowrap;
+            font-size: 0.8125em;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: var(--text-secondary);
+            position: sticky;
+            top: 0;
+            z-index: 1;
         }
 
-        .markdown-preview tr:nth-child(even) { background: rgba(30, 41, 59, 0.3); }
+        .markdown-preview tr:hover { background: rgba(59, 130, 246, 0.06); }
+        .markdown-preview tr:nth-child(even) { background: rgba(30, 41, 59, 0.2); }
+        .markdown-preview tr:nth-child(even):hover { background: rgba(59, 130, 246, 0.06); }
+
+        /* 去掉最后一行底部边框（wrapper 自带圆角边框） */
+        .markdown-preview table tr:last-child td { border-bottom: none; }
 
         .markdown-preview img {
             max-width: 100%;
@@ -1309,12 +1376,26 @@
                 const htmlContent = marked.parse(content);
                 previewContent.innerHTML = `<div class="markdown-preview">${htmlContent}</div>`;
 
-                // 将 table 包裹在可滚动容器中，防止溢出
+                // 将 table 包裹在可滚动容器中，带阴影提示
                 previewContent.querySelectorAll('.markdown-preview > table').forEach((table) => {
                     const wrapper = document.createElement('div');
                     wrapper.className = 'table-wrapper';
+                    const scroll = document.createElement('div');
+                    scroll.className = 'table-scroll';
                     table.parentNode.insertBefore(wrapper, table);
-                    wrapper.appendChild(table);
+                    wrapper.appendChild(scroll);
+                    scroll.appendChild(table);
+
+                    // 根据滚动位置更新左右阴影
+                    function updateShadow() {
+                        const sl = scroll.scrollLeft;
+                        const maxScroll = scroll.scrollWidth - scroll.clientWidth;
+                        wrapper.classList.toggle('shadow-left', sl > 2);
+                        wrapper.classList.toggle('shadow-right', maxScroll - sl > 2);
+                    }
+                    scroll.addEventListener('scroll', updateShadow, { passive: true });
+                    // 初始检测
+                    requestAnimationFrame(updateShadow);
                 });
 
                 // 对渲染后的代码块应用语法高亮
