@@ -85,5 +85,5 @@
   z-index: 999;
   overflow: hidden;
   display: none;
-  background-color: rgba(255,255,255,0);
+  background-color: var(--bg-sidebar-mask);
 }
