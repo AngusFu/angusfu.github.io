@@ -15,8 +15,9 @@ marked.use(markedHighlight({
 const renderer = new marked.Renderer()
 
 // Custom link renderer - open external links in new tab
-renderer.link = function ({ href, title, text }) {
+renderer.link = function ({ href, title, tokens }) {
   const relative = !/^(https?:)?\/\//.test(href)
+  const body = this.parser.parseInline(tokens)
   let out = `<a href="${href}"`
 
   if (!relative) {
@@ -27,7 +28,7 @@ renderer.link = function ({ href, title, text }) {
     out += ` title="${title}"`
   }
 
-  out += `>${text}</a>`
+  out += `>${body}</a>`
   return out
 }
 
@@ -40,7 +41,8 @@ renderer.image = function ({ href, title, text }) {
     )
     .replace(/qhres\.com/, 'qhres2.com')
 
-  let out = `<img loading="lazy" src="${href}" alt="${text || ''}"`
+  const alt = (text || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  let out = `<img loading="lazy" src="${href}" alt="${alt}"`
   if (title) {
     out += ` title="${title}"`
   }

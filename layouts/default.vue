@@ -115,6 +115,16 @@ useHead({
 
 onMounted(() => {
   isDark.value = document.documentElement.getAttribute('data-theme') === 'dark'
+
+  // Listen for system color scheme changes
+  const mq = window.matchMedia('(prefers-color-scheme: dark)')
+  mq.addEventListener('change', (e) => {
+    // Only follow system if user hasn't explicitly chosen a theme
+    if (!localStorage.getItem('theme')) {
+      isDark.value = e.matches
+      document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light')
+    }
+  })
 })
 
 function toggleTheme() {
