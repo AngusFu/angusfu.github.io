@@ -1362,6 +1362,15 @@
             actions.appendChild(downloadBtn);
         }
 
+        function extractFrontMatter(text) {
+            const match = text.match(/^---\r?\n([\s\S]*?)\r?\n---(\r?\n|$)/);
+            if (!match) return { frontMatter: null, body: text };
+            return {
+                frontMatter: match[1],
+                body: text.slice(match[0].length)
+            };
+        }
+
         function renderMarkdownPreview(content, filename) {
             const previewContent = document.getElementById('previewContent');
 
@@ -1373,7 +1382,11 @@
                     gfm: true
                 });
 
-                const htmlContent = marked.parse(content);
+                const { frontMatter, body } = extractFrontMatter(content);
+                const fmBlock = frontMatter != null
+                    ? `<pre><code class="language-yaml">${escapeHtml(frontMatter)}</code></pre>`
+                    : '';
+                const htmlContent = fmBlock + marked.parse(body);
                 previewContent.innerHTML = `<div class="markdown-preview">${htmlContent}</div>`;
 
                 // 将 table 包裹在可滚动容器中，带阴影提示
