@@ -49,9 +49,9 @@ export default defineNuxtConfig({
     }
   },
 
-  css: ['~/assets/css/all.css'],
+  css: ['~/assets/css/main.css'],
 
-  modules: [],
+  modules: ['@nuxtjs/tailwindcss'],
 
   // Static generation settings
   nitro: {

@@ -1,35 +1,33 @@
 <template>
-  <section class="container">
-    <h1 v-if="tag" class="intro">
-      标签 <NuxtLink :to="`/tag/${tag}`">{{ tag }}</NuxtLink> 下的文章
+  <section class="max-w-content mx-auto px-6">
+    <h1 v-if="tag" class="py-4 px-6 text-center text-slate-500 dark:text-slate-400 text-lg font-normal bg-slate-50 dark:bg-slate-800 rounded-lg mb-6">
+      标签 <NuxtLink :to="`/tag/${tag}`" class="font-semibold">{{ tag }}</NuxtLink> 下的文章
     </h1>
-    <h1 v-if="cate" class="intro">
-      分类 <NuxtLink :to="`/category/${cate}`">{{ cate }}</NuxtLink> 下的文章
+    <h1 v-if="cate" class="py-4 px-6 text-center text-slate-500 dark:text-slate-400 text-lg font-normal bg-slate-50 dark:bg-slate-800 rounded-lg mb-6">
+      分类 <NuxtLink :to="`/category/${cate}`" class="font-semibold">{{ cate }}</NuxtLink> 下的文章
     </h1>
 
     <article
       v-for="(post, i) in displayPosts"
       :key="post.title + '_' + i"
-      class="post post-card"
+      class="p-6 mb-4 border border-slate-200 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-800/50 transition-all hover:shadow-md hover:border-blue-200 dark:hover:border-blue-800 max-md:p-5"
     >
-      <div class="meta">
-        <div>
-          <template v-if="post.user">
-            <span class="author">{{ post.user }}</span>
-            <span>发布于</span>
-          </template>
-          <time class="date">{{ post.create_time }}</time>
-        </div>
+      <div class="text-sm text-slate-500 dark:text-slate-400 mb-2">
+        <template v-if="post.user">
+          <span>{{ post.user }}</span>
+          <span> 发布于 </span>
+        </template>
+        <time>{{ post.create_time }}</time>
       </div>
 
-      <h1 class="title">
-        <NuxtLink :to="`/post/${post.pathname}`">{{ post.title }}</NuxtLink>
+      <h1 class="text-xl font-bold leading-snug mb-2">
+        <NuxtLink :to="`/post/${post.pathname}`" class="text-slate-900 dark:text-slate-100 no-underline hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{{ post.title }}</NuxtLink>
       </h1>
 
       <div class="entry-content">
-        <div class="summary" v-html="post.summary"></div>
-        <p class="more">
-          <NuxtLink :to="`/post/${post.pathname}`">阅读全文 &raquo;</NuxtLink>
+        <div class="text-slate-500 dark:text-slate-400 text-[15px] leading-relaxed mt-2 [&>p]:m-0" v-html="post.summary"></div>
+        <p class="mt-3">
+          <NuxtLink :to="`/post/${post.pathname}`" class="text-sm font-medium text-blue-600 dark:text-blue-400 no-underline hover:text-blue-800 dark:hover:text-blue-300">阅读全文 &raquo;</NuxtLink>
         </p>
       </div>
     </article>

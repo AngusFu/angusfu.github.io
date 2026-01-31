@@ -1,0 +1,419 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   Base layer: resets & global defaults
+   ============================================ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    @apply font-sans text-slate-600 bg-white antialiased;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  [data-theme="dark"] body {
+    @apply bg-slate-900 text-slate-300;
+  }
+
+  /* Focus visible */
+  :focus-visible {
+    @apply outline-2 outline-blue-600 outline-offset-2;
+  }
+  [data-theme="dark"] :focus-visible {
+    @apply outline-blue-400;
+  }
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ============================================
+   Component layer: skip link, nuxt progress
+   ============================================ */
+@layer components {
+  .skip-link {
+    @apply absolute -top-full left-4 z-[10000] px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium no-underline;
+    transition: top 0.2s ease;
+  }
+  .skip-link:focus {
+    @apply top-4 text-white;
+  }
+
+  .nuxt-progress {
+    background-color: #2563eb !important;
+  }
+  [data-theme="dark"] .nuxt-progress {
+    background-color: #60a5fa !important;
+  }
+}
+
+/* ============================================
+   Utility: screen reader only
+   ============================================ */
+@layer utilities {
+  .sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+}
+
+/* ============================================
+   Article / Markdown content (entry-content)
+   These are rendered from markdown so we cannot
+   add Tailwind classes to them — use selectors.
+   ============================================ */
+.entry-content {
+  @apply text-base leading-relaxed;
+}
+
+.entry-content p,
+.entry-content blockquote,
+.entry-content ul,
+.entry-content ol,
+.entry-content dl,
+.entry-content table,
+.entry-content iframe,
+.entry-content h1,
+.entry-content h2,
+.entry-content h3,
+.entry-content h4,
+.entry-content h5,
+.entry-content h6,
+.entry-content pre {
+  @apply mt-4;
+}
+
+.entry-content h2 {
+  @apply text-xl font-bold mt-8 pb-2 border-b border-slate-100 text-slate-900;
+}
+[data-theme="dark"] .entry-content h2 {
+  @apply border-slate-800 text-slate-100;
+}
+
+.entry-content h3 {
+  @apply text-lg font-semibold mt-6 text-slate-900;
+}
+[data-theme="dark"] .entry-content h3 {
+  @apply text-slate-100;
+}
+
+.entry-content h4 {
+  @apply text-base font-semibold mt-5 text-slate-900;
+}
+[data-theme="dark"] .entry-content h4 {
+  @apply text-slate-100;
+}
+
+.entry-content ul,
+.entry-content ol,
+.entry-content dl {
+  @apply ml-6;
+}
+
+.entry-content ul ul,
+.entry-content ul ol,
+.entry-content ol ul,
+.entry-content ol ol,
+.entry-content dl ul,
+.entry-content dl ol,
+.entry-content blockquote > p:first-of-type {
+  @apply mt-0;
+}
+
+.entry-content a {
+  @apply text-blue-600 hover:text-blue-800;
+}
+[data-theme="dark"] .entry-content a {
+  @apply text-blue-400 hover:text-blue-300;
+}
+
+.entry-content blockquote {
+  @apply my-4 py-4 px-5 border-l-4 border-blue-600 bg-slate-50 rounded-r-md;
+}
+[data-theme="dark"] .entry-content blockquote {
+  @apply border-blue-400 bg-slate-800;
+}
+.entry-content blockquote p {
+  @apply mb-0;
+}
+.entry-content blockquote a {
+  @apply break-all;
+}
+
+.entry-content code {
+  @apply font-mono text-[0.875em] mx-0.5 px-1.5 py-0.5 bg-slate-100 text-slate-800 rounded align-middle;
+}
+[data-theme="dark"] .entry-content code {
+  @apply bg-slate-800 text-slate-200;
+}
+
+.entry-content pre {
+  @apply font-mono text-sm leading-relaxed p-4 rounded-lg bg-slate-50 border border-slate-200 break-all whitespace-pre-wrap relative overflow-hidden;
+}
+[data-theme="dark"] .entry-content pre {
+  @apply bg-slate-800 border-slate-700 text-slate-200;
+}
+.entry-content pre code {
+  @apply rounded-none bg-transparent border-0 p-0 m-0 text-[100%] block relative;
+}
+
+.entry-content pre b.name {
+  @apply absolute top-2.5 right-2.5 text-5xl text-slate-100 pointer-events-none leading-none;
+}
+[data-theme="dark"] .entry-content pre b.name {
+  @apply text-slate-700;
+}
+
+.entry-content img {
+  @apply block border border-slate-200 rounded-md my-4 max-w-full p-0;
+}
+[data-theme="dark"] .entry-content img {
+  @apply border-slate-700;
+}
+
+.entry-content table {
+  @apply w-full border-collapse overflow-x-auto block;
+}
+.entry-content table th {
+  @apply border-b-2 border-slate-400 text-left py-2 px-4 font-semibold;
+}
+[data-theme="dark"] .entry-content table th {
+  @apply border-slate-600;
+}
+.entry-content table td {
+  @apply border-b border-slate-200 py-2 px-4;
+}
+[data-theme="dark"] .entry-content table td {
+  @apply border-slate-700;
+}
+
+.entry-content .date {
+  @apply text-slate-500 text-sm italic;
+}
+
+/* Tips */
+.entry-content .expire-tips {
+  @apply p-3 text-[15px] border border-amber-200 bg-amber-50 border-l-4 border-l-amber-500 rounded-r-md text-slate-900;
+}
+[data-theme="dark"] .entry-content .expire-tips {
+  @apply border-amber-700 bg-amber-950 border-l-amber-500 text-slate-100;
+}
+
+.entry-content .aliyun-tips {
+  @apply p-3 text-[15px] border border-green-200 bg-green-50 border-l-4 border-l-green-500 rounded-r-md;
+}
+[data-theme="dark"] .entry-content .aliyun-tips {
+  @apply border-green-700 bg-green-950 border-l-green-500;
+}
+
+/* Firekylin code line numbers */
+.entry-content .firekylin-code > ul {
+  @apply list-decimal bg-slate-50 m-0 ml-10 p-0;
+}
+[data-theme="dark"] .entry-content .firekylin-code > ul {
+  @apply bg-slate-800;
+}
+.entry-content .firekylin-code li {
+  list-style: decimal-leading-zero;
+  @apply border-l border-slate-200 pl-0.5 relative;
+}
+[data-theme="dark"] .entry-content .firekylin-code li {
+  @apply border-slate-700;
+}
+.entry-content .firekylin-code li.mark {
+  @apply !bg-amber-100;
+}
+[data-theme="dark"] .entry-content .firekylin-code li.mark {
+  @apply !bg-amber-950;
+}
+.entry-content .firekylin-code li:hover {
+  @apply !bg-slate-200;
+}
+[data-theme="dark"] .entry-content .firekylin-code li:hover {
+  @apply !bg-slate-700;
+}
+.entry-content .firekylin-code .line-num {
+  @apply w-10 absolute left-0 top-0 h-full cursor-pointer;
+  left: -40px;
+}
+.entry-content .firekylin-code li:nth-of-type(even) {
+  @apply bg-slate-100;
+  color: inherit;
+}
+[data-theme="dark"] .entry-content .firekylin-code li:nth-of-type(even) {
+  @apply bg-slate-800/50;
+}
+.entry-content pre .firekylin-code {
+  @apply bg-slate-100;
+}
+[data-theme="dark"] .entry-content pre .firekylin-code {
+  @apply bg-slate-800;
+}
+
+/* Anchor offset for fixed header */
+a.anchor {
+  @apply block relative invisible;
+  top: -80px;
+}
+
+/* Hidden textareas */
+textarea.pre-area,
+textarea.codespan {
+  @apply hidden;
+}
+
+/* ============================================
+   Highlight.js (code syntax)
+   ============================================ */
+.hljs {
+  @apply block p-2 overflow-x-auto bg-slate-50 text-slate-800;
+  -webkit-text-size-adjust: none;
+}
+[data-theme="dark"] .hljs {
+  @apply bg-slate-800 text-slate-200;
+}
+
+.hljs-comment,
+.lang-bash .hljs-shebang,
+.lang-java .hljs-javadoc,
+.lang-javascript .hljs-javadoc,
+.lang-rust .hljs-preprocessor {
+  @apply text-slate-400;
+}
+[data-theme="dark"] .hljs-comment,
+[data-theme="dark"] .lang-bash .hljs-shebang,
+[data-theme="dark"] .lang-java .hljs-javadoc,
+[data-theme="dark"] .lang-javascript .hljs-javadoc,
+[data-theme="dark"] .lang-rust .hljs-preprocessor {
+  @apply text-slate-500;
+}
+
+.hljs-string,
+.lang-json .hljs-attribute,
+.lang-markdown .hljs-value,
+.lang-xml .hljs-value {
+  color: #059669;
+}
+[data-theme="dark"] .hljs-string,
+[data-theme="dark"] .lang-json .hljs-attribute,
+[data-theme="dark"] .lang-markdown .hljs-value,
+[data-theme="dark"] .lang-xml .hljs-value {
+  color: #86efac;
+}
+
+.hljs-keyword,
+.lang-css .hljs-at_rule,
+.lang-css .hljs-important,
+.lang-http .hljs-request {
+  color: #7c3aed;
+}
+[data-theme="dark"] .hljs-keyword,
+[data-theme="dark"] .lang-css .hljs-at_rule,
+[data-theme="dark"] .lang-css .hljs-important,
+[data-theme="dark"] .lang-http .hljs-request {
+  color: #c4b5fd;
+}
+
+.hljs-number,
+.hljs-literal,
+.hljs-built_in,
+.lang-css .hljs-hexcolor,
+.lang-css .hljs-number,
+.lang-css .hljs-function {
+  color: #2563eb;
+}
+[data-theme="dark"] .hljs-number,
+[data-theme="dark"] .hljs-literal,
+[data-theme="dark"] .hljs-built_in,
+[data-theme="dark"] .lang-css .hljs-hexcolor,
+[data-theme="dark"] .lang-css .hljs-number,
+[data-theme="dark"] .lang-css .hljs-function {
+  color: #93c5fd;
+}
+
+.hljs-tag,
+.lang-css .hljs-tag,
+.lang-xml .hljs-title {
+  color: #059669;
+}
+[data-theme="dark"] .hljs-tag,
+[data-theme="dark"] .lang-css .hljs-tag,
+[data-theme="dark"] .lang-xml .hljs-title {
+  color: #86efac;
+}
+
+.hljs-title,
+.hljs-class,
+.hljs-id,
+.lang-css .hljs-id,
+.lang-css .hljs-class,
+.lang-css .hljs-pseudo {
+  color: #7c3aed;
+}
+[data-theme="dark"] .hljs-title,
+[data-theme="dark"] .hljs-class,
+[data-theme="dark"] .hljs-id,
+[data-theme="dark"] .lang-css .hljs-id,
+[data-theme="dark"] .lang-css .hljs-class,
+[data-theme="dark"] .lang-css .hljs-pseudo {
+  color: #c4b5fd;
+}
+
+.hljs-variable,
+.lang-bash .hljs-variable,
+.lang-xml .hljs-tag {
+  @apply text-slate-800;
+}
+[data-theme="dark"] .hljs-variable,
+[data-theme="dark"] .lang-bash .hljs-variable,
+[data-theme="dark"] .lang-xml .hljs-tag {
+  @apply text-slate-200;
+}
+
+.lang-diff .hljs-chunk {
+  @apply font-bold;
+}
+.lang-diff .hljs-addition {
+  color: #16a34a;
+  @apply bg-green-100;
+}
+[data-theme="dark"] .lang-diff .hljs-addition {
+  color: #86efac;
+  @apply bg-green-950;
+}
+.lang-diff .hljs-deletion {
+  color: #dc2626;
+  @apply bg-red-100;
+}
+[data-theme="dark"] .lang-diff .hljs-deletion {
+  color: #fca5a5;
+  @apply bg-red-950;
+}
+
+.lang-markdown .hljs-link_url {
+  @apply underline;
+}
+
+/* Mobile pre b.name */
+@media screen and (max-width: 768px) {
+  .entry-content pre b.name {
+    @apply text-3xl;
+  }
+}

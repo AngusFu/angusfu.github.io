@@ -1,13 +1,13 @@
 <template>
-  <div class="container--narrow">
-    <article class="post detail">
-      <div class="meta">
+  <div class="max-w-prose mx-auto px-6 py-10">
+    <article>
+      <div class="text-sm text-slate-500 dark:text-slate-400 mb-2">
         <time>{{ post.create_time }}</time>
       </div>
-      <h1 class="title">{{ post.title }}</h1>
+      <h1 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-100 leading-tight mb-6 tracking-tight">{{ post.title }}</h1>
       <div class="entry-content">
         <blockquote v-if="post.translation">
-          <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+          <p class="whitespace-nowrap overflow-hidden text-ellipsis">
             原文作者:
             <a target="_blank" :href="post.translation.social">{{ post.translation.author }}</a>
             <br />原文地址:
@@ -22,19 +22,19 @@
         <slot></slot>
       </div>
     </article>
-    <nav class="pagination" v-if="prevPost.title || nextPost.title" aria-label="文章导航">
+    <nav v-if="prevPost.title || nextPost.title" class="flex items-center justify-between gap-4 pt-8 mt-8 border-t border-slate-200 dark:border-slate-700 max-md:flex-col max-md:gap-3" aria-label="文章导航">
       <NuxtLink
         v-if="prevPost.title"
         :to="`/post/${prevPost.pathname}`"
         :title="prevPost.title"
-        class="prev"
+        class="inline-flex items-center gap-1 px-4 py-2 text-sm text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700 rounded-md no-underline transition-all hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-600 dark:hover:border-blue-400 max-w-[45%] max-md:max-w-full max-md:w-full max-md:justify-center truncate"
       >&laquo; {{ prevPost.title }}</NuxtLink>
       <span v-else></span>
       <NuxtLink
         v-if="nextPost.title"
         :to="`/post/${nextPost.pathname}`"
         :title="nextPost.title"
-        class="next"
+        class="inline-flex items-center gap-1 px-4 py-2 text-sm text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700 rounded-md no-underline transition-all hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-600 dark:hover:border-blue-400 max-w-[45%] max-md:max-w-full max-md:w-full max-md:justify-center truncate"
       >{{ nextPost.title }} &raquo;</NuxtLink>
     </nav>
   </div>
