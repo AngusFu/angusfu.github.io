@@ -38,17 +38,20 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      htmlAttrs: {
+        lang: 'zh-CN'
+      },
       charset: 'utf-8',
-      viewport: 'width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no',
+      viewport: 'width=device-width,initial-scale=1',
       link: [
         { rel: 'shortcut icon', href: '/favicon.ico' }
       ]
     }
   },
 
-  css: ['~/assets/css/all.css'],
+  css: ['~/assets/css/main.css'],
 
-  modules: [],
+  modules: ['@nuxtjs/tailwindcss'],
 
   // Static generation settings
   nitro: {
