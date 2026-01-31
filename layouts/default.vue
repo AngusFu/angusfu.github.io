@@ -12,8 +12,10 @@
 
         <nav
           id="main-nav"
-          class="flex items-center gap-0.5 max-md:hidden"
-          :class="{ '!max-md:flex max-md:fixed max-md:top-16 max-md:left-0 max-md:right-0 max-md:z-[99] max-md:flex-col max-md:p-4 max-md:bg-white/[0.98] max-md:dark:bg-slate-900/[0.98] max-md:backdrop-blur-xl max-md:border-b max-md:border-slate-200 max-md:dark:border-slate-700 max-md:shadow-lg max-md:gap-0.5': menuOpen }"
+          class="flex items-center gap-0.5"
+          :class="menuOpen
+            ? 'max-md:fixed max-md:top-16 max-md:left-0 max-md:right-0 max-md:z-[99] max-md:flex-col max-md:p-4 max-md:bg-white/[0.98] max-md:dark:bg-slate-900/[0.98] max-md:backdrop-blur-xl max-md:border-b max-md:border-slate-200 max-md:dark:border-slate-700 max-md:shadow-lg max-md:gap-0.5'
+            : 'max-md:hidden'"
           aria-label="主导航"
         >
           <NuxtLink
