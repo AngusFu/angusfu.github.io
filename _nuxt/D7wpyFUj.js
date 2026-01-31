@@ -1,0 +1,1 @@
+import{_ as o,p as e}from"./Cdb3oEx8.js";import{c as s,e as c,o as n}from"./B1kHp8qp.js";import"./8oskhlv7.js";const i={__name:"[page]",setup(p){const t=e;return(r,_)=>{const a=o;return n(),s(a,{data:c(t),type:"cate"},null,8,["data"])}}};export{i as default};

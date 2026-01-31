@@ -1,1 +1,0 @@
-import{_ as o,p as s}from"./jYGHc-f6.js";import{c as e,e as n,o as c}from"./YobvFIQM.js";const f={__name:"index",setup(_){const t=s;return(p,r)=>{const a=o;return c(),e(a,{data:n(t),type:"tag"},null,8,["data"])}}};export{f as default};

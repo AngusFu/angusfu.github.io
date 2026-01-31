@@ -1,1 +1,0 @@
-import{_ as t,p as s}from"./jYGHc-f6.js";import{c as e,e as c,o as n}from"./YobvFIQM.js";const f={__name:"[page]",setup(_){const a=s;return(p,r)=>{const o=t;return n(),e(o,{data:c(a)},null,8,["data"])}}};export{f as default};

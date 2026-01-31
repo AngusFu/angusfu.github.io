@@ -1,0 +1,1 @@
+import{_ as a,p as s}from"./Cdb3oEx8.js";import{c as e,e as n,o as c}from"./B1kHp8qp.js";import"./8oskhlv7.js";const f={__name:"index",setup(p){const t=s;return(r,_)=>{const o=a;return c(),e(o,{data:n(t),type:"tag"},null,8,["data"])}}};export{f as default};
