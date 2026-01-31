@@ -1,17 +1,18 @@
 <template>
-  <article class="post tags">
-    <h1 class="title">分类</h1>
-    <div class="entry-content">
-      <section>
-        <NuxtLink
-          v-for="cate in cates"
-          :key="cate.name"
-          :to="`/category/${cate.pathname}`"
-          :data-tag="cate.name"
-        >{{ cate.name }} ({{ cate.count }})</NuxtLink>
-      </section>
-    </div>
-  </article>
+  <div class="container--narrow">
+    <article class="post tags">
+      <h1 class="title">分类</h1>
+      <div class="entry-content">
+        <section>
+          <NuxtLink
+            v-for="cate in cates"
+            :key="cate.name"
+            :to="`/category/${cate.pathname}`"
+          >{{ cate.name }} ({{ cate.count }})</NuxtLink>
+        </section>
+      </div>
+    </article>
+  </div>
 </template>
 
 <script setup>

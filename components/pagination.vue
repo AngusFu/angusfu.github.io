@@ -1,10 +1,12 @@
 <template>
-  <nav class="pagination">
+  <nav class="pagination" aria-label="分页导航">
     <NuxtLink v-if="prev" :to="prev" class="prev">&laquo; 上一页</NuxtLink>
+    <span v-else></span>
+    <span class="pagination-info" v-if="pagination.totalPages > 1">
+      {{ pagination.currentPage }} / {{ pagination.totalPages }}
+    </span>
     <NuxtLink v-if="next" :to="next" class="next">下一页 &raquo;</NuxtLink>
-    <div class="center">
-      <NuxtLink to="/archives">博客归档</NuxtLink>
-    </div>
+    <span v-else></span>
   </nav>
 </template>
 
@@ -32,8 +34,7 @@ function onKeydown(e) {
   if (import.meta.client && document.activeElement !== document.body) {
     return
   }
-  const n = +e.keyCode
-  const path = n === 37 ? prev.value : n === 39 ? next.value : null
+  const path = e.key === 'ArrowLeft' ? prev.value : e.key === 'ArrowRight' ? next.value : null
   if (path) {
     navigateTo(path)
   }

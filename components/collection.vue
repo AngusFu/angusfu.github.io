@@ -1,20 +1,24 @@
 <template>
-  <section id="page-index">
+  <section class="container">
     <h1 v-if="tag" class="intro">
-      标签<NuxtLink :to="`/tag/${tag}`">{{ tag }}</NuxtLink>下的文章
+      标签 <NuxtLink :to="`/tag/${tag}`">{{ tag }}</NuxtLink> 下的文章
     </h1>
     <h1 v-if="cate" class="intro">
-      分类<NuxtLink :to="`/category/${cate}`">{{ cate }}</NuxtLink>下的文章
+      分类 <NuxtLink :to="`/category/${cate}`">{{ cate }}</NuxtLink> 下的文章
     </h1>
 
-    <article v-for="(post, i) in displayPosts" :key="post.title + '_' + i" class="post">
+    <article
+      v-for="(post, i) in displayPosts"
+      :key="post.title + '_' + i"
+      class="post post-card"
+    >
       <div class="meta">
         <div>
           <template v-if="post.user">
             <span class="author">{{ post.user }}</span>
             <span>发布于</span>
           </template>
-          <span class="date">{{ post.create_time }}</span>
+          <time class="date">{{ post.create_time }}</time>
         </div>
       </div>
 

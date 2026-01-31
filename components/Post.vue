@@ -1,8 +1,8 @@
 <template>
-  <div id="page-post">
+  <div class="container--narrow">
     <article class="post detail">
       <div class="meta">
-        <div class="date">{{ post.create_time }}</div>
+        <time>{{ post.create_time }}</time>
       </div>
       <h1 class="title">{{ post.title }}</h1>
       <div class="entry-content">
@@ -22,13 +22,14 @@
         <slot></slot>
       </div>
     </article>
-    <nav class="pagination" v-if="prevPost.title || nextPost.title">
+    <nav class="pagination" v-if="prevPost.title || nextPost.title" aria-label="文章导航">
       <NuxtLink
         v-if="prevPost.title"
         :to="`/post/${prevPost.pathname}`"
         :title="prevPost.title"
         class="prev"
       >&laquo; {{ prevPost.title }}</NuxtLink>
+      <span v-else></span>
       <NuxtLink
         v-if="nextPost.title"
         :to="`/post/${nextPost.pathname}`"
@@ -67,9 +68,7 @@ function onKeydown(e) {
   if (import.meta.client && document.activeElement !== document.body) {
     return
   }
-
-  const n = +e.keyCode
-  const item = n === 37 ? prevPost.value : n === 39 ? nextPost.value : null
+  const item = e.key === 'ArrowLeft' ? prevPost.value : e.key === 'ArrowRight' ? nextPost.value : null
   const path = (item && item.pathname) || null
   if (path && path !== 'null') {
     navigateTo('/post/' + path)
