@@ -2,7 +2,7 @@
   <nav class="flex items-center justify-between mt-8 mb-4 px-2" aria-label="分页导航">
     <NuxtLink v-if="prev" :to="prev" class="text-sm font-medium text-blue-600 dark:text-blue-400 no-underline hover:text-blue-800 dark:hover:text-blue-300 transition-colors">&laquo; 上一页</NuxtLink>
     <span v-else></span>
-    <span class="text-sm text-slate-500 dark:text-slate-400" v-if="pagination.totalPages > 1">
+    <span class="text-sm text-slate-600 dark:text-slate-300" v-if="pagination.totalPages > 1">
       {{ pagination.currentPage }} / {{ pagination.totalPages }}
     </span>
     <NuxtLink v-if="next" :to="next" class="text-sm font-medium text-blue-600 dark:text-blue-400 no-underline hover:text-blue-800 dark:hover:text-blue-300 transition-colors">下一页 &raquo;</NuxtLink>

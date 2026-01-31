@@ -5,7 +5,7 @@
       <div v-for="item in archiveData" :key="item.yearMonth" class="mb-6">
         <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2 pb-2 border-b border-slate-200 dark:border-slate-700">
           {{ item.yearMonth }}
-          <span class="font-normal text-slate-500 dark:text-slate-400 text-[0.9em]">({{ item.data.length }})</span>
+          <span class="font-normal text-slate-600 dark:text-slate-300 text-[0.9em]">({{ item.data.length }})</span>
         </h3>
         <ul class="list-none m-0 p-0">
           <li
@@ -20,7 +20,7 @@
             >
               {{ post.title }}
             </NuxtLink>
-            <time class="shrink-0 text-slate-500 dark:text-slate-400 text-[13px]">{{ post.create_time }}</time>
+            <time class="shrink-0 text-slate-600 dark:text-slate-300 text-[13px]">{{ post.create_time }}</time>
           </li>
         </ul>
       </div>

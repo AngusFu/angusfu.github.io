@@ -12,7 +12,8 @@
   }
 
   body {
-    @apply font-sans text-slate-600 bg-white antialiased;
+    @apply font-sans text-slate-600 bg-white;
+    -webkit-font-smoothing: subpixel-antialiased;
     -webkit-tap-highlight-color: transparent;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
@@ -205,7 +206,10 @@
 }
 
 .entry-content .date {
-  @apply text-slate-500 text-sm italic;
+  @apply text-slate-600 text-sm italic;
+}
+[data-theme="dark"] .entry-content .date {
+  @apply text-slate-300;
 }
 
 /* Tips */

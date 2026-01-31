@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-prose mx-auto px-6 py-10">
     <article>
-      <div class="text-sm text-slate-500 dark:text-slate-400 mb-2">
+      <div class="text-sm text-slate-600 dark:text-slate-300 mb-2">
         <time>{{ post.create_time }}</time>
       </div>
       <h1 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-100 leading-tight mb-6 tracking-tight">{{ post.title }}</h1>
@@ -27,14 +27,14 @@
         v-if="prevPost.title"
         :to="`/post/${prevPost.pathname}`"
         :title="prevPost.title"
-        class="inline-flex items-center gap-1 px-4 py-2 text-sm text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700 rounded-md no-underline transition-all hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-600 dark:hover:border-blue-400 max-w-[45%] max-md:max-w-full max-md:w-full max-md:justify-center truncate"
+        class="inline-flex items-center gap-1 px-4 py-2 text-sm text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-md no-underline transition-all hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-600 dark:hover:border-blue-400 max-w-[45%] max-md:max-w-full max-md:w-full max-md:justify-center truncate"
       >&laquo; {{ prevPost.title }}</NuxtLink>
       <span v-else></span>
       <NuxtLink
         v-if="nextPost.title"
         :to="`/post/${nextPost.pathname}`"
         :title="nextPost.title"
-        class="inline-flex items-center gap-1 px-4 py-2 text-sm text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700 rounded-md no-underline transition-all hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-600 dark:hover:border-blue-400 max-w-[45%] max-md:max-w-full max-md:w-full max-md:justify-center truncate"
+        class="inline-flex items-center gap-1 px-4 py-2 text-sm text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-md no-underline transition-all hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-600 dark:hover:border-blue-400 max-w-[45%] max-md:max-w-full max-md:w-full max-md:justify-center truncate"
       >{{ nextPost.title }} &raquo;</NuxtLink>
     </nav>
   </div>
