@@ -26,7 +26,6 @@
 - 全部按钮/图标提供 `aria-label`
 - `:focus-visible` 键盘焦点指示器
 - 语义化 HTML（`<nav>`、`<main>`、`<footer>`、`<article>`、`<time>`）
-- 搜索输入关联 `<label>`
 - 允许页面缩放（无 `user-scalable=no`）
 
 ## 开发
