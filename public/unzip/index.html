@@ -8,9 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/file-type-mime@0.4.7/dist/index.umd.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.1/marked.min.js"></script>
     <style>
-
         * {
             margin: 0;
             padding: 0;
@@ -396,6 +394,23 @@
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
         }
 
+        /* PDF 预览样式 */
+        .pdf-container {
+            width: 100%;
+            height: 100%;
+            min-height: 70vh;
+            background: var(--bg-secondary);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .pdf-preview {
+            width: 100%;
+            height: 100%;
+            min-height: 70vh;
+            border: none;
+        }
+
         /* 视频预览 */
         .video-container {
             display: flex;
@@ -592,226 +607,6 @@
             transform: translateX(-50%) translateY(0);
             opacity: 1;
         }
-
-        /* Markdown 渲染预览 */
-        .markdown-preview {
-            padding: 1.5rem;
-            line-height: 1.7;
-            color: var(--text-primary);
-            font-size: 0.9375rem;
-            overflow-wrap: break-word;
-            min-width: 0;
-            max-width: 100%;
-        }
-
-        .markdown-preview h1, .markdown-preview h2, .markdown-preview h3,
-        .markdown-preview h4, .markdown-preview h5, .markdown-preview h6 {
-            margin-top: 1.5em;
-            margin-bottom: 0.5em;
-            font-weight: 600;
-            line-height: 1.3;
-            color: var(--text-primary);
-        }
-
-        .markdown-preview h1 { font-size: 2em; border-bottom: 1px solid var(--border); padding-bottom: 0.3em; }
-        .markdown-preview h2 { font-size: 1.5em; border-bottom: 1px solid var(--border); padding-bottom: 0.3em; }
-        .markdown-preview h3 { font-size: 1.25em; }
-        .markdown-preview h4 { font-size: 1em; }
-
-        .markdown-preview p { margin-bottom: 1em; }
-
-        .markdown-preview a {
-            color: var(--accent-light);
-            text-decoration: none;
-        }
-
-        .markdown-preview a:hover { text-decoration: underline; }
-
-        .markdown-preview code {
-            background: var(--bg-secondary);
-            padding: 0.2em 0.4em;
-            border-radius: 0.25rem;
-            font-size: 0.875em;
-            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-        }
-
-        .markdown-preview pre {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 0.5rem;
-            padding: 1rem;
-            overflow-x: auto;
-            margin-bottom: 1em;
-            max-width: 100%;
-        }
-
-        .markdown-preview pre code {
-            background: transparent;
-            padding: 0;
-            font-size: 0.8125rem;
-            line-height: 1.6;
-        }
-
-        .markdown-preview blockquote {
-            border-left: 4px solid var(--accent);
-            padding: 0.5em 1em;
-            margin: 0 0 1em 0;
-            color: var(--text-secondary);
-            background: rgba(59, 130, 246, 0.05);
-            border-radius: 0 0.25rem 0.25rem 0;
-        }
-
-        .markdown-preview blockquote p:last-child { margin-bottom: 0; }
-
-        .markdown-preview ul, .markdown-preview ol {
-            padding-left: 1.5em;
-            margin-bottom: 1em;
-        }
-
-        .markdown-preview li { margin-bottom: 0.25em; }
-
-        .markdown-preview li > ul, .markdown-preview li > ol { margin-bottom: 0; }
-
-        .markdown-preview .table-wrapper {
-            position: relative;
-            margin-bottom: 1em;
-            border: 1px solid var(--border);
-            border-radius: 0.5rem;
-            overflow: hidden;
-        }
-
-        .markdown-preview .table-scroll {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(148,163,184,0.35) transparent;
-        }
-
-        .markdown-preview .table-scroll::-webkit-scrollbar {
-            height: 6px;
-        }
-
-        .markdown-preview .table-scroll::-webkit-scrollbar-track {
-            background: rgba(15, 23, 42, 0.3);
-        }
-
-        .markdown-preview .table-scroll::-webkit-scrollbar-thumb {
-            background: rgba(148,163,184,0.35);
-            border-radius: 3px;
-        }
-
-        .markdown-preview .table-scroll::-webkit-scrollbar-thumb:hover {
-            background: rgba(148,163,184,0.55);
-        }
-
-        /* 左右渐隐阴影提示可滚动 */
-        .markdown-preview .table-wrapper::before,
-        .markdown-preview .table-wrapper::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 24px;
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .markdown-preview .table-wrapper::before {
-            left: 0;
-            background: linear-gradient(to right, var(--bg-primary), transparent);
-        }
-
-        .markdown-preview .table-wrapper::after {
-            right: 0;
-            background: linear-gradient(to left, var(--bg-primary), transparent);
-        }
-
-        .markdown-preview .table-wrapper.shadow-left::before { opacity: 1; }
-        .markdown-preview .table-wrapper.shadow-right::after { opacity: 1; }
-
-        .markdown-preview table {
-            border-collapse: collapse;
-            min-width: 100%;
-        }
-
-        .markdown-preview th, .markdown-preview td {
-            padding: 0.625em 0.875em;
-            text-align: left;
-            white-space: nowrap;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .markdown-preview td {
-            white-space: normal;
-        }
-
-        .markdown-preview th {
-            background: rgba(15, 23, 42, 0.6);
-            font-weight: 600;
-            font-size: 0.8125em;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-            color: var(--text-secondary);
-            position: sticky;
-            top: 0;
-            z-index: 1;
-        }
-
-        .markdown-preview tr:hover { background: rgba(59, 130, 246, 0.06); }
-        .markdown-preview tr:nth-child(even) { background: rgba(30, 41, 59, 0.2); }
-        .markdown-preview tr:nth-child(even):hover { background: rgba(59, 130, 246, 0.06); }
-
-        /* 去掉最后一行底部边框（wrapper 自带圆角边框） */
-        .markdown-preview table tr:last-child td { border-bottom: none; }
-
-        .markdown-preview img {
-            max-width: 100%;
-            border-radius: 0.5rem;
-        }
-
-        .markdown-preview hr {
-            border: none;
-            border-top: 1px solid var(--border);
-            margin: 1.5em 0;
-        }
-
-        .markdown-preview input[type="checkbox"] {
-            margin-right: 0.5em;
-        }
-
-        /* 视图切换按钮 */
-        .view-toggle {
-            display: inline-flex;
-            border-radius: 0.375rem;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            margin-left: 0.5rem;
-            flex-shrink: 0;
-        }
-
-        .view-toggle-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            padding: 0.35rem 0.625rem;
-            font-size: 0.75rem;
-            font-weight: 500;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-
-        .view-toggle-btn:hover {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--text-primary);
-        }
-
-        .view-toggle-btn.active {
-            background: var(--accent);
-            color: white;
-        }
     </style>
 </head>
 <body>
@@ -892,8 +687,8 @@
         let currentFile = null;
         let pathStack = [];
         let currentFileContent = null;
-        let currentMarkdownView = 'rendered'; // 'rendered' or 'source'
 
+        // 修复：正确引用 fileTypeMime
         const fileTypeParser = window.fileTypeMime;
 
         document.getElementById('fileInput').addEventListener('change', handleFileSelect);
@@ -1111,25 +906,57 @@
 
         function getFileIcon(filename) {
             const ext = filename.split('.').pop().toLowerCase();
-            if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'].includes(ext)) {
+            // 修复：增加PDF图标识别
+            if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg', 'ico'].includes(ext)) {
                 return '<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>';
+            }
+            if (ext === 'pdf') {
+                return '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>';
             }
             return '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>';
         }
 
-        async function detectFileType(arrayBuffer) {
+        // 修复：改进文件类型检测，优先使用库，失败时回退到扩展名判断
+        async function detectFileType(arrayBuffer, filename) {
+            // 首先尝试使用 file-type-mime
             try {
-                const result = fileTypeParser.parse(arrayBuffer);
-                if (result) {
-                    return result;
+                if (fileTypeParser && fileTypeParser.parse) {
+                    const result = fileTypeParser.parse(arrayBuffer);
+                    if (result && result.mime) {
+                        return result;
+                    }
                 }
             } catch (e) {
                 console.log('file-type detection failed:', e);
             }
+            
+            // 修复：如果库检测失败，通过文件扩展名判断
+            const ext = filename.split('.').pop().toLowerCase();
+            const mimeTypes = {
+                'jpg': 'image/jpeg',
+                'jpeg': 'image/jpeg',
+                'png': 'image/png',
+                'gif': 'image/gif',
+                'bmp': 'image/bmp',
+                'webp': 'image/webp',
+                'svg': 'image/svg+xml',
+                'ico': 'image/x-icon',
+                'pdf': 'application/pdf',
+                'mp4': 'video/mp4',
+                'webm': 'video/webm',
+                'ogg': 'video/ogg',
+                'mp3': 'audio/mpeg',
+                'wav': 'audio/wav'
+            };
+            
+            if (mimeTypes[ext]) {
+                return { mime: mimeTypes[ext], ext: ext };
+            }
+            
             return null;
         }
 
-        function isTextType(mimeType) {
+        function isTextType(mimeType, filename) {
             if (!mimeType) return false;
             const textTypes = [
                 'text/',
@@ -1150,22 +977,34 @@
                 'application/x-perl',
                 'application/x-lua',
                 'application/x-csh',
-                'application/x-zsh'
+                'application/x-zsh',
+                'application/pdf'  // PDF不是文本，但这里不拦截，让专门的PDF处理逻辑处理
             ];
+            // 修复：排除PDF，让专门的PDF预览处理
+            if (mimeType === 'application/pdf') return false;
+            
             return textTypes.some(type => mimeType.startsWith(type)) || mimeType.includes('script');
         }
 
-        function isImageType(mimeType) {
-            return mimeType && mimeType.startsWith('image/');
+        function isImageType(mimeType, filename) {
+            if (mimeType && mimeType.startsWith('image/')) return true;
+            // 修复：如果mimeType检测失败，通过扩展名再次确认
+            if (!mimeType && filename) {
+                const ext = filename.split('.').pop().toLowerCase();
+                return ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg', 'ico'].includes(ext);
+            }
+            return false;
         }
 
         function isVideoType(mimeType) {
-            return mimeType && mimeType.startsWith('video/');
+            return mimeType && (mimeType.startsWith('video/') || mimeType.startsWith('audio/'));
         }
 
-        function isMarkdownFile(filename) {
-            const ext = filename.split('.').pop().toLowerCase();
-            return ['md', 'markdown', 'mdown', 'mkd', 'mkdn'].includes(ext);
+        // 修复：添加PDF类型判断
+        function isPdfType(mimeType, filename) {
+            if (mimeType === 'application/pdf') return true;
+            if (filename && filename.toLowerCase().endsWith('.pdf')) return true;
+            return false;
         }
 
         function getHighlightLanguage(filename, mimeType) {
@@ -1244,11 +1083,13 @@
             try {
                 const arrayBuffer = await fileItem._file.async('arraybuffer');
                 
-                const fileType = await detectFileType(arrayBuffer);
+                // 修复：传入文件名作为备选检测依据
+                const fileType = await detectFileType(arrayBuffer, fileItem._name);
                 const mimeType = fileType ? fileType.mime : null;
                 
-                if (isImageType(mimeType)) {
-                    const blob = new Blob([arrayBuffer]);
+                // 修复：图片预览 - 同时检查mimeType和扩展名
+                if (isImageType(mimeType, fileItem._name)) {
+                    const blob = new Blob([arrayBuffer], { type: mimeType || 'image/jpeg' });
                     const url = URL.createObjectURL(blob);
                     document.getElementById('previewContent').innerHTML = `
                         <div class="image-container">
@@ -1257,7 +1098,19 @@
                     `;
                     addDownloadButton();
                     
-                } else if (isVideoType(mimeType)) {
+                } 
+                // 修复：添加PDF预览支持
+                else if (isPdfType(mimeType, fileItem._name)) {
+                    const blob = new Blob([arrayBuffer], { type: 'application/pdf' });
+                    const url = URL.createObjectURL(blob);
+                    document.getElementById('previewContent').innerHTML = `
+                        <div class="pdf-container">
+                            <embed src="${url}" class="pdf-preview" type="application/pdf" width="100%" height="100%">
+                        </div>
+                    `;
+                    addDownloadButton();
+                }
+                else if (isVideoType(mimeType)) {
                     const blob = new Blob([arrayBuffer], { type: mimeType });
                     const url = URL.createObjectURL(blob);
                     document.getElementById('previewContent').innerHTML = `
@@ -1270,28 +1123,22 @@
                     `;
                     addDownloadButton();
                     
-                } else if (isTextType(mimeType) || fileItem._file._data.uncompressedSize < 1024 * 1024) {
+                } else if (isTextType(mimeType, fileItem._name) || fileItem._file._data.uncompressedSize < 1024 * 1024) {
                     const content = new TextDecoder('utf-8', { fatal: false }).decode(arrayBuffer);
                     currentFileContent = content;
-
-                    if (isMarkdownFile(fileItem._name)) {
-                        currentMarkdownView = 'rendered';
-                        renderMarkdownPreview(content, fileItem._name);
-                        addMarkdownToggle(content, fileItem._name);
-                    } else {
-                        const language = getHighlightLanguage(fileItem._name, mimeType);
-
-                        document.getElementById('previewContent').innerHTML = `
-                            <div class="code-preview">
-                                <pre><code class="language-${language}">${escapeHtml(content)}</code></pre>
-                            </div>
-                        `;
-
-                        document.querySelectorAll('pre code').forEach((block) => {
-                            hljs.highlightElement(block);
-                        });
-                    }
-
+                    
+                    const language = getHighlightLanguage(fileItem._name, mimeType);
+                    
+                    document.getElementById('previewContent').innerHTML = `
+                        <div class="code-preview">
+                            <pre><code class="language-${language}">${escapeHtml(content)}</code></pre>
+                        </div>
+                    `;
+                    
+                    document.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+                    
                     addCopyButton();
                     addDownloadButton();
                     
@@ -1360,99 +1207,6 @@
             `;
             downloadBtn.onclick = downloadCurrentFile;
             actions.appendChild(downloadBtn);
-        }
-
-        function extractFrontMatter(text) {
-            const match = text.match(/^---\r?\n([\s\S]*?)\r?\n---(\r?\n|$)/);
-            if (!match) return { frontMatter: null, body: text };
-            return {
-                frontMatter: match[1],
-                body: text.slice(match[0].length)
-            };
-        }
-
-        function renderMarkdownPreview(content, filename) {
-            const previewContent = document.getElementById('previewContent');
-
-            if (currentMarkdownView === 'rendered') {
-                const renderer = new marked.Renderer();
-                marked.setOptions({
-                    renderer: renderer,
-                    breaks: true,
-                    gfm: true
-                });
-
-                const { frontMatter, body } = extractFrontMatter(content);
-                const fmBlock = frontMatter != null
-                    ? `<pre><code class="language-yaml">${escapeHtml(frontMatter)}</code></pre>`
-                    : '';
-                const htmlContent = fmBlock + marked.parse(body);
-                previewContent.innerHTML = `<div class="markdown-preview">${htmlContent}</div>`;
-
-                // 将 table 包裹在可滚动容器中，带阴影提示
-                previewContent.querySelectorAll('.markdown-preview > table').forEach((table) => {
-                    const wrapper = document.createElement('div');
-                    wrapper.className = 'table-wrapper';
-                    const scroll = document.createElement('div');
-                    scroll.className = 'table-scroll';
-                    table.parentNode.insertBefore(wrapper, table);
-                    wrapper.appendChild(scroll);
-                    scroll.appendChild(table);
-
-                    // 根据滚动位置更新左右阴影
-                    function updateShadow() {
-                        const sl = scroll.scrollLeft;
-                        const maxScroll = scroll.scrollWidth - scroll.clientWidth;
-                        wrapper.classList.toggle('shadow-left', sl > 2);
-                        wrapper.classList.toggle('shadow-right', maxScroll - sl > 2);
-                    }
-                    scroll.addEventListener('scroll', updateShadow, { passive: true });
-                    // 初始检测
-                    requestAnimationFrame(updateShadow);
-                });
-
-                // 对渲染后的代码块应用语法高亮
-                previewContent.querySelectorAll('pre code').forEach((block) => {
-                    hljs.highlightElement(block);
-                });
-            } else {
-                const language = getHighlightLanguage(filename, null);
-                previewContent.innerHTML = `
-                    <div class="code-preview">
-                        <pre><code class="language-${language}">${escapeHtml(content)}</code></pre>
-                    </div>
-                `;
-                previewContent.querySelectorAll('pre code').forEach((block) => {
-                    hljs.highlightElement(block);
-                });
-            }
-        }
-
-        function addMarkdownToggle(content, filename) {
-            const actions = document.getElementById('previewActions');
-
-            const toggle = document.createElement('div');
-            toggle.className = 'view-toggle';
-            toggle.innerHTML = `
-                <button class="view-toggle-btn ${currentMarkdownView === 'rendered' ? 'active' : ''}" data-view="rendered">预览</button>
-                <button class="view-toggle-btn ${currentMarkdownView === 'source' ? 'active' : ''}" data-view="source">源码</button>
-            `;
-
-            toggle.querySelectorAll('.view-toggle-btn').forEach(btn => {
-                btn.onclick = () => {
-                    const view = btn.dataset.view;
-                    if (view === currentMarkdownView) return;
-                    currentMarkdownView = view;
-
-                    toggle.querySelectorAll('.view-toggle-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-
-                    renderMarkdownPreview(content, filename);
-                };
-            });
-
-            // 插入到 actions 最前面
-            actions.insertBefore(toggle, actions.firstChild);
         }
 
         async function copyContent() {
