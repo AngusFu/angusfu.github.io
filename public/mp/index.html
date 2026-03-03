@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微信公众号文章净化工具</title>
+    <link rel="stylesheet" href="https://res.wx.qq.com/mmbizappmsg/zh_CN/assets/tap_highlight.mm8sawte21feed59.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: #07c160;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #06ad56;
+        }
+
+        .btn-secondary {
+            background: #576b95;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4a5d82;
+        }
+
+        .btn-secondary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .preview-box {
+            background: white;
+            border-radius: 8px;
+            min-height: 400px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .preview-box iframe {
+            width: 100%;
+            min-height: 400px;
+            border: none;
+            display: block;
+        }
+
+        .empty-tip {
+            text-align: center;
+            padding: 100px 20px;
+            color: #999;
+        }
+
+        .status {
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .status.show {
+            display: block;
+        }
+
+        .status.error {
+            background: #ffe6e6;
+            color: #c00;
+        }
+
+        .status.success {
+            background: #e6f7e6;
+            color: #07c160;
+        }
+
+        /* 视觉隐藏但保留在 DOM 中 */
+        .hidden-content {
+            position: absolute;
+            left: -9999px;
+            top: -9999px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📰 微信公众号文章净化工具</h1>
+            <p>自动去除广告、底部栏，修复图片和视频</p>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-primary" onclick="readClipboard()">📋 读取剪贴板</button>
+            <button class="btn btn-secondary" id="copyBtn" onclick="copyContent()" disabled>📄 一键拷贝</button>
+        </div>
+        
+        <div class="status" id="status"></div>
+
+        <div class="preview-box" id="previewBox">
+            <div class="empty-tip">复制微信文章后，点击上方按钮</div>
+        </div>
+
+        <!-- 视觉隐藏但实际存在的容器 -->
+        <div id="hiddenContainer" class="hidden-content"></div>
+    </div>
+
+    <script>
+        let currentHTML = '';
+
+        function showStatus(msg, type) {
+            const status = document.getElementById('status');
+            status.textContent = msg;
+            status.className = 'status show ' + type;
+            setTimeout(() => status.classList.remove('show'), 3000);
+        }
+
+        async function readClipboard() {
+            if (!navigator.clipboard?.read) {
+                showStatus('浏览器不支持剪贴板读取，请使用 Chrome/Edge', 'error');
+                return;
+            }
+
+            try {
+                const items = await navigator.clipboard.read();
+                
+                for (const item of items) {
+                    if (!item.types.includes('text/html')) continue;
+                    
+                    const blob = await item.getType('text/html');
+                    const html = await blob.text();
+                    
+                    if (!html.trim()) continue;
+                    
+                    currentHTML = processHTML(html);
+                    renderInIframe(currentHTML);
+                    writeToHiddenContainer(currentHTML);
+                    
+                    document.getElementById('copyBtn').disabled = false;
+                    showStatus('净化完成', 'success');
+                    return;
+                }
+                
+                showStatus('剪贴板中没有内容，请先复制微信文章', 'error');
+                
+            } catch (err) {
+                showStatus('读取失败: ' + err.message, 'error');
+            }
+        }
+
+        function processHTML(html) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+
+            // 1. 处理图片懒加载
+            doc.querySelectorAll('img[data-src]').forEach(img => {
+                const src = img.getAttribute('data-src');
+                if (src) {
+                    img.src = src.replace(/^\/\//, 'https://');
+                    img.removeAttribute('data-src');
+                }
+            });
+
+            // 修复 // 开头的图片
+            doc.querySelectorAll('img[src^="//"]').forEach(img => {
+                img.src = 'https:' + img.getAttribute('src');
+            });
+
+            // 2. 清理非 rich_media 元素
+            Array.from(doc.body.children).forEach(child => {
+                if (!child.classList.contains('rich_media')) {
+                    child.remove();
+                }
+            });
+
+            // 清理广告和底部栏
+            doc.querySelectorAll('mpcpc, .mpda_bottom_container, #content_bottom_area, #js_article_bottom_bar, .rich_media_tool').forEach(el => el.remove());
+
+            // 3. 处理视频
+            doc.querySelectorAll('.mp-video-player').forEach(player => {
+                const video = player.querySelector('video');
+                if (video) {
+                    const src = video.getAttribute('src');
+                    if (src?.startsWith('//')) video.src = 'https:' + src;
+                    video.controls = true;
+                    video.style.width = '100%';
+                    player.innerHTML = '';
+                    player.appendChild(video);
+                }
+            });
+
+            // 清理 script
+            doc.querySelectorAll('script').forEach(el => el.remove());
+
+            // 提取内容
+            const richMedia = doc.querySelector('.rich_media');
+            const content = richMedia ? richMedia.innerHTML : doc.body.innerHTML;
+
+            // 包装成完整 HTML
+            return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://res.wx.qq.com/mmbizappmsg/zh_CN/assets/tap_highlight.mm8sawte21feed59.css">
+<style>
+body { margin: 0; padding: 20px; font-family: -apple-system, sans-serif; line-height: 1.6; color: #333; }
+img { max-width: 100%; height: auto; display: block; margin: 10px 0; }
+video { max-width: 100%; display: block; margin: 10px 0; background: #000; }
+p { margin: 0 0 1em; }
+</style>
+</head>
+<body>${content}</body>
+</html>`;
+        }
+
+        function renderInIframe(html) {
+            const box = document.getElementById('previewBox');
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            box.innerHTML = `<iframe src="${url}" onload="this.style.height=this.contentDocument.body.scrollHeight+40+'px'"></iframe>`;
+        }
+
+        function writeToHiddenContainer(html) {
+            const container = document.getElementById('hiddenContainer');
+            container.innerHTML = html;
+        }
+
+        async function copyContent() {
+            if (!currentHTML) {
+                showStatus('没有可拷贝的内容', 'error');
+                return;
+            }
+
+            try {
+                // 创建 blob 并写入剪贴板
+                const blob = new Blob([currentHTML], { type: 'text/html' });
+                const clipboardItem = new ClipboardItem({ 'text/html': blob });
+                await navigator.clipboard.write([clipboardItem]);
+                showStatus('已拷贝到剪贴板', 'success');
+            } catch (err) {
+                // 降级方案：复制纯文本
+                try {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(currentHTML, 'text/html');
+                    const text = doc.body.textContent || '';
+                    await navigator.clipboard.writeText(text);
+                    showStatus('已拷贝纯文本（HTML格式不支持）', 'success');
+                } catch (fallbackErr) {
+                    showStatus('拷贝失败: ' + fallbackErr.message, 'error');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
